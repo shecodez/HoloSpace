@@ -2,12 +2,13 @@
   <div class="flex h-full">
     <div
       class="
-        w-full
+        max-w-screen
         md:w-5/12
         lg:w-3/12
         bg-0d0d0d
         min-h-screen
-        p-12
+        p-8
+        md:p-12
         text-gray-200
         flex flex-col
         gap-4
@@ -39,7 +40,7 @@
         </a>
       </div>
       <div class="text-5xl font-extrabold">
-        <span
+        <h2
           class="
             bg-clip-text
             text-transparent
@@ -49,7 +50,7 @@
           "
         >
           Get early access
-        </span>
+        </h2>
       </div>
       <p>We'll announce it first in our newsletter</p>
 
@@ -129,7 +130,8 @@
         lg:w-9/12
         bg-black
         min-h-screen
-        p-12
+        p-8
+        md:p-12
         text-white
         overflow-hidden
       "

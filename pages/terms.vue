@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-0d0d0d h-full p-24 text-gray-200 h-full">
+  <div class="bg-0d0d0d h-full p-12 md:p-24 text-gray-200 h-full">
     <h1>Terms and Conditions</h1>
     <p class="italic">Last updated: December 29, 2021</p>
     <p>
