@@ -1,9 +1,21 @@
-import { subDays, subMonths } from 'date-fns';
+import { setDate, subDays, subMonths } from 'date-fns';
+
 const today = new Date();
+
+function thisMonth(d: number, h: number, m: number) {
+  const t = new Date();
+  return new Date(t.getFullYear(), t.getMonth(), d, h || 0, m || 0);
+}
 
 export enum DiskspaceType {
   TEXT = 'TEXT',
   VOIP = 'VOIP',
+  H010 = 'H010',
+}
+
+export enum CommType {
+  TEXT = 'TEXT',
+  VOICE = 'VOICE',
   H010 = 'H010',
 }
 
@@ -34,18 +46,18 @@ export const decks = [
   { id: '1', name: 'Resume | NJN', boot_disk_id: '1', captain_id: '1', hq: Region.US_EAST, created_at: today },
   { id: '2', name: '이거 매워요?', boot_disk_id: '6', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
   { id: '3', name: '見ぬが花', boot_disk_id: '7', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
-  // { id: '4', name: 'Deck 4', boot_disk_id: '1' },
-  // { id: '5', name: 'Deck 5', boot_disk_id: '1' },
-  // { id: '6', name: 'Deck 6', boot_disk_id: '1' },
-  // { id: '7', name: 'Deck 7', boot_disk_id: '1' },
-  // { id: '8', name: 'Deck 8', boot_disk_id: '1' },
-  // { id: '9', name: 'Deck 9', boot_disk_id: '1' },
-  // { id: '14', name: 'Deck 14', boot_disk_id: '1' },
-  // { id: '15', name: 'Deck 15', boot_disk_id: '1' },
-  // { id: '16', name: 'Deck 16', boot_disk_id: '1' },
-  // { id: '17', name: 'Deck 17', boot_disk_id: '1' },
-  // { id: '18', name: 'Deck 18', boot_disk_id: '1' },
-  // { id: '19', name: 'Deck 19', boot_disk_id: '1' },
+  // { id: '4', name: 'Deck 4', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '5', name: 'Deck 5', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '6', name: 'Deck 6', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '7', name: 'Deck 7', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '8', name: 'Deck 8', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '9', name: 'Deck 9', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '14', name: 'Deck 14', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '15', name: 'Deck 15', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '16', name: 'Deck 16', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '17', name: 'Deck 17', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '18', name: 'Deck 18', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
+  // { id: '19', name: 'Deck 19', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
 ];
 
 export const diskspaces = [
@@ -285,7 +297,7 @@ export const messages = [
     },
     diskspace_id: '1',
     created_at: subDays(today, 7),
-    text: '`@Kai` We should eat this: Grate, Squash, Corn, and tomatillo Tacos. Also ~~The world is flat.~~',
+    text: '`@Kai` We should eat this: Grate, Squash, Corn, and tomatillo Tacos. Also ~~The world is flat.~~ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id cursus leo. Aenean condimentum dolor leo, id aliquet lorem consectetur in. Ut nec mattis odio. Suspendisse feugiat ex ac massa interdum posuere.',
     is_markdown: true,
   },
   {
@@ -355,5 +367,79 @@ export const messages = [
     diskspace_id: '1',
     created_at: subDays(today, 0),
     text: '`Thatz whatz up!',
+  },
+];
+
+export const events = [
+  {
+    id: 'e0',
+    startDate: setDate(today, 1),
+  },
+  {
+    id: 'e1',
+    startDate: thisMonth(15, 18, 30), // 18:30
+  },
+  {
+    id: 'e2',
+    startDate: setDate(today, 15),
+    title: 'Single-day item with a long title',
+  },
+  {
+    id: 'e3',
+    startDate: thisMonth(7, 9, 25), // 9:25
+    endDate: thisMonth(10, 16, 30), // 16:30
+    title: 'Multi-day item with a long title and times',
+  },
+  {
+    id: 'e4',
+    startDate: setDate(today, 20),
+    title: 'My Birthday!',
+    classes: 'birthday',
+    url: 'https://en.wikipedia.org/wiki/Birthday',
+  },
+  {
+    id: 'e5',
+    startDate: setDate(today, 5),
+    endDate: setDate(today, 12),
+    title: 'Multi-day item',
+    classes: 'purple',
+  },
+  {
+    id: 'foo',
+    startDate: setDate(today, 29),
+    title: 'Same day 1',
+  },
+  {
+    id: 'e6',
+    startDate: setDate(today, 29),
+    title: 'Same day 2',
+    classes: 'orange',
+  },
+  {
+    id: 'e7',
+    startDate: setDate(today, 29),
+    title: 'Same day 3',
+  },
+  {
+    id: 'e8',
+    startDate: setDate(today, 29),
+    title: 'Same day 4',
+    classes: 'orange',
+  },
+  {
+    id: 'e9',
+    startDate: setDate(today, 29),
+    title: 'Same day 5',
+  },
+  {
+    id: 'e10',
+    startDate: setDate(today, 29),
+    title: 'Same day 6',
+    classes: 'orange',
+  },
+  {
+    id: 'e11',
+    startDate: setDate(today, 29),
+    title: 'Same day 7',
   },
 ];

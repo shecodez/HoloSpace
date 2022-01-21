@@ -1,6 +1,6 @@
 <template>
   <Drawer :collapsed="collapsed" minW="w-20">
-    <Panel css="bg-gray-200 bg-opacity-80 dark:bg-gray-800 dark:bg-opacity-80 text-gray-800 dark:text-gray-200">
+    <Panel css="bg-base-300 bg-opacity-70">
       <template #header>
         <div class="navbar" :class="collapsed ? 'collapsed flex justify-center' : ''">
           <div class="flex-none">
@@ -19,7 +19,7 @@
       </template>
 
       <div class="users overflow-y-auto overflow-x-hidden" :class="collapsed ? 'collapsed' : ''">
-        <UserList title="On Deck" :users="usersOnline" />
+        <UserList title="On-Deck" :users="usersOnline" />
         <UserList title="Offline" :users="usersOffline" offline />
       </div>
 
@@ -34,20 +34,20 @@
 import { computed, defineProps, PropType, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import Drawer from '@/components/Drawer.vue';
+import Drawer from '@/components/MyDrawer.vue';
 import Panel from '@/components/Panel.vue';
 import UserList from '@/components/UserList.vue';
 import UserToolbar from './UserToolbar.vue';
 import { IUser } from '../data/interfaces';
 
 const props = defineProps({
-  collapsed: {
-    type: Boolean,
-    default: false,
-  },
   users: {
     type: Array as PropType<IUser[]>,
     default: [],
+  },
+  collapsed: {
+    type: Boolean,
+    default: false,
   },
 });
 

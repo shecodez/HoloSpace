@@ -18,8 +18,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
+import { themeChange } from 'theme-change';
+
+onMounted(() => themeChange(false));
 
 const themes = ref([
   { id: 'light', name: '🌝 light' },

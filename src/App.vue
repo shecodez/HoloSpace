@@ -13,7 +13,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
 
 .app {
-  @apply h-full text-gray-800 dark:text-gray-200;
+  @apply h-full;
 }
 
 .bg-0d0d0d {
@@ -25,7 +25,7 @@
 }
 
 .my-divider {
-  @apply border-black border-opacity-10 dark:border-white dark:border-opacity-10;
+  @apply border-gray-400 border-opacity-70;
 }
 
 .ribbon-tail:before {
@@ -39,5 +39,17 @@
   background: transparent;
   clip-path: polygon(50% 50%, 0 100%, 100% 100%);
   transform: rotate(270deg);
+}
+
+.t-border-menu {
+  @apply bg-base-100 rounded border-t-2 border-primary;
+}
+
+label.label {
+  @apply text-xs uppercase font-medium inline-block;
+}
+.form-control.required .label:after {
+  content: ' *';
+  color: red;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 bg-opacity-80 dark:bg-gray-900 dark:bg-opacity-80 text-gray-800 dark:text-gray-200">
+  <div class="bg-base-300 bg-opacity-80">
     <div class="flex flex-row md:flex-col w-screen md:w-20 h-16 md:h-full">
       <div class="my-auto md:my-0 md:mx-auto">
         <button class="btn btn-circle bg-primary m-2">
@@ -10,24 +10,27 @@
         <h5 class="uppercase text-xs font-medium p-2">Decks</h5>
       </div>
 
-      <div class="decks overflow-x-auto md:overflow-y-auto overflow-y-hidden md:overflow-x-hidden">
+      <div class="decks flex md:block overflow-x-auto md:overflow-y-auto overflow-y-hidden md:overflow-x-hidden">
         <DeckList :decks="decks" />
       </div>
 
       <div class="sticky right-0 md:bottom-0 p-2 my-auto md:my-0 md:mx-auto">
-        <button class="btn btn-circle dark:btn-outline border-dashed border-4">
+        <button @click="openModal" class="btn btn-circle btn-outline border-dashed border-4">
           <Icon icon="mdi:plus" width="26" />
         </button>
       </div>
     </div>
   </div>
+
+  <AddOrJoinDeckModal :isOpen="openAddOrJoinDeck" @close="closeModal" />
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, toRefs } from 'vue';
+import { defineProps, PropType, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import DeckList from '@/components/DeckList.vue';
+import AddOrJoinDeckModal from '@/components/deck/AddOrJoinDeckModal.vue';
 import { IDeck } from '@/data/interfaces';
 
 const props = defineProps({
@@ -36,6 +39,16 @@ const props = defineProps({
     default: [],
   },
 });
+
+const openAddOrJoinDeck = ref(false);
+
+function openModal() {
+  openAddOrJoinDeck.value = true;
+}
+
+function closeModal() {
+  openAddOrJoinDeck.value = false;
+}
 
 const { decks } = toRefs(props);
 </script>
@@ -48,7 +61,7 @@ const { decks } = toRefs(props);
 }
 @media (max-width: 767px) {
   .decks {
-    overflow-x: overlay;
+    overflow-x: overlay !important;
   }
 }
 </style>

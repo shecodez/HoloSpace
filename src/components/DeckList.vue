@@ -1,6 +1,6 @@
 <template>
-  <ul class="flex md:flex-col">
-    <li v-for="deck in decks" :key="deck.id" class="py-1 my-auto md:my-0 md:mx-auto">
+  <ul class="flex md:flex-col gap-2">
+    <li v-for="deck in decks" :key="deck.id" class="my-auto md:my-0 md:mx-auto">
       <div :data-tip="deck.name" class="tooltip tooltip-top md:tooltip-right z-10">
         <router-link :to="`/d/${deck.id}/${deck.boot_disk_id}`">
           <div class="avatar" :class="deck.image_url ? '' : 'placeholder'">

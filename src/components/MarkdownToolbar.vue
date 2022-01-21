@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded border-t-2 border-primary rounded-b-none mr-2 shadow-lg"
-  >
+  <div class="bg-base-200 rounded border-t-2 border-primary rounded-b-none mr-2 shadow-lg">
     <div class="flex space-x-6 justify-end">
       <ul v-for="(markdownGroup, i) in markdownOptions" :key="i" class="grid grid-flow-col grid-cols-3 gap-2">
         <li v-for="option in markdownGroup" :key="option.id">

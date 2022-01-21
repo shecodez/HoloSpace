@@ -1,9 +1,10 @@
 <template>
-  <div class="bg-white bg-opacity-30 dark:bg-black dark:bg-opacity-80">
-    <div class="ribbon-tail relative banner flex items-center">
+  <!-- TODO: fix: before:w-16 is not dynamic -->
+  <div class="bg-base-300 bg-opacity-30">
+    <div class="banner ribbon-tail relative before:w-16 before:bg-base-300 flex items-center">
       <slot></slot>
-      <button v-if="dismissible" class="absolute right-0 btn btn-sm btn-circle btn-ghost">
-        <Icon icon="mdi:close-circle" width="20" />
+      <button v-if="dismissible" @click="$emit('close')" class="btn btn-sm btn-circle btn-ghost absolute right-0">
+        <Icon icon="mdi:close-outline" width="20" />
       </button>
     </div>
   </div>
@@ -22,14 +23,3 @@ const props = defineProps({
 
 const { dismissible } = toRefs(props);
 </script>
-
-<style scoped>
-.ribbon-tail:before {
-  width: 4rem; /* TODO: how to make this dynamic? */
-  background: white;
-}
-.dark .ribbon-tail:before {
-  width: 4rem; /* TODO: how to make this dynamic? */
-  background: black;
-}
-</style>
