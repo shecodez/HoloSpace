@@ -9,7 +9,13 @@
     </template>
 
     <template v-slot:left>
-      <SideDrawer :deck="activeDeck" :diskspaces="diskspaces" :collapsed="state.sideDrawerIsCollapsed" />
+      <SideDrawer
+        :deck="activeDeck"
+        :diskspaces="diskspaces"
+        :collapsed="state.sideDrawerIsCollapsed"
+        :isSmScreen="!lgAndLarger"
+        @close="state.sideDrawerIsCollapsed = true"
+      />
     </template>
 
     <ChatPanel
@@ -27,8 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
 import Layout from '@/layouts/Default.vue';
 import ConfirmEmailAlert from '@/components/alerts/ConfirmEmailAlert.vue';
@@ -39,13 +46,34 @@ import ChatPanel from '@/components/ChatPanel.vue';
 import { decks, users, diskspaces as all_diskspaces, messages as all_messages } from '../data/mock';
 
 const route = useRoute();
+const breakpoints = useBreakpoints(breakpointsTailwind);
 
 const state = reactive({
   showAlert: true,
   sideDrawerIsCollapsed: false,
   metaDrawerIsCollapsed: false,
+  sideDrawerPreBreakpoint: false,
+  metaDrawerPreBreakpoint: false,
   backgroundImageUrl: '/src/assets/images/backgrounds/juskteez-vu-unsplash-1920x1080.jpg',
 });
+
+const lgAndLarger = breakpoints.greater('lg');
+watch(
+  () => lgAndLarger.value,
+  (lgAndLarger: Boolean) => {
+    if (lgAndLarger) {
+      state.sideDrawerIsCollapsed = state.sideDrawerPreBreakpoint;
+      state.metaDrawerIsCollapsed = state.metaDrawerPreBreakpoint;
+    } else {
+      state.sideDrawerPreBreakpoint = state.sideDrawerIsCollapsed;
+      state.metaDrawerPreBreakpoint = state.metaDrawerIsCollapsed;
+
+      state.sideDrawerIsCollapsed = true;
+      state.metaDrawerIsCollapsed = true;
+    }
+  },
+  { immediate: true },
+);
 
 function dismissAlert() {
   state.showAlert = false;

@@ -20,6 +20,10 @@
             <div class="flex-1 mx-2 hide-on-collapsed">
               <span class="text-lg font-bold uppercase">Notifications</span>
             </div>
+
+            <button @click="closeDrawer" class="btn btn-sm btn-ghost btn-square">
+              <Icon icon="mdi:close" width="24" />
+            </button>
           </div>
         </template>
 

@@ -1,10 +1,7 @@
 <template>
   <div class="mr-2">
     <div class="flex items-center bg-base-100 rounded-full px-2 h-12 border-2 border-primary">
-      <button @click="$emit('switchToH010Comms')" class="btn btn-ghost btn-square btn-sm">
-        <Icon icon="mdi:arrow-up-bold-hexagon-outline" width="24" />
-        <span class="sr-only">Send H010Comm</span>
-      </button>
+      <H010CommModal />
 
       <div class="ml-2">
         <Icon v-if="state.isRecording" icon="bx:bxs-album" width="24" class="animate-spin text-primary" />
@@ -39,6 +36,7 @@ import { onUnmounted, reactive } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import ConfirmDeleteButton from '@/components/ConfirmDeleteButton.vue';
+import H010CommModal from './H010CommModal.vue';
 
 const state = reactive({
   isRecording: true,

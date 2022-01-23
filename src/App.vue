@@ -31,14 +31,10 @@
 .ribbon-tail:before {
   content: '';
   position: absolute;
-  top: 0;
   right: 0;
-  height: 100%;
-  width: 0;
-  /* TODO: calc dynamic width w/ JS */
-  background: transparent;
-  clip-path: polygon(50% 50%, 0 100%, 100% 100%);
-  transform: rotate(270deg);
+  bottom: 0;
+  top: 0;
+  clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
 }
 
 .t-border-menu {

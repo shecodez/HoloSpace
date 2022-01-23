@@ -4,10 +4,7 @@
     <div class="mr-2">
       <div class="flex relative items-center justify-between">
         <div class="absolute left-2 grid">
-          <button @click="$emit('switchToH010Comms')" class="btn btn-ghost btn-square btn-sm">
-            <Icon icon="mdi:arrow-up-bold-hexagon-outline" width="24" />
-            <span class="sr-only">Send H010Comm</span>
-          </button>
+          <H010CommModal />
         </div>
 
         <textarea
@@ -54,6 +51,7 @@ import { reactive } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import MarkdownToolbar from '@/components/MarkdownToolbar.vue';
+import H010CommModal from './H010CommModal.vue';
 
 const state = reactive({
   message: '',

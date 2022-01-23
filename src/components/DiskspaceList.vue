@@ -18,7 +18,7 @@
         >
           <div
             class="ribbon-tail flex justify-between mx-2"
-            :class="isActive(space.id) && 'before:w-10 before:bg-base-100 before:bg-opacity-50'"
+            :class="isActive(space.id) && 'before:pr-5 before:bg-base-100 before:bg-opacity-50'"
           >
             <router-link :to="`/d/${space.deck_id}/${space.id}`">{{ space.name }}</router-link>
             <div class="actions">
@@ -87,14 +87,6 @@ const isActive = (diskspaceId: string) => {
 .diskspace.active {
   @apply font-medium border-primary bg-gradient-to-r;
 }
-/* .diskspace.active > .ribbon-tail:before {
-  width: 2.5rem;
-  background-color: rgba(35, 35, 35, 0.3);
-}
-.dark .diskspace.active > .ribbon-tail:before {
-  width: 2.5rem;
-  background-color: rgba(235, 235, 235, 0.1);
-} */
 
 .diskspace .actions {
   visibility: hidden;

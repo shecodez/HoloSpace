@@ -13,17 +13,8 @@
 
     <template #footer>
       <div class="relative mb-4 mx-6 md:mx-24">
-        <TextCommForm
-          v-if="state.commType === CommType.TEXT"
-          @switchToVoiceComms="switchComms(CommType.VOICE)"
-          @switchToH010Comms="switchComms(CommType.H010)"
-        />
-        <VoiceCommForm
-          v-if="state.commType === CommType.VOICE"
-          @switchToTextComms="switchComms(CommType.TEXT)"
-          @switchToH010Comms="switchComms(CommType.H010)"
-        />
-        <H010CommModal :isOpen="state.commType === CommType.H010" @close="switchComms(CommType.TEXT)" />
+        <TextCommForm v-if="state.commType === CommType.TEXT" @switchToVoiceComms="switchComms(CommType.VOICE)" />
+        <VoiceCommForm v-if="state.commType === CommType.VOICE" @switchToTextComms="switchComms(CommType.TEXT)" />
       </div>
     </template>
   </Panel>
@@ -39,7 +30,6 @@ import VoiceCommForm from './comms/VoiceCommForm.vue';
 import TextCommForm from './comms/TextCommForm.vue';
 import { IDiskspace, ITextMessage } from '@/data/interfaces';
 import { CommType } from '@/data/mock';
-import H010CommModal from './comms/H010CommModal.vue';
 
 const props = defineProps({
   diskspace: {

@@ -13,7 +13,7 @@
         <label class="mx-3">Please confirm your email address.</label>
       </div>
       <div class="flex-none">
-        <button class="btn btn-sm btn-ghost mr-6">Resend</button>
+        <button class="btn btn-sm btn-ghost mr-8">Resend</button>
       </div>
     </div>
   </Banner>

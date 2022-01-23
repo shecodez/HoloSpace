@@ -25,7 +25,10 @@
         <span>My Settings</span>
       </li>
       <li class="flex items-center justify-center">
-        <a>Cog</a>
+        <button @click="$emit('openSettings')" class="btn btn-square btn-ghost">
+          <Icon icon="mdi:cog" width="24" />
+          <span class="sr-only">My Settings</span>
+        </button>
       </li>
     </template>
   </ul>

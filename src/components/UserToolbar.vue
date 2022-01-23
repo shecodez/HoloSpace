@@ -7,7 +7,7 @@
             <UserAvatar :user="user" :isCaptain="true" />
           </button>
         </template>
-        <UserStatusMenu :user="user" :collapsed="collapsed" />
+        <UserStatusMenu :user="user" :collapsed="collapsed" @openSettings="openModal" />
       </Popper>
     </div>
     <div class="hide-on-collapsed flex-1 mx-2 flex flex-col items-start overflow-hidden">
