@@ -39,7 +39,7 @@ import { PropType, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import Modal from '@/components/DockUI/Modal.vue';
-import Panel from '@/components/Panel.vue';
+import Panel from '@/components/DockUI/Panel.vue';
 import { IDeck } from '@/data/interfaces';
 
 const props = defineProps({

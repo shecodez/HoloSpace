@@ -19,7 +19,7 @@
         <span>Camera/Mic/VR</span>
       </li>
       <li class="flex items-center justify-center">
-        <UserCamMicVrToolbar :user="user" :collapsed="collapsed" />
+        <IOToolbar :user="user" :collapsed="collapsed" />
       </li>
       <li class="menu-title">
         <span>My Settings</span>
@@ -38,7 +38,7 @@
 import { PropType, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import UserCamMicVrToolbar from './UserCamMicVrToolbar.vue';
+import IOToolbar from '@/components/me/UserIOToolbar.vue';
 import { IUser } from '@/data/interfaces';
 import { OnlineStatus } from '@/data/mock';
 

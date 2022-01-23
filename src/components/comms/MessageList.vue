@@ -34,7 +34,7 @@
 import { defineProps, PropType, toRefs } from 'vue';
 import { format, formatRelative, isSameDay, isSameMinute } from 'date-fns';
 
-import { ITextMessage, IMessage } from '../data/interfaces';
+import { ITextMessage, IMessage } from '@/data/interfaces';
 
 const props = defineProps({
   messages: {

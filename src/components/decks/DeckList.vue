@@ -22,7 +22,7 @@ import { defineProps, PropType, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 //import { Icon } from '@iconify/vue';
 
-import { IDeck } from '../data/interfaces';
+import { IDeck } from '@/data/interfaces';
 
 const props = defineProps({
   decks: {

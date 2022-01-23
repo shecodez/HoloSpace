@@ -37,8 +37,8 @@ import { reactive, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import Modal from '@/components/DockUI/Modal.vue';
-import AddDeckForm from './forms/AddDeckForm.vue';
-import JoinDeckForm from './forms/JoinDeckForm.vue';
+import AddDeckForm from '@/components/decks/AddDeckForm.vue';
+import JoinDeckForm from '@/components/decks/JoinDeckForm.vue';
 import { IDeck } from '@/data/interfaces';
 
 const props = defineProps({

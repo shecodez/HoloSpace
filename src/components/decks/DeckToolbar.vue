@@ -23,8 +23,8 @@ import { defineProps, PropType, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import Popper from '@/components/DockUI/Popper.vue';
-import DeckMenu from './DeckMenu.vue';
-import DeckSettings from '@/components/DeckSettingsModal.vue';
+import DeckMenu from '@/components/decks/DeckMenu.vue';
+import DeckSettings from '@/components/decks/DeckSettingsModal.vue';
 import { IDeck } from '@/data/interfaces';
 
 const props = defineProps({

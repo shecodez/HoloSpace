@@ -22,7 +22,7 @@
             <Icon icon="mdi:chevron-up" width="24" />
           </button>
         </template>
-        <UserCamMicVrToolbar :user="user" />
+        <IOToolbar :user="user" />
       </Popper>
       <button @click="openModal" class="btn btn-square btn-sm btn-ghost">
         <Icon icon="mdi:cog" width="24" />
@@ -37,12 +37,12 @@
 import { defineProps, PropType, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import UserAvatar from './UserAvatar.vue';
-import Popper from './DockUI/Popper.vue';
-import UserStatusMenu from './UserStatusMenu.vue';
-import UserCamMicVrToolbar from './UserCamMicVrToolbar.vue';
-import { IUser } from '../data/interfaces';
-import UserSettings from './UserSettingsModal.vue';
+import UserAvatar from '@/components/users/UserAvatar.vue';
+import Popper from '@/components/DockUI/Popper.vue';
+import UserStatusMenu from '@/components/me/UserStatusMenu.vue';
+import IOToolbar from '@/components/me/UserIOToolbar.vue';
+import UserSettings from '@/components/me/UserSettingsModal.vue';
+import { IUser } from '@/data/interfaces';
 
 const props = defineProps({
   user: {

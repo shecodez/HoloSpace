@@ -15,9 +15,9 @@
 <script setup lang="ts">
 //import { Icon } from '@iconify/vue';
 
-import ToogleDarkMode from './ToogleDarkMode.vue';
-import LogoutButton from './LogoutButton.vue';
-import SearchModal from './SearchModal.vue';
-import CalendarModal from './CalendarModal.vue';
-import NotificationDrawer from './NotificationDrawer.vue';
+import ToogleDarkMode from '@/components/ToogleDarkMode.vue';
+import LogoutButton from '@/components/LogoutButton.vue';
+import SearchModal from '@/components/search/SearchModal.vue';
+import CalendarModal from '@/components/calendar/CalendarModal.vue';
+import NotificationDrawer from '@/components/me/NotificationDrawer.vue';
 </script>

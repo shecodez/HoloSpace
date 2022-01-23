@@ -41,6 +41,7 @@
                 <div class="ml-auto">
                   <span class="text-4xl font-bold">72</span>
                   <Icon icon="wi:degrees" width="12" />
+                  <span class="text-xs font-bold">F</span>
                 </div>
               </div>
             </template>
@@ -130,13 +131,13 @@ import { reactive, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 import { format } from 'date-fns';
 import { CalendarView } from 'vue-simple-calendar';
-import '../../node_modules/vue-simple-calendar/dist/style.css';
+import '../../../node_modules/vue-simple-calendar/dist/style.css';
 // The next two lines are optional themes
-import '../../node_modules/vue-simple-calendar/static/css/default.css';
-import '../../node_modules/vue-simple-calendar/static/css/holidays-us.css';
+import '../../../node_modules/vue-simple-calendar/static/css/default.css';
+import '../../../node_modules/vue-simple-calendar/static/css/holidays-us.css';
 
 import Modal from '@/components/DockUI/Modal.vue';
-import Panel from '@/components/Panel.vue';
+import Panel from '@/components/DockUI/Panel.vue';
 import { events as all_events } from '@/data/mock';
 
 const props = defineProps({

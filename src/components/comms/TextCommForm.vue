@@ -50,8 +50,8 @@
 import { reactive } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import MarkdownToolbar from '@/components/MarkdownToolbar.vue';
-import H010CommModal from './H010CommModal.vue';
+import MarkdownToolbar from '@/components/comms/MarkdownToolbar.vue';
+import H010CommModal from '@/components/comms/H010CommModal.vue';
 
 const state = reactive({
   message: '',

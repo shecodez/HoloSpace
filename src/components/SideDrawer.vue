@@ -1,20 +1,20 @@
 <template>
-  <Drawer v-if="isSmScreen" :isOpen="!collapsed" @close="$emit('close')">
+  <DrawerModal v-if="isSmScreen" :isOpen="!collapsed" @close="$emit('close')">
     <div class="w-64 h-screen bg-base-100">
       <DiskspaceSidePanel :deck="deck" :diskspaces="diskspaces" />
     </div>
-  </Drawer>
-  <MyDrawer v-else :collapsed="collapsed">
+  </DrawerModal>
+  <Drawer v-else :collapsed="collapsed">
     <DiskspaceSidePanel :deck="deck" :diskspaces="diskspaces" />
-  </MyDrawer>
+  </Drawer>
 </template>
 
 <script setup lang="ts">
 import { defineProps, PropType, toRefs } from 'vue';
 
-import MyDrawer from '@/components/MyDrawer.vue';
 import Drawer from '@/components/DockUI/Drawer.vue';
-import DiskspaceSidePanel from '@/components/diskspace/DiskspaceSidePanel.vue';
+import DrawerModal from '@/components/DockUI/DrawerModal.vue';
+import DiskspaceSidePanel from '@/components/diskspaces/DiskspaceSidePanel.vue';
 import { IDeck, IDiskspace } from '@/data/interfaces';
 
 const props = defineProps({

@@ -18,8 +18,7 @@ import { PropType, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import Modal from '@/components/DockUI/Modal.vue';
-import DiskspaceForm from './DiskspaceForm.vue';
-//import { IDiskspace } from '@/data/interfaces';
+import DiskspaceForm from '@/components/diskspaces/DiskspaceForm.vue';
 import { DiskspaceType } from '@/data/mock';
 
 const props = defineProps({

@@ -20,9 +20,9 @@
 import { computed, defineProps, PropType, ref, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 
-import Panel from '@/components/Panel.vue';
-import DiskspaceList from '@/components/DiskspaceList.vue';
-import DeckToolbar from '@/components/DeckToolbar.vue';
+import Panel from '@/components/DockUI/Panel.vue';
+import DiskspaceList from '@/components/diskspaces/DiskspaceList.vue';
+import DeckToolbar from '@/components/decks/DeckToolbar.vue';
 import { DiskspaceType } from '@/data/mock';
 import { IDeck, IDiskspace } from '@/data/interfaces';
 

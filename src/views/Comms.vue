@@ -18,7 +18,7 @@
       />
     </template>
 
-    <ChatPanel
+    <CommsPanel
       :me="activeUser"
       :diskspace="activeDiskspace"
       :messages="messages"
@@ -42,7 +42,7 @@ import ConfirmEmailAlert from '@/components/alerts/ConfirmEmailAlert.vue';
 import FixedPanel from '@/components/FixedPanel.vue';
 import MetaDrawer from '@/components/MetaDrawer.vue';
 import SideDrawer from '@/components/SideDrawer.vue';
-import ChatPanel from '@/components/ChatPanel.vue';
+import CommsPanel from '@/components/comms/CommsPanel.vue';
 import { decks, users, diskspaces as all_diskspaces, messages as all_messages } from '../data/mock';
 
 const route = useRoute();

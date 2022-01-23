@@ -60,7 +60,7 @@ import { Icon } from '@iconify/vue';
 import { format } from 'date-fns';
 
 import { IUser } from '@/data/interfaces';
-import UserAvatar from './UserAvatar.vue';
+import UserAvatar from '@/components/users/UserAvatar.vue';
 
 const props = defineProps({
   user: {

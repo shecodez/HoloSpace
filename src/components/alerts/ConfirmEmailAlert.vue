@@ -23,7 +23,7 @@
 //import { Icon } from "@iconify/vue";
 import { defineProps, toRefs } from 'vue';
 
-import Banner from '@/components/Banner.vue';
+import Banner from '@/components/DockUI/Banner.vue';
 
 const props = defineProps({
   show: {

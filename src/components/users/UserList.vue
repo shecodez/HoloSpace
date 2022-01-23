@@ -23,10 +23,10 @@
 <script setup lang="ts">
 import { defineProps, PropType, toRefs } from 'vue';
 
-import UserAvatar from './UserAvatar.vue';
-import Popper from './DockUI/Popper.vue';
-import UserCard from './UserCard.vue';
-import { IUser } from '../data/interfaces';
+import UserAvatar from '@/components/users/UserAvatar.vue';
+import Popper from '@/components/DockUI/Popper.vue';
+import UserCard from '@/components/users/UserCard.vue';
+import { IUser } from '@/data/interfaces';
 
 const props = defineProps({
   title: String,

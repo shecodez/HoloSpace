@@ -42,9 +42,9 @@ import { defineProps, PropType, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useRoute } from 'vue-router';
 
-import AddDiskspaceModal from './diskspace/AddDiskspaceModal.vue';
-import EditDiskspaceModal from './diskspace/EditDiskspaceModal.vue';
-import { IDiskspace } from '../data/interfaces';
+import AddDiskspaceModal from '@/components/diskspaces/AddDiskspaceModal.vue';
+import EditDiskspaceModal from '@/components/diskspaces/EditDiskspaceModal.vue';
+import { IDiskspace } from '@/data/interfaces';
 import { DiskspaceType } from '@/data/mock';
 
 const props = defineProps({

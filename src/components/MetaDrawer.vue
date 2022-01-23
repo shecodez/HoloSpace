@@ -13,7 +13,7 @@
             </button>
           </div>
           <div class="flex-1 mx-2 hide-on-collapsed">
-            <span class="text-lg font-bold">Crew</span>
+            <span class="text-lg font-bold">{{ title }}</span>
           </div>
         </div>
       </template>
@@ -34,13 +34,17 @@
 import { computed, defineProps, PropType, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import Drawer from '@/components/MyDrawer.vue';
-import Panel from '@/components/Panel.vue';
-import UserList from '@/components/UserList.vue';
-import UserToolbar from './UserToolbar.vue';
-import { IUser } from '../data/interfaces';
+import Drawer from '@/components/DockUI/Drawer.vue';
+import Panel from '@/components/DockUI/Panel.vue';
+import UserList from '@/components/users/UserList.vue';
+import UserToolbar from '@/components/me/UserToolbar.vue';
+import { IUser } from '@/data/interfaces';
 
 const props = defineProps({
+  title: {
+    type: String,
+    default: 'Crew',
+  },
   users: {
     type: Array as PropType<IUser[]>,
     default: [],

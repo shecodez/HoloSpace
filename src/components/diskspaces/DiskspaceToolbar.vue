@@ -35,12 +35,12 @@
 import { defineProps, PropType, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
+import Popper from '@/components/DockUI/Popper.vue';
+import QuickMenu from '@/components/me/QuickMenu.vue';
+import NotificationDrawer from '@/components/me/NotificationDrawer.vue';
+import CalendarModal from '@/components/calendar/CalendarModal.vue';
+import SearchModal from '@/components/search/SearchModal.vue';
 import { IDiskspace } from '@/data/interfaces';
-import Popper from './DockUI/Popper.vue';
-import QuickMenu from './QuickMenu.vue';
-import NotificationDrawer from '@/components/NotificationDrawer.vue';
-import CalendarModal from '@/components/CalendarModal.vue';
-import SearchModal from './SearchModal.vue';
 
 const props = defineProps({
   diskspace: {

@@ -9,7 +9,7 @@
     </span>
   </div>
 
-  <Drawer :isOpen="openNotifications" @close="closeDrawer" css="justify-end">
+  <DrawerModal :isOpen="openNotifications" @close="closeDrawer" css="justify-end">
     <div class="w-64 h-screen bg-base-100 p-2">
       <Panel css="w-full">
         <template #header>
@@ -41,15 +41,15 @@
         </template>
       </Panel>
     </div>
-  </Drawer>
+  </DrawerModal>
 </template>
 
 <script setup lang="ts">
 import { ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import Drawer from '@/components/DockUI/Drawer.vue';
-import Panel from '@/components/Panel.vue';
+import DrawerModal from '@/components/DockUI/DrawerModal.vue';
+import Panel from '@/components/DockUI/Panel.vue';
 
 const props = defineProps({
   btnCss: {

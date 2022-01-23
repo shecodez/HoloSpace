@@ -44,11 +44,11 @@ import { PropType, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import Modal from '@/components/DockUI/Modal.vue';
-import Panel from '@/components/Panel.vue';
+import Panel from '@/components/DockUI/Panel.vue';
+import ToogleDarkMode from '@/components/ToogleDarkMode.vue';
+import LogoutButton from '@/components/LogoutButton.vue';
+import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 import { IUser } from '@/data/interfaces';
-import ToogleDarkMode from './ToogleDarkMode.vue';
-import LogoutButton from './LogoutButton.vue';
-import ThemeSwitcher from './ThemeSwitcher.vue';
 
 const props = defineProps({
   isOpen: {

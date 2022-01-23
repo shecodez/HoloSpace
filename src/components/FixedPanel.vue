@@ -29,8 +29,8 @@
 import { defineProps, PropType, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import DeckList from '@/components/DeckList.vue';
-import AddOrJoinDeckModal from '@/components/deck/AddOrJoinDeckModal.vue';
+import DeckList from '@/components/decks/DeckList.vue';
+import AddOrJoinDeckModal from '@/components/decks/AddOrJoinDeckModal.vue';
 import { IDeck } from '@/data/interfaces';
 
 const props = defineProps({

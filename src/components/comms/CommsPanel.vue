@@ -23,11 +23,11 @@
 <script setup lang="ts">
 import { defineProps, PropType, reactive, toRefs } from 'vue';
 
-import Panel from '@/components/Panel.vue';
-import MessageList from '@/components/MessageList.vue';
-import DiskspaceToolbar from '@/components/DiskspaceToolbar.vue';
-import VoiceCommForm from './comms/VoiceCommForm.vue';
-import TextCommForm from './comms/TextCommForm.vue';
+import Panel from '@/components/DockUI/Panel.vue';
+import MessageList from '@/components/comms/MessageList.vue';
+import DiskspaceToolbar from '@/components/diskspaces/DiskspaceToolbar.vue';
+import VoiceCommForm from '@/components/comms/VoiceCommForm.vue';
+import TextCommForm from '@/components/comms/TextCommForm.vue';
 import { IDiskspace, ITextMessage } from '@/data/interfaces';
 import { CommType } from '@/data/mock';
 
