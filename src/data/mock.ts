@@ -148,20 +148,6 @@ export const memberships = [];
 export const subscriptions = [];
 export const friendships = [];
 
-export const presence = [
-  {
-    diskspace_id: '4',
-    users: [{ id: '4', name: 'WillIAm' }],
-  },
-  {
-    diskspace_id: '5',
-    users: [
-      { id: '2', name: '龍ハヤブサ' },
-      { id: '6', name: '홍길동' },
-    ],
-  },
-];
-
 export const users = [
   {
     id: '0',
@@ -236,6 +222,17 @@ export const users = [
     is_online: false,
     status: OnlineStatus.SHOW,
     created_at: subDays(today, 9),
+  },
+];
+
+export const teams = [
+  {
+    diskspace_id: '4',
+    users: [users[5]],
+  },
+  {
+    diskspace_id: '5',
+    users: [users[4], users[7]],
   },
 ];
 

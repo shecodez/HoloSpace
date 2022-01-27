@@ -9,6 +9,7 @@
 
     <p class="px-4 py-2">
       <span>{{ event.url }}</span>
+      <EventForm v-if="showForm" :event="event" />
     </p>
 
     <div class="flex justify-end px-4 pb-4">
@@ -18,11 +19,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, toRefs } from 'vue';
+import { PropType, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import { IEvent } from '@/data/interfaces';
 import ConfirmDeleteButton from '@/components/ConfirmDeleteButton.vue';
+import EventForm from './EventForm.vue';
 
 const props = defineProps({
   event: {
@@ -30,6 +32,8 @@ const props = defineProps({
     default: {},
   },
 });
+
+const showForm = ref(false);
 
 const { event } = toRefs(props);
 </script>

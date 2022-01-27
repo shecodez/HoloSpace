@@ -26,8 +26,9 @@ export interface IMessageAuthor {
 export interface IEvent {
   id: string;
 
-  title: string;
-  url?: string; // details
+  title: string; // name
+  description?: string;
+  url?: string;
   startDate: Date;
   endDate?: Date;
   classes?: string; // color

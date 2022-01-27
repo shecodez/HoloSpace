@@ -11,17 +11,27 @@
     </div>
 
     <div class="form-control mb-2">
-      <label class="label">Details/URL</label>
-      <div class="relative flex">
-        <textarea v-model="form.url" class="textarea h-24 textarea-bordered textarea-accent pl-16 w-full" />
-        <span class="absolute top-0 left-0 h-full rounded-r-none btn btn-accent">
+      <label class="label">URL</label>
+      <div class="relative">
+        <input v-model="form.url" type="text" class="w-full pl-16 input input-accent input-bordered" />
+        <span class="absolute top-0 left-0 rounded-r-none btn btn-accent">
           <Icon icon="mdi:link-variant" width="20" />
         </span>
       </div>
     </div>
 
+    <div class="form-control mb-2">
+      <label class="label">Description</label>
+      <div class="relative flex">
+        <textarea v-model="form.description" class="textarea h-24 textarea-bordered textarea-accent pl-16 w-full" />
+        <span class="absolute top-0 left-0 h-full rounded-r-none btn btn-accent">
+          <Icon icon="ri:sticky-note-fill" width="20" />
+        </span>
+      </div>
+    </div>
+
     <div class="flex gap-4 mb-2">
-      <div class="form-control required w-1/2 overflow-hidden">
+      <div class="form-control required w-full md:w-1/2 overflow-hidden">
         <label class="label">Start Date</label>
         <div class="relative">
           <input v-model="form.startDate" type="date" class="w-full pl-16 input input-accent input-bordered" />
@@ -30,7 +40,7 @@
           </span>
         </div>
       </div>
-      <div class="form-control mb-2 w-1/2 overflow-hidden">
+      <div class="form-control mb-2 w-full md:w-1/2 overflow-hidden">
         <label class="label">End Date</label>
         <div class="relative">
           <input v-model="form.endDate" type="date" class="w-full pl-16 input input-accent input-bordered" />
@@ -56,7 +66,7 @@ import { computed, onMounted, PropType, reactive } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import { IEvent } from '@/data/interfaces';
-import ConfirmDeleteButton from '../ConfirmDeleteButton.vue';
+import ConfirmDeleteButton from '@/components/ConfirmDeleteButton.vue';
 
 const props = defineProps({
   event: {
@@ -70,6 +80,7 @@ const props = defineProps({
 const form = reactive({
   title: '',
   url: '',
+  description: '',
   startDate: new Date(),
   endDate: new Date(),
   classes: '',
@@ -78,6 +89,7 @@ const form = reactive({
 onMounted(() => {
   if (!!props.event.title) {
     form.title = props.event.title;
+    form.description = props.event.description as string;
     form.url = props.event.url as string;
     form.startDate = props.event.startDate;
     form.endDate = props.event.endDate as Date;
