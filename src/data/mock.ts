@@ -43,7 +43,14 @@ export enum Region {
 }
 
 export const decks = [
-  { id: '1', name: 'Resume | NJN', boot_disk_id: '1', captain_id: '1', hq: Region.US_EAST, created_at: today },
+  {
+    id: '1',
+    name: 'Resume | NJN',
+    boot_disk_id: '1',
+    captain_id: '1',
+    hq: Region.US_EAST,
+    created_at: today,
+  },
   { id: '2', name: '이거 매워요?', boot_disk_id: '6', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
   { id: '3', name: '見ぬが花', boot_disk_id: '7', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
   // { id: '4', name: 'Deck 4', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },

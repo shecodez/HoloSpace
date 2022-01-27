@@ -1,5 +1,5 @@
 <template>
-  <button :class="css">
+  <button :class="css" title="Logout">
     <Icon icon="mdi:logout" width="24" />
   </button>
 </template>

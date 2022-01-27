@@ -11,20 +11,20 @@
       </Popper>
     </div>
     <div class="hide-on-collapsed flex-1 mx-2 flex flex-col items-start overflow-hidden">
-      <h3 class="text-lg font-bold w-full truncate">{{ user.name }}</h3>
+      <h3 class="text-lg font-bold w-full truncate" :title="user.name">{{ user.name }}</h3>
       <span class="text-xs font-extralight text-gray-400 -mt-1.5">#{{ user.pin }}</span>
     </div>
 
     <div class="hide-on-collapsed">
       <Popper placement="top-start">
         <template v-slot:activator>
-          <button class="btn btn-square btn-sm btn-ghost">
+          <button class="btn btn-square btn-sm btn-ghost" title="I/O Toolbar">
             <Icon icon="mdi:chevron-up" width="24" />
           </button>
         </template>
         <IOToolbar :user="user" />
       </Popper>
-      <button @click="openModal" class="btn btn-square btn-sm btn-ghost">
+      <button @click="openModal" class="btn btn-square btn-sm btn-ghost" title="My Settings">
         <Icon icon="mdi:cog" width="24" />
       </button>
     </div>

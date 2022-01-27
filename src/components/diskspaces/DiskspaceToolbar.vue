@@ -3,6 +3,7 @@
     <div class="flex-none">
       <button
         @click="$emit('toggleCollapsed')"
+        :title="collapsed ? 'Open' : 'Collapse'"
         class="btn btn-square btn-ghost"
         :class="!collapsed && 'transform rotate-180'"
       >
@@ -10,8 +11,8 @@
       </button>
     </div>
     <div class="flex-1 px-2 mx-2 flex items-center w-full overflow-hidden divide-x divide-opacity-10">
-      <h1 class="text-lg font-brand pr-2 inline-block truncate">{{ diskspace.name }}</h1>
-      <span class="font-thin pl-2 truncate">{{ diskspace.topic }}</span>
+      <h1 class="text-lg font-brand pr-2 inline-block truncate" :title="diskspace.name">{{ diskspace.name }}</h1>
+      <span class="font-thin pl-2 truncate" :title="diskspace.topic">{{ diskspace.topic }}</span>
     </div>
 
     <div class="hidden mx-2 md:flex">
@@ -22,7 +23,7 @@
 
     <Popper placement="bottom">
       <template v-slot:activator>
-        <button class="btn btn-square btn-ghost">
+        <button class="btn btn-square btn-ghost" title="More Options">
           <Icon icon="mdi:dots-vertical" width="24" />
         </button>
       </template>

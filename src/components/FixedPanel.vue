@@ -2,7 +2,7 @@
   <div class="bg-base-300 bg-opacity-80">
     <div class="flex flex-row md:flex-col w-screen md:w-20 h-16 md:h-full">
       <div class="my-auto md:my-0 md:mx-auto">
-        <button class="btn btn-circle bg-primary m-2">
+        <button title="@me (profile)" class="btn btn-circle bg-primary m-2">
           <Icon icon="mdi:account-circle" width="26" />
         </button>
       </div>
@@ -15,7 +15,7 @@
       </div>
 
       <div class="sticky right-0 md:bottom-0 p-2 my-auto md:my-0 md:mx-auto">
-        <button @click="openModal" class="btn btn-circle btn-outline border-dashed border-4">
+        <button @click="openModal" title="Add New Deck" class="btn btn-circle btn-outline border-dashed border-4">
           <Icon icon="mdi:plus" width="26" />
         </button>
       </div>

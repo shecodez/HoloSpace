@@ -1,5 +1,5 @@
 <template>
-  <button @click="toggleDark()" :class="css">
+  <button @click="toggleDark()" :class="css" :title="isDark ? 'Theme: light' : 'Theme: dark'">
     <Icon v-if="isDark" icon="mdi:brightness-5" width="24" />
     <Icon v-else icon="mdi:weather-night" width="24" />
   </button>

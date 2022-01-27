@@ -1,5 +1,5 @@
 <template>
-  <button @click="openModal" :class="btnCss">
+  <button @click="openModal" :class="btnCss" title="Calendar">
     <Icon icon="mdi:calendar-month" width="24" />
   </button>
 
@@ -66,10 +66,7 @@
 
             <template #footer>
               <div class="navbar mx-2">
-                <button class="btn btn-sm btn-primary w-full flex items-center gap-2">
-                  <Icon icon="mdi:plus" width="24" />
-                  Add Event
-                </button>
+                <AddEventModal />
               </div>
             </template>
           </Panel>
@@ -108,6 +105,7 @@
             <div class="flex-1 flex flex-col flex-grow text-neutral">
               <!-- TODO: add css to cross-out past days -->
               <CalendarView
+                id="vue-simple-cal"
                 :items="events"
                 :show-date="state.showDate"
                 :time-format-options="{ hour: 'numeric', minute: '2-digit' }"
@@ -123,13 +121,18 @@
         </div>
       </div>
     </div>
+
+    <!-- <div class="absolute top-2 left-0">
+      <EventCard v-if="state.selectedItem" :event="state.selectedItem" />
+    </div> -->
   </Modal>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, toRefs } from 'vue';
+import { reactive, ref, toRefs, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import { format } from 'date-fns';
+//import { createPopper } from '@popperjs/core';
 import { CalendarView } from 'vue-simple-calendar';
 import '../../../node_modules/vue-simple-calendar/dist/style.css';
 // The next two lines are optional themes
@@ -139,6 +142,8 @@ import '../../../node_modules/vue-simple-calendar/static/css/holidays-us.css';
 import Modal from '@/components/DockUI/Modal.vue';
 import Panel from '@/components/DockUI/Panel.vue';
 import { events as all_events } from '@/data/mock';
+import AddEventModal from './AddEventModal.vue';
+import EventCard from './EventCard.vue';
 
 const props = defineProps({
   btnCss: {
@@ -175,6 +180,7 @@ const state = reactive({
   useDefaultTheme: true,
   useHolidayTheme: true,
   useTodayIcons: true,
+  selectedItem: null,
 });
 
 function onClickDay(d: any) {
@@ -182,20 +188,37 @@ function onClickDay(d: any) {
 }
 
 function onClickItem(e: any) {
-  console.log(`You clicked: ${e.title}`);
+  //console.log(`You clicked: ${e.title}`);
+  state.selectedItem = { ...e };
+  // TODO: open popper at item clientX clientY pos
+  // https://popper.js.org/docs/v2/virtual-elements/
 }
+
+// function generateGetBoundingClientRect(x = 0, y = 0) {
+//   return () => ({
+//     width: 0,
+//     height: 0,
+//     top: y,
+//     right: x,
+//     bottom: y,
+//     left: x,
+//   });
+// }
+// const popper = ref();
+// const virtualElement = {
+//   getBoundingClientRect: generateGetBoundingClientRect(),
+// };
+// watch(
+//   () => state.selectedItem,
+//   () => {
+//     createPopper(virtualElement, popper.value);
+//   },
+// );
+// document.addEventListener('mousemove', ({ clientX: x, clientY: y }) => {
+//   virtualElement.getBoundingClientRect = generateGetBoundingClientRect(x, y);
+// });
 
 const events = ref(all_events);
-
-function clickTestAddEvent() {
-  events.value.push({
-    id: 'e' + Math.random().toString(36).substr(2, 10),
-    title: state.newItemTitle,
-    startDate: state.newItemStartDate,
-    endDate: state.newItemEndDate,
-  });
-  console.log('Toast Success: You added a calendar event!');
-}
 </script>
 
 <style>

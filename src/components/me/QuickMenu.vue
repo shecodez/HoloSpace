@@ -1,5 +1,5 @@
 <template>
-  <ul class="flex flex-col gap-1 mt-3">
+  <ul class="relative flex flex-col gap-1 mt-3">
     <template class="flex flex-col gap-1 md:hidden">
       <li><SearchModal btnCss="btn btn-sm btn-circle" /></li>
       <li><CalendarModal btnCss="btn btn-sm btn-circle" /></li>

@@ -1,12 +1,12 @@
 <template>
   <div class="navbar bg-base-200">
     <div class="flex-1 px-2 mx-2 overflow-hidden">
-      <span class="text-lg font-bold truncate">{{ deck.name }}</span>
+      <span class="text-lg font-bold truncate" :title="deck.name">{{ deck.name }}</span>
     </div>
     <div class="flex-none">
       <Popper placement="bottom">
         <template v-slot:activator>
-          <button class="btn btn-square btn-ghost">
+          <button class="btn btn-square btn-ghost" title="Deck Menu">
             <Icon icon="mdi:chevron-down" width="24" />
           </button>
         </template>

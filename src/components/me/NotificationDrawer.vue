@@ -1,6 +1,6 @@
 <template>
   <div class="relative inline-flex">
-    <button @click="openDrawer" :class="btnCss">
+    <button @click="openDrawer" :class="btnCss" title="Notifications">
       <Icon icon="mdi:bell" width="24" />
     </button>
     <span class="flex absolute h-2 w-2 top-0 right-0">

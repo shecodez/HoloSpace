@@ -54,7 +54,7 @@ const state = reactive({
   metaDrawerIsCollapsed: false,
   sideDrawerPreBreakpoint: false,
   metaDrawerPreBreakpoint: false,
-  backgroundImageUrl: '/src/assets/images/backgrounds/juskteez-vu-unsplash-1920x1080.jpg',
+  backgroundImageUrl: 'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/backgrounds/default-bg.jpg',
 });
 
 const lgAndLarger = breakpoints.greater('lg');

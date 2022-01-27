@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MarkdownToolbar v-if="state.showMarkdownToolbar" />
+    <FormatToolbar v-if="state.showFormatToolbar" />
     <div class="mr-2">
       <div class="flex relative items-center justify-between">
         <div class="absolute left-2 grid">
@@ -26,15 +26,19 @@
         </button>
 
         <div class="absolute right-2 flex items-center">
-          <button @click="toggleMarkdownToolbar" class="btn btn-ghost btn-square btn-sm">
+          <button @click="toggleFormatToolbar" class="btn btn-ghost btn-square btn-sm" title="Format">
             <Icon icon="mdi:format-textbox" width="20" />
           </button>
-          <button @click="$emit('switchToVoiceComms')" class="btn btn-ghost btn-square btn-sm">
+          <button @click="$emit('switchToVoiceComms')" class="btn btn-ghost btn-square btn-sm" title="Send VoiceComm">
             <Icon icon="clarity:microphone-solid" width="20" />
           </button>
 
           <div class="my-divider border-l ml-1">
-            <button type="submit" class="btn btn-outline btn-primary btn-square btn-sm border-none ml-1">
+            <button
+              type="submit"
+              class="btn btn-outline btn-primary btn-square btn-sm border-none ml-1"
+              title="Send Comm"
+            >
               <Icon icon="fa:paper-plane" width="24" />
             </button>
           </div>
@@ -50,17 +54,17 @@
 import { reactive } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import MarkdownToolbar from '@/components/comms/MarkdownToolbar.vue';
+import FormatToolbar from '@/components/comms/FormatTextToolbar.vue';
 import H010CommModal from '@/components/comms/H010CommModal.vue';
 
 const state = reactive({
   message: '',
   isMultiline: false,
-  showMarkdownToolbar: false,
+  showFormatToolbar: false,
 });
 
-function toggleMarkdownToolbar() {
-  state.showMarkdownToolbar = !state.showMarkdownToolbar;
+function toggleFormatToolbar() {
+  state.showFormatToolbar = !state.showFormatToolbar;
   state.isMultiline = !state.isMultiline;
 }
 

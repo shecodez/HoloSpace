@@ -1,17 +1,26 @@
 <template>
-  <ul class="flex md:flex-col gap-2">
+  <ul class="flex md:flex-col gap-2 p-1">
     <li v-for="deck in decks" :key="deck.id" class="my-auto md:my-0 md:mx-auto">
-      <div :data-tip="deck.name" class="tooltip tooltip-top md:tooltip-right z-10">
+      <div class="relative" :title="deck.name">
         <router-link :to="`/d/${deck.id}/${deck.boot_disk_id}`">
-          <div class="avatar" :class="deck.image_url ? '' : 'placeholder'">
+          <div class="avatar shadow" :class="deck.image_url ? '' : 'placeholder'">
             <div
-              class="deck bg-primary text-neutral-content w-12 h-12"
-              :class="isActive(deck.id) ? 'active rounded-md' : 'rounded-full'"
+              class="deck bg-primary w-12 h-12"
+              :class="[
+                isActive(deck.id) ? 'active rounded-md' : 'rounded-full',
+                //!isActive(deck.id) && 'w-11 h-11 ring ring-accent ring-offset-base-300 ring-offset-2 m-1',
+              ]"
             >
-              <span v-if="!deck.image_url" class="text-xl">{{ deck.name.charAt(0) }}</span>
+              <img v-if="deck.image_url" :src="deck.image_url" alt="Deck Icon" class="inline-block" />
+              <span v-else class="text-xl">{{ deck.name.charAt(0) }}</span>
             </div>
           </div>
         </router-link>
+
+        <!-- <span class="notification absolute right-0 top-0 flex h-4 w-4">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-4 w-4 bg-accent"></span>
+        </span> -->
       </div>
     </li>
   </ul>

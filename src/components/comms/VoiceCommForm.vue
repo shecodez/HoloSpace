@@ -5,7 +5,7 @@
 
       <div class="ml-2">
         <Icon v-if="state.isRecording" icon="bx:bxs-album" width="24" class="animate-spin text-primary" />
-        <button v-if="!state.isRecording && !!state.comm" class="btn btn-ghost btn-square btn-sm">
+        <button v-if="!state.isRecording && !!state.comm" class="btn btn-ghost btn-square btn-sm" title="Play">
           <Icon icon="mdi:play" width="24" />
         </button>
       </div>
@@ -14,16 +14,20 @@
         <Icon icon="mdi:trash-can" width="20" />
       </ConfirmDeleteButton>
 
-      <button @click="$emit('switchToTextComms')" class="btn btn-sm btn-ghost btn-square">
+      <button @click="$emit('switchToTextComms')" class="btn btn-sm btn-ghost btn-square" title="Send TextComm">
         <Icon icon="mdi:format-textbox" width="20" />
       </button>
-      <button @click="toggleRec" class="btn btn-ghost btn-square btn-sm">
+      <button
+        @click="toggleRec"
+        class="btn btn-ghost btn-square btn-sm"
+        :title="state.isRecording ? 'Stop' : 'Record Voice'"
+      >
         <Icon v-if="state.isRecording" icon="mdi:stop" width="20" />
         <Icon v-else icon="mdi:microphone" width="20" />
       </button>
 
       <div class="my-divider border-l ml-1">
-        <button type="submit" class="btn btn-outline btn-primary btn-square btn-sm border-none ml-1">
+        <button type="submit" class="btn btn-outline btn-primary btn-square btn-sm border-none ml-1" title="Send Comm">
           <Icon icon="fa:paper-plane" width="24" />
         </button>
       </div>

@@ -1,8 +1,8 @@
 <template>
   <div class="relative">
-    <div class="user avatar cursor-pointer" :class="user?.image_url ? '' : 'placeholder'">
+    <div class="user avatar cursor-pointer" :class="user?.image_url ? '' : 'placeholder'" :title="user?.name">
       <div class="bg-primary text-neutral-content rounded-full" :class="`w-${size} h-${size}`">
-        <img v-if="user?.image_url" :src="user?.image_url" alt="2d avatar" class="inline-block" />
+        <img v-if="user?.image_url" :src="user?.image_url" alt="User 2d-Avatar" class="inline-block" />
         <span v-else :class="textCss">{{ user?.name.charAt(0) }}</span>
       </div>
     </div>

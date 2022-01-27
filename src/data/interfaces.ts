@@ -23,6 +23,16 @@ export interface IMessageAuthor {
   model_url?: string;
 }
 
+export interface IEvent {
+  id: string;
+
+  title: string;
+  url?: string; // details
+  startDate: Date;
+  endDate?: Date;
+  classes?: string; // color
+}
+
 export interface IDeck {
   id: string;
 

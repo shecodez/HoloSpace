@@ -1,5 +1,5 @@
 <template>
-  <button @click="openModal" :class="btnCss">
+  <button @click="openModal" :class="btnCss" title="Search">
     <Icon icon="mdi:magnify" width="24" />
   </button>
 

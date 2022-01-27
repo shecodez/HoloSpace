@@ -6,6 +6,7 @@
           <div class="flex-none">
             <button
               @click="$emit('toggleCollapsed')"
+              :title="collapsed ? 'Open' : 'Collapse'"
               class="btn btn-square btn-ghost"
               :class="collapsed && 'transform rotate-180'"
             >
