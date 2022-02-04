@@ -1,5 +1,11 @@
 import { DiskspaceType, OnlineStatus, Region } from './mock';
 
+export interface IAuth {
+  username?: string; // meta
+  email: string;
+  password?: string;
+}
+
 export interface IUser {
   id: string;
 

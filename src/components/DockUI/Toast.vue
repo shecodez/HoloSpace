@@ -1,12 +1,9 @@
 <template>
-  <div
-    class="hs-toast relative w-64 py-2 border border-gray-600 m-0.5 rounded-lg shadow-md overflow-hidden"
-    :class="`${type}-toast bg-${type}-500`"
-  >
-    <div class="flex justify-end space-x-1 p-1 mr-2">
+  <div class="hs-toast relative pt-4 overflow-hidden" :class="`${type}-toast bg-${type}-500`">
+    <!-- <div class="flex justify-end space-x-1 p-1 mr-2">
       <div class="w-2 h-2 rounded-full bg-white bg-opacity-50 hover:bg-white" />
       <div class="w-2 h-2 rounded-full bg-white hover:bg-red-500" />
-    </div>
+    </div> -->
     <div v-if="type === 'warning'" class="exclamation absolute left-7 top-0 z-20 text-red-400 font-bold">-!-</div>
     <div class="relative" :class="`${type}-face`">
       <div class="face absolute w-11 h-11 bg-white rounded-full border border-gray-800 top-0 left-4 z-10">
@@ -17,25 +14,26 @@
       <div class="shadow absolute w-10 h-1 bg-gray-800 bg-opacity-50 left-5 top-11 z-10" />
     </div>
     <div class="message uppercase mr-4" :class="type === 'error' ? 'ml-4' : 'ml-20'">
-      <h4><slot name="header"></slot></h4>
-      <p><slot></slot></p>
+      <h4>
+        <slot name="title">{{ title }}</slot>
+      </h4>
+      <p>
+        <slot>{{ text }}</slot>
+      </p>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { defineProps, toRefs } from 'vue';
 
-export default defineComponent({
-  name: 'Toast',
-  props: {
-    type: {
-      type: String, // success, error, info, warning
-      required: true,
-    },
-  },
-  setup: () => {},
+const props = defineProps({
+  type: String, // success, error, info, warning
+  title: String,
+  text: String,
 });
+
+const { type, title, text } = toRefs(props);
 </script>
 
 <style scoped>
@@ -212,25 +210,25 @@ $blue: #7db0db;
 $purple: #7d81db;
 $yellow: #efe08d;
 $peach: #efaf8d;
-*/
+
 
 .success-toast {
-  /* background: linear-gradient(to bottom right, $success 40%, $lime 100%); */
-  @apply bg-gradient-to-br from-success-500 to-indigo-300;
+  /* background: linear-gradient(to bottom right, $success 40%, $lime 100%); /
+  @apply bg-gradient-to-br from-green-500 to-indigo-300;
 }
 
 .error-toast {
-  /* background: linear-gradient(to bottom left, $error 40%, $orange 100%); */
-  @apply bg-gradient-to-bl from-error-500 to-yellow-500;
+  /* background: linear-gradient(to bottom left, $error 40%, $orange 100%); /
+  @apply bg-gradient-to-bl from-red-500 to-yellow-500;
 }
 
 .info-toast {
-  /* background: linear-gradient(to bottom right, $blue 40%, $purple 100%); */
-  @apply bg-gradient-to-br from-info-500 to-purple-500;
+  /* background: linear-gradient(to bottom right, $blue 40%, $purple 100%); /
+  @apply bg-gradient-to-br from-blue-500 to-purple-500;
 }
 
 .warning-toast {
-  /* background: linear-gradient(to bottom left, $yellow 40%, $peach 100%); */
-  @apply bg-gradient-to-bl from-warning-500 apply to-red-300;
-}
+  /* background: linear-gradient(to bottom left, $yellow 40%, $peach 100%); /
+  @apply bg-gradient-to-bl from-yellow-500 to-red-300;
+}*/
 </style>

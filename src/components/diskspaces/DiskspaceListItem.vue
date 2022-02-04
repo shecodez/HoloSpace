@@ -45,11 +45,11 @@
     </div>
 
     <div v-if="state.expanded" class="diskspace-team">
-      <ul class="pl-10 flex flex-col gap-1">
+      <ul class="pt-1 pl-10 pr-6 flex flex-col gap-1">
         <template v-for="user in team" :key="user.id">
           <li class="flex items-center gap-2">
             <UserAvatar :user="user" :size="7" textCss="text-sm" hideIndicators />
-            <span class="text-xs">{{ user.name }}</span>
+            <span class="text-xs truncate">{{ user.name }}</span>
           </li>
         </template>
       </ul>

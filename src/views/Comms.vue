@@ -5,7 +5,8 @@
     </template>
 
     <template v-slot:banner>
-      <ConfirmEmailAlert :show="state.showAlert" @close="dismissAlert" />
+      <!-- <ConfirmEmailAlert :show="state.showAlert" @close="dismissAlert" /> -->
+      <BetaAlert :show="state.showAlert" @close="dismissAlert" />
     </template>
 
     <template v-slot:left>
@@ -37,8 +38,8 @@ import { computed, reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
-import Layout from '@/layouts/Default.vue';
-import ConfirmEmailAlert from '@/components/alerts/ConfirmEmailAlert.vue';
+import Layout from '@/layouts/DefaultLayout.vue';
+import BetaAlert from '@/components/alerts/BetaAlert.vue';
 import FixedPanel from '@/components/FixedPanel.vue';
 import MetaDrawer from '@/components/MetaDrawer.vue';
 import SideDrawer from '@/components/SideDrawer.vue';

@@ -60,8 +60,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 
-import { supabase } from '../data/supabase';
-import Logo from '../components/Logo.vue';
+import useSupabase from '@/use/supabase';
+import Logo from '@/components/Logo.vue';
 
 const state = reactive({
   loading: false,
@@ -69,6 +69,8 @@ const state = reactive({
   sent: false,
   error: null,
 });
+
+const { supabase } = useSupabase();
 
 async function subscribeToNewsletter() {
   try {

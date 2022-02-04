@@ -29,12 +29,12 @@ export enum OnlineStatus {
 }
 
 export enum PasswordStrength {
-  VERY_WEAK = 'VERY_WEAK',
-  WEAK = 'WEAK',
-  MEDIUM = 'MEDIUM',
-  STRONG = 'STRONG',
-  VERY_STRONG = 'VERY_STRONG',
-  OVER_9000 = 'OVER_9000',
+  VERY_WEAK = 0,
+  WEAK = 10,
+  GOOD = 20,
+  STRONG = 30,
+  VERY_STRONG = 40,
+  OVER_9000 = 50,
 }
 
 export enum Region {

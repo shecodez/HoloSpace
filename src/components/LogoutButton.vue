@@ -1,7 +1,7 @@
 <template>
-  <button :class="css" title="Logout">
+  <router-link to="/logout" :class="css" title="Logout">
     <Icon icon="mdi:logout" width="24" />
-  </button>
+  </router-link>
 </template>
 
 <script setup lang="ts">

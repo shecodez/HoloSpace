@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-hidden" :class="`w-${size} h-${size}`">
+  <div class="relative overflow-hidden flex-shrink-0" :class="`w-${size} h-${size}`">
     <div class="user avatar cursor-pointer" :class="user?.image_url ? '' : 'placeholder'" :title="user?.name">
       <div class="bg-primary text-neutral-content rounded-full" :class="`w-${size} h-${size}`">
         <img v-if="user?.image_url" :src="user?.image_url" alt="User 2d-Avatar" class="inline-block" />

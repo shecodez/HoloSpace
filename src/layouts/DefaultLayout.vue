@@ -1,11 +1,11 @@
 <template>
   <div
-    class="default-layout flex flex-col md:flex-row flex-wrap md:flex-nowrap h-screen overflow-hidden"
+    class="default-layout flex flex-col md:flex-row flex-wrap md:flex-nowrap h-screen max-h-screen overflow-hidden"
     :style="{ backgroundImage: `url(${backgroundImageUrl})` }"
   >
     <slot name="fixed"></slot>
 
-    <div class="flex-1 flex flex-col w-full h-full overflow-hidden">
+    <div class="flex-1 flex flex-col w-full h-full md:max-h-screen overflow-hidden">
       <slot name="banner"></slot>
 
       <div class="flex h-full overflow-hidden">
