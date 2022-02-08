@@ -4,7 +4,7 @@
   </button>
 
   <Modal :isOpen="openSearch" @close="closeModal" css="w-11/12 md:max-w-lg mx-auto rounded shadow-lg">
-    <form class="flex text-white w-full">
+    <form class="flex w-full">
       <div class="form-control">
         <select v-model="state.filter" class="select select-bordered select-primary rounded-r-none rounded-bl-none">
           <option v-for="filter in filters" :value="filter.name">{{ filter.name }}</option>
@@ -21,7 +21,7 @@
             class="input input-primary input-bordered w-full pr-16 rounded-l-none rounded-br-none"
           />
 
-          <button class="absolute top-0 right-0 rounded-l-none btn btn-primary">
+          <button type="button" class="absolute top-0 right-0 rounded-l-none btn btn-primary">
             <Icon icon="mdi:magnify" width="20" />
           </button>
         </div>

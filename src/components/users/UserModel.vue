@@ -138,7 +138,6 @@ function createH010botModel(name: 'xbot' | 'ybot', random = false) {
   }
   userModel.value?.addComponent('animation', { assets: [assets[2]], speed: 1 });
   app.value.root.addChild(userModel.value);
-  //console.log(state.h010botColors);
 }
 
 function createRandomColorH010botModel(name: 'xbot' | 'ybot') {

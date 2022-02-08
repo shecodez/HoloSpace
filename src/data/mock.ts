@@ -142,6 +142,15 @@ export const diskspaces = [
     can_delete: true,
     created_at: today,
   },
+  {
+    id: '9',
+    name: 'team-gu9skf',
+    user_id: '1',
+    is_ssh: true,
+    type: DiskspaceType.H010,
+    can_delete: true,
+    created_at: today,
+  },
 ];
 
 export const memberships = [];
@@ -163,7 +172,7 @@ export const users = [
     pin: 1337,
     is_online: true,
     status: OnlineStatus.SHOW,
-    image_url: 'https://i.pravatar.cc/500?img=16',
+    image_url: 'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/avatars/shecodez-njn.jpg',
     created_at: subDays(today, 11),
   },
   {

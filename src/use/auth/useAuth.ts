@@ -47,10 +47,10 @@ export default function useAuth() {
   }
 
   /**
-   * Handles OAuth via Facebook
+   * Handles OAuth via Discord
    */
-  function authWithFacebook() {
-    return authWithExternalProvider('facebook');
+  function authWithDiscord() {
+    return authWithExternalProvider('discord');
   }
 
   /**
@@ -110,7 +110,7 @@ export default function useAuth() {
     authWithExternalProvider,
     authWithGoogle,
     authWithTwitter,
-    authWithFacebook,
+    authWithDiscord,
     isLoggedIn,
     logout,
     register,

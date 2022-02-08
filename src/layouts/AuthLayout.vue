@@ -42,12 +42,8 @@
               <button @click="handleAuth('twitter')" class="btn btn-sm btn-outline" :class="state.loading && 'loading'">
                 <Icon icon="logos:twitter" width="20" />
               </button>
-              <button
-                @click="handleAuth('facebook')"
-                class="btn btn-sm btn-outline"
-                :class="state.loading && 'loading'"
-              >
-                <Icon icon="logos:facebook" width="20" />
+              <button @click="handleAuth('discord')" class="btn btn-sm btn-outline" :class="state.loading && 'loading'">
+                <Icon icon="logos:discord-icon" width="20" />
               </button>
             </div>
           </div>
@@ -82,9 +78,9 @@ const { backgroundImageUrl, pageTitle } = toRefs(props);
 useTitle(`${pageTitle?.value} | ${import.meta.env.VITE_APP_NAME}`);
 
 const router = useRouter();
-const { user, authWithGoogle, authWithTwitter, authWithFacebook } = useAuth();
+const { user, authWithGoogle, authWithTwitter, authWithDiscord } = useAuth();
 
-async function handleAuth(provider: 'google' | 'twitter' | 'facebook') {
+async function handleAuth(provider: 'google' | 'twitter' | 'discord') {
   // console.log('social auth with', provider);
   try {
     state.loading = true;
@@ -95,8 +91,8 @@ async function handleAuth(provider: 'google' | 'twitter' | 'facebook') {
       case 'twitter':
         await authWithTwitter();
         break;
-      case 'google':
-        await authWithFacebook();
+      case 'discord':
+        await authWithDiscord();
         break;
 
       default:

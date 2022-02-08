@@ -1,11 +1,13 @@
 <template>
   <DrawerModal v-if="isSmScreen" :isOpen="!collapsed" @close="$emit('close')">
     <div class="w-64 h-screen bg-base-100">
-      <DiskspaceSidePanel :deck="deck" :diskspaces="diskspaces" />
+      <DirectDiskspaceSidePanel v-if="isDirect" :diskspaces="diskspaces" />
+      <DiskspaceSidePanel v-else :deck="deck" :diskspaces="diskspaces" />
     </div>
   </DrawerModal>
   <Drawer v-else :collapsed="collapsed">
-    <DiskspaceSidePanel :deck="deck" :diskspaces="diskspaces" />
+    <DirectDiskspaceSidePanel v-if="isDirect" :diskspaces="diskspaces" />
+    <DiskspaceSidePanel v-else :deck="deck" :diskspaces="diskspaces" />
   </Drawer>
 </template>
 
@@ -16,6 +18,7 @@ import Drawer from '@/components/DockUI/Drawer.vue';
 import DrawerModal from '@/components/DockUI/DrawerModal.vue';
 import DiskspaceSidePanel from '@/components/diskspaces/DiskspaceSidePanel.vue';
 import { IDeck, IDiskspace } from '@/data/interfaces';
+import DirectDiskspaceSidePanel from './diskspaces/DirectDiskspaceSidePanel.vue';
 
 const props = defineProps({
   deck: {
@@ -31,6 +34,10 @@ const props = defineProps({
     default: false,
   },
   isSmScreen: Boolean,
+  isDirect: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const { deck, diskspaces, collapsed } = toRefs(props);

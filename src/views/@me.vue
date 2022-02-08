@@ -3,7 +3,7 @@
     <template v-slot:fixed>
       <FixedPanel :decks="decks">
         <template #linkTo>
-          <router-link to="/ssh" class="btn btn-circle bg-primary m-2">
+          <router-link to="/direct" class="btn btn-circle bg-primary m-2">
             <Icon icon="mdi:at" width="26" />
           </router-link>
         </template>

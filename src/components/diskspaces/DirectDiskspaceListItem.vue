@@ -26,9 +26,8 @@
           </button>
 
           <div v-else class="pl-2" />
-          <router-link :to="`/d/${diskspace.deck_id}${h010}/${diskspace.id}`" class="truncate">
-            {{ diskspace.name }}
-          </router-link>
+          <Icon icon="mdi:accounts" width="36" />
+          <router-link :to="`/direct${h010}/${diskspace.id}`" class="truncate"> {{ diskspace.name }}</router-link>
         </div>
 
         <div class="actions">

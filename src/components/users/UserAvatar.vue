@@ -92,6 +92,12 @@ function getStatusColor(status: OnlineStatus, isOnline: boolean) {
 .h-7 {
   height: 1.75rem;
 }
+.w-8 {
+  width: 2rem;
+}
+.h-8 {
+  height: 2rem;
+}
 .w-16 {
   width: 4rem;
 }

@@ -34,8 +34,7 @@
       </div>
     </template>
 
-    <div ref="canvasarea" class="relative block w-full h-full bg-black">
-      <!-- Height: {{ height }} Width: {{ width }} -->
+    <div ref="canvasarea" class="relative block w-full h-full">
       <UserModel :width="width" :height="height" />
     </div>
   </Panel>

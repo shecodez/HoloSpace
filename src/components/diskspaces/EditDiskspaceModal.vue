@@ -10,7 +10,8 @@
         </button>
       </div>
 
-      <DiskspaceForm :type="diskspace.type" :diskspace="diskspace" />
+      <DirectDiskspaceForm v-if="isDirect" :type="diskspace.type" :diskspace="diskspace" />
+      <DiskspaceForm v-else :type="diskspace.type" :diskspace="diskspace" />
     </div>
   </Modal>
 </template>
@@ -22,6 +23,7 @@ import { Icon } from '@iconify/vue';
 import Modal from '@/components/DockUI/Modal.vue';
 import DiskspaceForm from '@/components/diskspaces/DiskspaceForm.vue';
 import { IDiskspace } from '@/data/interfaces';
+import DirectDiskspaceForm from './DirectDiskspaceForm.vue';
 
 const props = defineProps({
   isOpen: {
@@ -31,6 +33,10 @@ const props = defineProps({
   diskspace: {
     type: Object as PropType<IDiskspace>,
     default: {},
+  },
+  isDirect: {
+    type: Boolean,
+    default: false,
   },
 });
 

@@ -5,7 +5,7 @@
       <button
         v-if="dismissible"
         @click="$emit('close')"
-        title="Dismiss Banner"
+        title="Dismiss"
         class="btn btn-sm btn-circle btn-ghost absolute right-0"
       >
         <Icon icon="mdi:close-outline" width="20" />

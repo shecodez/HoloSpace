@@ -3,12 +3,13 @@
     <div class="diskspace-modal p-6">
       <div class="flex justify-between items-center mb-2">
         <h3 class="text-secondary font-bold">Add New <span class="font-brand uppercase">Diskspace</span></h3>
-        <button @click="$emit('close')" class="btn btn-sm btn-square btn-error btn-outline">
+        <button @click="$emit('close')" class="btn btn-sm btn-square btn-error btn-outline border-none">
           <Icon icon="mdi:close" width="20" />
         </button>
       </div>
 
-      <DiskspaceForm :type="type" />
+      <DirectDiskspaceForm v-if="isDirect" :type="type" />
+      <DiskspaceForm v-else :type="type" />
     </div>
   </Modal>
 </template>
@@ -20,6 +21,7 @@ import { Icon } from '@iconify/vue';
 import Modal from '@/components/DockUI/Modal.vue';
 import DiskspaceForm from '@/components/diskspaces/DiskspaceForm.vue';
 import { DiskspaceType } from '@/data/mock';
+import DirectDiskspaceForm from './DirectDiskspaceForm.vue';
 
 const props = defineProps({
   type: {
@@ -27,6 +29,10 @@ const props = defineProps({
     default: DiskspaceType.TEXT,
   },
   isOpen: {
+    type: Boolean,
+    default: false,
+  },
+  isDirect: {
     type: Boolean,
     default: false,
   },

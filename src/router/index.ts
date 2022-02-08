@@ -5,7 +5,7 @@ import Toast from '@/components/DockUI/Toast.vue';
 
 import Home from '@/views/Home.vue';
 import Comms from '@/views/Comms.vue';
-// import H010Comms from '@/views/H010Comms.vue';
+import H010Comms from '@/views/H010Comms.vue';
 import DirectComms from '@/views/DirectComms.vue';
 import Terms from '@/views/legal/Terms.vue';
 import Privacy from '@/views/legal/Privacy.vue';
@@ -55,29 +55,29 @@ const routes: Array<RouteRecordRaw> = [
     path: '/d/:deck_id/:diskspace_id',
     name: 'Comms',
     component: Comms,
-    // meta: {
-    //   requiresAuth: true,
-    // },
+    meta: {
+      requiresAuth: true,
+    },
   },
-  // {
-  //   path: '/d/:deck_id/h010/:diskspace_id',
-  //   name: 'H010Comms',
-  //   component: H010Comms,
-  //   meta: {
-  //     requiresAuth: true,
-  //   },
-  // },
   {
-    path: '/ssh',
+    path: '/d/:deck_id/h010/:diskspace_id',
+    name: 'H010Comms',
+    component: H010Comms,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/direct',
     name: 'DirectCommsRoot',
     component: DirectComms,
     children: [
-      { path: '/ssh/d/:diskspace_id', name: 'DirectComms', component: DirectComms },
-      // { path: "/ssh/d/h010/:diskspace_id", name: "DirectH010Comms", component: DirectH010Comms },
+      { path: '/direct/:diskspace_id', name: 'DirectComms', component: DirectComms },
+      // { path: "/direct/h010/:diskspace_id", name: "DirectH010Comms", component: DirectH010Comms },
     ],
-    // meta: {
-    //   requiresAuth: true,
-    // },
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/terms',

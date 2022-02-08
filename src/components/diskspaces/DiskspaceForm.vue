@@ -1,7 +1,9 @@
 <template>
-  <form class="text-gray-200">
+  <form>
+    <slot name="header"></slot>
+
     <div class="form-control required mb-2">
-      <label class="label">Diskspace Name</label>
+      <label class="label">Name</label>
       <div class="relative">
         <input v-focus v-model="form.name" type="text" class="w-full pl-16 input input-secondary input-bordered" />
         <span class="absolute top-0 left-0 rounded-r-none btn btn-secondary">
@@ -11,7 +13,7 @@
     </div>
 
     <div class="form-control mb-2">
-      <label class="label">Diskspace Topic</label>
+      <label class="label">Topic</label>
       <div class="relative flex">
         <textarea v-model="form.topic" class="textarea h-24 textarea-bordered textarea-secondary pl-16 w-full" />
         <span class="absolute top-0 left-0 h-full rounded-r-none btn btn-secondary">
@@ -21,7 +23,7 @@
     </div>
 
     <div class="form-control required mb-2 w-1/2">
-      <label class="label">Diskspace Type</label>
+      <label class="label">Type</label>
       <div class="relative">
         <select v-model="form.type" class="select select-bordered select-secondary pl-16 w-full">
           <!-- <option selected disabled>Select Diskspace Type</option> -->
@@ -34,6 +36,8 @@
         </span>
       </div>
     </div>
+
+    <slot name="footer"></slot>
 
     <div class="text-right mt-6">
       <div v-if="!!diskspace.id" class="flex gap-2 justify-end">
