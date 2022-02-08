@@ -2,9 +2,11 @@
   <div class="bg-base-300 bg-opacity-80">
     <div class="flex flex-row md:flex-col w-screen md:w-20 h-16 md:h-full">
       <div class="my-auto md:my-0 md:mx-auto">
-        <button title="@me (profile)" class="btn btn-circle bg-primary m-2">
-          <Icon icon="mdi:account-circle" width="26" />
-        </button>
+        <slot name="linkTo">
+          <router-link to="/@me" class="btn btn-circle bg-primary m-2">
+            <Icon icon="mdi:account-circle" width="26" />
+          </router-link>
+        </slot>
       </div>
       <div class="my-divider border-l md:border-t md:border-l-0 my-auto md:my-0 md:mx-auto md:pt-2">
         <h5 class="uppercase text-xs font-medium p-2">Decks</h5>

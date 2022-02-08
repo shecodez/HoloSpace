@@ -1,12 +1,12 @@
 <template>
   <Banner v-if="show" dismissible>
     <div class="alert alert-info flex-1 border-l-4 border-info rounded-none">
-      <div class="flex-1">
-        <Icon icon="mdi:check" width="20" />
+      <div class="flex-1 items-center">
+        <Icon icon="vs:party" width="24" />
         <label class="mx-3">Welcome to the <span class="font-brand">H010SPACE</span> Beta!</label>
       </div>
       <div class="flex-none">
-        <button class="btn btn-sm btn-ghost mr-8">Ok</button>
+        <button @click="$emit('close')" class="btn btn-sm btn-ghost mr-8">Got it!</button>
       </div>
     </div>
   </Banner>
