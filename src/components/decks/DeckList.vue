@@ -2,7 +2,7 @@
   <ul class="flex md:flex-col gap-2 p-1">
     <li v-for="deck in decks" :key="deck.id" class="my-auto md:my-0 md:mx-auto">
       <div class="relative" :title="deck.name">
-        <router-link :to="`/d/${deck.id}/${deck.boot_disk_id}`">
+        <router-link :to="`/d/${deck.id}/TEXT/${deck.boot_disk_id}`">
           <div class="avatar shadow" :class="deck.image_url ? '' : 'placeholder'">
             <div
               class="deck bg-primary w-12 h-12"
@@ -39,6 +39,9 @@ const props = defineProps({
     default: [],
   },
 });
+
+// TODO: if the boot diskspace becomes changeable
+// on mounted get boot diskspace type from the db
 
 const { decks } = toRefs(props);
 

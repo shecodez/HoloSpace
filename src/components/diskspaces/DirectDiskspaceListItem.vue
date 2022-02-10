@@ -27,7 +27,9 @@
 
           <div v-else class="pl-2" />
           <Icon icon="mdi:accounts" width="36" />
-          <router-link :to="`/direct${h010}/${diskspace.id}`" class="truncate"> {{ diskspace.name }}</router-link>
+          <router-link :to="`/direct/${diskspace.type}/${diskspace.id}`" class="truncate">
+            {{ diskspace.name }}</router-link
+          >
         </div>
 
         <div class="actions">
@@ -107,8 +109,6 @@ const isActive = (diskspaceId: string) => {
 };
 
 const { type, diskspace } = toRefs(props);
-
-const h010 = computed(() => (diskspace.value.type === DiskspaceType.H010 ? '/h010' : ''));
 </script>
 
 <style scoped>

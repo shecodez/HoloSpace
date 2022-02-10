@@ -51,6 +51,7 @@ import { Icon } from '@iconify/vue';
 import DrawerModal from '@/components/DockUI/DrawerModal.vue';
 import Panel from '@/components/DockUI/Panel.vue';
 
+// TODO: daily login reward notification like GW2
 const props = defineProps({
   btnCss: {
     type: String,

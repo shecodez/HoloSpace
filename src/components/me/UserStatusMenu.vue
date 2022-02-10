@@ -1,7 +1,13 @@
 <template>
   <ul class="t-border-menu menu menu-compact w-52 py-3 shadow-lg text-gray-200">
+    <li class="flex items-center justify-center">
+      <button @click="openModal" title="QR Code" class="btn btn-square btn-ghost">
+        <Icon icon="cil:qr-code" width="24" />
+      </button>
+      <QRCodeModal v-if="openQR" :isOpen="openQR" :user="user" @close="closeModal" />
+    </li>
     <li class="menu-title">
-      <span>My Status</span>
+      <span>Status</span>
     </li>
     <li v-for="status in statuses" :key="status.id" class="hover-bordered">
       <a class="space-x-8 items-baseline" :class="user.status === status.id && 'active'">
@@ -22,7 +28,7 @@
         <IOToolbar :user="user" :collapsed="collapsed" />
       </li>
       <li class="menu-title">
-        <span>My Settings</span>
+        <span>Settings</span>
       </li>
       <li class="flex items-center justify-center">
         <button @click="$emit('openSettings')" class="btn btn-square btn-ghost">
@@ -41,6 +47,7 @@ import { Icon } from '@iconify/vue';
 import IOToolbar from '@/components/me/UserIOToolbar.vue';
 import { IUser } from '@/data/interfaces';
 import { OnlineStatus } from '@/data/mock';
+import QRCodeModal from './QRCodeModal.vue';
 
 const props = defineProps({
   user: {
@@ -49,6 +56,14 @@ const props = defineProps({
   },
   collapsed: Boolean,
 });
+
+const openQR = ref(false);
+function openModal() {
+  openQR.value = true;
+}
+function closeModal() {
+  openQR.value = false;
+}
 
 const statuses = ref([
   { id: OnlineStatus.SHOW, name: 'Show', description: 'Available' },

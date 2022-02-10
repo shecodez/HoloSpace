@@ -1,7 +1,6 @@
 <template>
-  <teleport to="body">
+  <teleport to="body" v-if="isOpen">
     <div
-      v-if="isOpen"
       class="d-modal fixed z-20 w-full h-full top-0 left-0"
       :class="!fullscreen && 'flex items-center justify-center'"
     >

@@ -4,7 +4,8 @@
       <DiskspaceToolbar :diskspace="diskspace" :collapsed="collapsed" @toggleCollapsed="emitToggleCollapsed" />
     </template>
 
-    <div class="overflow-y-auto overflow-x-hidden">
+    <div class="p-4 border">TODO: tabs for VoIP * Comms * Files</div>
+    <div class="overflow-y-auto overflow-x-hidden flex flex-col-reverse">
       <div v-if="!messages.length" class="flex justify-center p-8">
         <h2 class="text-5xl font-bold">No messages yet. Say something.</h2>
       </div>

@@ -3,6 +3,7 @@ import { createToast, withProps } from 'mosha-vue-toastify';
 
 import Toast from '@/components/DockUI/Toast.vue';
 
+import Test from '@/views/Test.vue';
 import Home from '@/views/Home.vue';
 import Comms from '@/views/Comms.vue';
 import H010Comms from '@/views/H010Comms.vue';
@@ -14,9 +15,15 @@ import Login from '@/views/auth/Login.vue';
 import Logout from '@/views/auth/Logout.vue';
 import Register from '@/views/auth/Register.vue';
 import Me from '@/views/@me.vue';
+import Profile from '@/views/Profile.vue';
 import useAuth from '@/use/auth';
 
 const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/Test',
+    name: 'Test',
+    component: Test,
+  },
   {
     path: '/',
     name: 'Home',
@@ -52,15 +59,28 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: '/d/:deck_id/:diskspace_id',
-    name: 'Comms',
+    path: '/h010dex/@:h010tag',
+    name: 'Profile',
+    component: Profile,
+  },
+  {
+    path: '/d/:deck_id/TEXT/:diskspace_id',
+    name: 'TEXTComms',
     component: Comms,
     meta: {
       requiresAuth: true,
     },
   },
   {
-    path: '/d/:deck_id/h010/:diskspace_id',
+    path: '/d/:deck_id/VoIP/:diskspace_id',
+    name: 'VOIPComms',
+    component: Comms,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/d/:deck_id/H010/:diskspace_id',
     name: 'H010Comms',
     component: H010Comms,
     meta: {
@@ -72,9 +92,17 @@ const routes: Array<RouteRecordRaw> = [
     name: 'DirectCommsRoot',
     component: DirectComms,
     children: [
-      { path: '/direct/:diskspace_id', name: 'DirectComms', component: DirectComms },
-      // { path: "/direct/h010/:diskspace_id", name: "DirectH010Comms", component: DirectH010Comms },
+      { path: '/direct/TEXT/:diskspace_id', name: 'DirectTEXTComms', component: DirectComms },
+      { path: '/direct/VoIP/:diskspace_id', name: 'DirectVOIPComms', component: DirectComms },
     ],
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/direct/H010/:diskspace_id',
+    name: 'DirectH010Comms',
+    component: H010Comms,
     meta: {
       requiresAuth: true,
     },

@@ -4,7 +4,7 @@
       <DiskspaceToolbar :diskspace="diskspace" :collapsed="collapsed" @toggleCollapsed="emitToggleCollapsed" />
     </template>
 
-    <div v-if="!route.params.diskspace_id" class="flex items-center justify-center">
+    <div v-if="!$route.params.diskspace_id" class="flex items-center justify-center">
       <img src="@/assets/branding/brand.png" alt="brand" class="w-11/12 md:w-3/4 lg:w-1/2" />
     </div>
     <div v-else class="overflow-y-auto overflow-x-hidden">
@@ -15,7 +15,7 @@
     </div>
 
     <template #footer>
-      <div v-if="route.params.diskspace_id" class="relative mb-4 mx-6 md:mx-24">
+      <div v-if="$route.params.diskspace_id" class="relative mb-4 mx-6 md:mx-24">
         <TextCommForm v-if="state.commType === CommType.TEXT" @switchToVoiceComms="switchComms(CommType.VOICE)" />
         <VoiceCommForm v-if="state.commType === CommType.VOICE" @switchToTextComms="switchComms(CommType.TEXT)" />
       </div>
@@ -25,7 +25,6 @@
 
 <script setup lang="ts">
 import { defineProps, PropType, reactive, toRefs } from 'vue';
-import { useRoute } from 'vue-router';
 
 import Panel from '@/components/DockUI/Panel.vue';
 import MessageList from '@/components/comms/MessageList.vue';
@@ -34,8 +33,6 @@ import VoiceCommForm from '@/components/comms/VoiceCommForm.vue';
 import TextCommForm from '@/components/comms/TextCommForm.vue';
 import { IDiskspace, ITextMessage } from '@/data/interfaces';
 import { CommType } from '@/data/mock';
-
-const route = useRoute();
 
 const props = defineProps({
   diskspace: {

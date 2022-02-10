@@ -45,6 +45,7 @@ import MetaDrawer from '@/components/MetaDrawer.vue';
 import SideDrawer from '@/components/SideDrawer.vue';
 import CommsPanel from '@/components/comms/CommsPanel.vue';
 import { decks, users, diskspaces as all_diskspaces, messages as all_messages } from '../data/mock';
+import { IMessage, ITextMessage } from '@/data/interfaces';
 
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
@@ -87,6 +88,12 @@ function toggleSideDrawer() {
 function toggleMetaDrawer() {
   state.metaDrawerIsCollapsed = !state.metaDrawerIsCollapsed;
 }
+
+// function sortByDateDesc(a: ITextMessage, b: ITextMessage) {
+//   var dateA = new Date(a.created_at).getTime();
+//   var dateB = new Date(b.created_at).getTime();
+//   return dateA < dateB ? 1 : -1;
+// }
 
 const activeUser = computed(() => users[1]);
 const activeDeck = computed(() => decks.find((x) => x.id === route.params.deck_id));

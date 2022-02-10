@@ -3,7 +3,7 @@
     <div class="flex flex-row md:flex-col w-screen md:w-20 h-16 md:h-full">
       <div class="my-auto md:my-0 md:mx-auto">
         <slot name="linkTo">
-          <router-link to="/@me" class="btn btn-circle bg-primary m-2">
+          <router-link to="/@me" class="btn btn-circle btn-primary m-2">
             <Icon icon="mdi:account-circle" width="26" />
           </router-link>
         </slot>

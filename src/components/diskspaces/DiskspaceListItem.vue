@@ -26,7 +26,7 @@
           </button>
 
           <div v-else class="pl-2" />
-          <router-link :to="`/d/${diskspace.deck_id}${h010}/${diskspace.id}`" class="truncate">
+          <router-link :to="`/d/${diskspace.deck_id}/${diskspace.type}/${diskspace.id}`" class="truncate">
             {{ diskspace.name }}
           </router-link>
         </div>
@@ -108,8 +108,6 @@ const isActive = (diskspaceId: string) => {
 };
 
 const { type, diskspace } = toRefs(props);
-
-const h010 = computed(() => (diskspace.value.type === DiskspaceType.H010 ? '/h010' : ''));
 </script>
 
 <style scoped>
