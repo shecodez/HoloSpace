@@ -19,7 +19,7 @@
             <label class="label">Deck Name</label>
             <div class="relative">
               <input v-focus v-model="deck.name" type="text" class="w-full pl-16 input input-primary input-bordered" />
-              <span class="absolute top-0 left-0 rounded-r-none btn btn-primary">
+              <span class="absolute top-0 left-0 rounded-r-none btn btn-primary btn-disabled">
                 <Icon icon="mdi:layers-outline" width="20" />
               </span>
             </div>
@@ -32,7 +32,7 @@
                 <!-- <option selected disabled>Select HQ region</option> -->
                 <option v-for="region in state.regionList" :value="region.id">{{ region.name }}</option>
               </select>
-              <span class="absolute top-0 left-0 rounded-r-none btn btn-primary">
+              <span class="absolute top-0 left-0 rounded-r-none btn btn-primary btn-disabled">
                 <Icon :icon="getRegionFlag" width="20" />
               </span>
             </div>

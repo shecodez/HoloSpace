@@ -1,4 +1,4 @@
-import { DiskspaceType, OnlineStatus, Region } from './mock';
+import { SpaceType, OnlineStatus, Region } from './mock';
 
 export interface IAuth {
   username?: string; // meta
@@ -16,6 +16,8 @@ export interface IUser {
   model_url?: string;
   is_online: boolean;
   status: OnlineStatus;
+  is_talking?: boolean;
+  is_typing?: boolean;
 
   created_at: Date;
   updated_at?: Date;
@@ -60,7 +62,7 @@ export interface IDiskspace {
 
   name: string;
   topic?: string;
-  type: DiskspaceType;
+  type: SpaceType;
   h010space_id?: string; // if type = H010
   is_ssh: boolean; // default false
   user_id?: string;
@@ -104,4 +106,8 @@ export interface IVoiceMessage extends IMessage {
 
 export interface IH010Message extends IMessage {
   h010gram_url: string; // .h010 file
+}
+
+export interface IFile extends IMessage {
+  name: string;
 }

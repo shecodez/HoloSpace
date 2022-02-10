@@ -2,7 +2,7 @@
   <div :class="!collapsed && 't-border-menu'">
     <div class="btn-group">
       <template v-for="btn in buttons" :key="btn.id">
-        <button @click="btn.toggle" class="btn btn-ghost">
+        <button @click="btn.toggle" class="btn btn-ghost relative">
           <Icon :icon="btn.icon" width="24" />
           <Icon v-if="!btn.isOn" icon="mdi:circle-off-outline" width="24" class="absolute text-error" />
         </button>
@@ -38,7 +38,7 @@ const toggleVr = () => {
 };
 
 const buttons = ref([
-  { id: '1', icon: 'mdi:camera-iris', isOn: false, toggle: toggleCam },
+  { id: '1', icon: 'mdi:video', isOn: false, toggle: toggleCam },
   { id: '2', icon: 'mdi:microphone', isOn: true, toggle: toggleMic },
   { id: '3', icon: 'mdi:hololens', isOn: false, toggle: toggleVr },
 ]);

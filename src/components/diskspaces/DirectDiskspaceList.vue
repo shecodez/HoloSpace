@@ -29,13 +29,13 @@ import { Icon } from '@iconify/vue';
 import AddDiskspaceModal from '@/components/diskspaces/AddDiskspaceModal.vue';
 import EditDiskspaceModal from '@/components/diskspaces/EditDiskspaceModal.vue';
 import { IDiskspace } from '@/data/interfaces';
-import { DiskspaceType, teams } from '@/data/mock';
+import { SpaceType, teams } from '@/data/mock';
 import DirectDiskspaceListItem from './DirectDiskspaceListItem.vue';
 
 const props = defineProps({
   type: {
-    type: String as PropType<DiskspaceType>,
-    default: DiskspaceType.TEXT,
+    type: String as PropType<SpaceType>,
+    default: SpaceType.TEXT,
   },
   diskspaces: {
     type: Array as PropType<IDiskspace[]>,

@@ -4,7 +4,7 @@
       <div class="my-auto md:my-0 md:mx-auto">
         <slot name="linkTo">
           <router-link to="/@me" class="btn btn-circle btn-primary m-2">
-            <Icon icon="mdi:account-circle" width="26" />
+            <Icon icon="mdi:account-settings-outline" width="26" />
           </router-link>
         </slot>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <DiskspaceForm :type="type">
+  <DiskspaceForm :type="type" :diskspace="diskspace">
     <template #header>
       <div class="form-control relative w-full pb-4">
         <div class="relative">
@@ -69,13 +69,13 @@ import UserAvatar from '@/components/users/UserAvatar.vue';
 import DiskspaceForm from '@/components/diskspaces/DiskspaceForm.vue';
 import { IUser } from '@/data/interfaces';
 import { users } from '@/data/mock';
-import { DiskspaceType } from '@/data/mock';
+import { SpaceType } from '@/data/mock';
 import { IDiskspace } from '@/data/interfaces';
 
 const props = defineProps({
   type: {
-    type: String as PropType<DiskspaceType>,
-    default: DiskspaceType.TEXT,
+    type: String as PropType<SpaceType>,
+    default: SpaceType.TEXT,
   },
   diskspace: {
     type: Object as PropType<IDiskspace>,

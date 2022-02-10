@@ -1,5 +1,8 @@
 <template>
   <ul class="mx-2 md:mx-6">
+    <li v-if="!messages.length" class="text-center py-8">
+      <h2 class="text-5xl font-bold">No messages yet. Say something.</h2>
+    </li>
     <!-- <li class="text-center p-2">Comms Start</li> -->
     <template v-for="(message, i) in messages" :key="message.id">
       <li v-if="i > 0 && !isSameDay(messages[i].created_at, messages[i - 1].created_at)" class="mx-6 md:mx-16">

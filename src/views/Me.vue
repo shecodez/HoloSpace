@@ -1,7 +1,13 @@
 <template>
-  <Layout :backgroundImageUrl="state.backgroundImageUrl">
+  <Layout v-if="user" :backgroundImageUrl="state.backgroundImageUrl">
     <template v-slot:fixed>
-      <FixedPanel :decks="decks" />
+      <FixedPanel :decks="decks">
+        <template #linkTo>
+          <router-link to="/team" class="btn btn-circle btn-primary m-2">
+            <Icon icon="mdi:account-group-outline" width="26" />
+          </router-link>
+        </template>
+      </FixedPanel>
     </template>
 
     <template v-slot:banner>
@@ -10,49 +16,51 @@
     </template>
 
     <template v-slot:left>
-      <SideDrawer
-        :deck="activeDeck"
-        :diskspaces="diskspaces"
+      <ShopSideDrawer
         :collapsed="state.sideDrawerIsCollapsed"
         :isSmScreen="!lgAndLarger"
         @close="state.sideDrawerIsCollapsed = true"
       />
     </template>
 
-    <CommsPanel
-      :me="activeUser"
-      :diskspace="activeDiskspace"
-      :messages="messages"
+    <UserModelPanel
+      :me="user.user_metadata.username"
       :collapsed="state.sideDrawerIsCollapsed"
       @toggleCollapsed="toggleSideDrawer"
     />
 
     <template v-slot:right>
-      <MetaDrawer :users="users" :collapsed="state.metaDrawerIsCollapsed" @toggleCollapsed="toggleMetaDrawer" />
+      <MetaDrawer
+        title="Friends"
+        :users="users"
+        :collapsed="state.metaDrawerIsCollapsed"
+        @toggleCollapsed="toggleMetaDrawer"
+      />
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { reactive, watch } from 'vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+import { Icon } from '@iconify/vue';
 
 import Layout from '@/layouts/DefaultLayout.vue';
 import BetaAlert from '@/components/alerts/BetaAlert.vue';
 import FixedPanel from '@/components/FixedPanel.vue';
 import MetaDrawer from '@/components/MetaDrawer.vue';
-import SideDrawer from '@/components/SideDrawer.vue';
-import CommsPanel from '@/components/comms/CommsPanel.vue';
-import { decks, users, diskspaces as all_diskspaces, messages as all_messages } from '../data/mock';
-import { IMessage, ITextMessage } from '@/data/interfaces';
+import UserModelPanel from '@/components/me/UserModelPanel.vue';
+import ShopSideDrawer from '@/components/me/ShopSideDrawer.vue';
+import { decks, users } from '@/data/mock';
+import useAuth from '@/use/auth';
 
-const route = useRoute();
+const { user } = useAuth();
+
 const breakpoints = useBreakpoints(breakpointsTailwind);
 
 const state = reactive({
   showAlert: true,
-  sideDrawerIsCollapsed: false,
+  sideDrawerIsCollapsed: true,
   metaDrawerIsCollapsed: false,
   sideDrawerPreBreakpoint: false,
   metaDrawerPreBreakpoint: false,
@@ -88,17 +96,4 @@ function toggleSideDrawer() {
 function toggleMetaDrawer() {
   state.metaDrawerIsCollapsed = !state.metaDrawerIsCollapsed;
 }
-
-// function sortByDateDesc(a: ITextMessage, b: ITextMessage) {
-//   var dateA = new Date(a.created_at).getTime();
-//   var dateB = new Date(b.created_at).getTime();
-//   return dateA < dateB ? 1 : -1;
-// }
-
-const activeUser = computed(() => users[1]);
-const activeDeck = computed(() => decks.find((x) => x.id === route.params.deck_id));
-const isCaptain = activeUser.value.id === activeDeck.value?.captain_id;
-const diskspaces = computed(() => all_diskspaces.filter((x) => x.deck_id === route.params.deck_id));
-const activeDiskspace = computed(() => diskspaces.value.find((x) => x.id === route.params.diskspace_id));
-const messages = computed(() => all_messages.filter((x) => x.diskspace_id === route.params.diskspace_id));
 </script>

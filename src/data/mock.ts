@@ -1,3 +1,4 @@
+import { IUser } from './interfaces';
 import { setDate, subDays, subMonths } from 'date-fns';
 
 const today = new Date();
@@ -7,7 +8,7 @@ function thisMonth(d: number, h: number, m: number) {
   return new Date(t.getFullYear(), t.getMonth(), d, h || 0, m || 0);
 }
 
-export enum DiskspaceType {
+export enum SpaceType {
   TEXT = 'TEXT',
   VOIP = 'VOIP',
   H010 = 'H010',
@@ -74,7 +75,7 @@ export const diskspaces = [
     is_ssh: false,
     name: 'Init Space',
     topic: 'rawr',
-    type: DiskspaceType.TEXT,
+    type: SpaceType.TEXT,
     can_delete: false,
     created_at: today,
   },
@@ -83,7 +84,7 @@ export const diskspaces = [
     deck_id: '1',
     is_ssh: false,
     name: 'Education',
-    type: DiskspaceType.TEXT,
+    type: SpaceType.TEXT,
     can_delete: false,
     created_at: today,
   },
@@ -92,7 +93,7 @@ export const diskspaces = [
     deck_id: '1',
     is_ssh: false,
     name: 'Experience',
-    type: DiskspaceType.TEXT,
+    type: SpaceType.TEXT,
     can_delete: true,
     created_at: today,
   },
@@ -101,7 +102,7 @@ export const diskspaces = [
     deck_id: '1',
     is_ssh: false,
     name: 'The Voice',
-    type: DiskspaceType.VOIP,
+    type: SpaceType.VOIP,
     can_delete: true,
     created_at: today,
   },
@@ -110,7 +111,7 @@ export const diskspaces = [
     deck_id: '1',
     is_ssh: false,
     name: 'Holodeck 18',
-    type: DiskspaceType.H010,
+    type: SpaceType.H010,
     h010space_id: '1',
     can_delete: true,
     created_at: today,
@@ -120,7 +121,7 @@ export const diskspaces = [
     deck_id: '2',
     is_ssh: false,
     name: 'init',
-    type: DiskspaceType.TEXT,
+    type: SpaceType.TEXT,
     can_delete: false,
     created_at: today,
   },
@@ -129,7 +130,7 @@ export const diskspaces = [
     deck_id: '3',
     is_ssh: false,
     name: 'init',
-    type: DiskspaceType.TEXT,
+    type: SpaceType.TEXT,
     can_delete: false,
     created_at: today,
   },
@@ -138,7 +139,7 @@ export const diskspaces = [
     name: "shecodez's team-xi9dj7",
     user_id: '1',
     is_ssh: true,
-    type: DiskspaceType.TEXT,
+    type: SpaceType.TEXT,
     can_delete: true,
     created_at: today,
   },
@@ -147,7 +148,7 @@ export const diskspaces = [
     name: 'team-gu9skf',
     user_id: '1',
     is_ssh: true,
-    type: DiskspaceType.H010,
+    type: SpaceType.H010,
     can_delete: true,
     created_at: today,
   },
@@ -237,11 +238,11 @@ export const users = [
 export const teams = [
   {
     diskspace_id: '4',
-    users: [users[5]],
+    users: [users[5], users[6], users[3]] as IUser[],
   },
   {
     diskspace_id: '5',
-    users: [users[4], users[7]],
+    users: [users[4], users[7]] as IUser[],
   },
 ];
 

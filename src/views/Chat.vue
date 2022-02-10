@@ -1,5 +1,5 @@
 <template>
-  <Layout :backgroundImageUrl="state.backgroundImageUrl" pageTitle="Ssh">
+  <Layout :backgroundImageUrl="state.backgroundImageUrl">
     <template v-slot:fixed>
       <FixedPanel :decks="decks" />
     </template>
@@ -11,7 +11,7 @@
 
     <template v-slot:left>
       <SideDrawer
-        isDirect
+        :deck="activeDeck"
         :diskspaces="diskspaces"
         :collapsed="state.sideDrawerIsCollapsed"
         :isSmScreen="!lgAndLarger"
@@ -19,21 +19,17 @@
       />
     </template>
 
-    <DirectCommsPanel
+    <ChatPanel
       :me="activeUser"
-      :diskspace="activeDiskspace"
+      :space="activeDiskspace"
       :messages="messages"
+      :team="team?.users"
       :collapsed="state.sideDrawerIsCollapsed"
       @toggleCollapsed="toggleSideDrawer"
     />
 
     <template v-slot:right>
-      <MetaDrawer
-        title="Contacts"
-        :users="users"
-        :collapsed="state.metaDrawerIsCollapsed"
-        @toggleCollapsed="toggleMetaDrawer"
-      />
+      <MetaDrawer :users="users" :collapsed="state.metaDrawerIsCollapsed" @toggleCollapsed="toggleMetaDrawer" />
     </template>
   </Layout>
 </template>
@@ -48,8 +44,9 @@ import BetaAlert from '@/components/alerts/BetaAlert.vue';
 import FixedPanel from '@/components/FixedPanel.vue';
 import MetaDrawer from '@/components/MetaDrawer.vue';
 import SideDrawer from '@/components/SideDrawer.vue';
-import DirectCommsPanel from '@/components/comms/DirectCommsPanel.vue';
-import { decks, users, diskspaces as all_diskspaces, messages as all_messages } from '../data/mock';
+import ChatPanel from '@/components/chat/ChatPanel.vue';
+import { decks, users, diskspaces as all_diskspaces, messages as all_messages, teams } from '../data/mock';
+import { IMessage, ITextMessage } from '@/data/interfaces';
 
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
@@ -57,7 +54,7 @@ const breakpoints = useBreakpoints(breakpointsTailwind);
 const state = reactive({
   showAlert: true,
   sideDrawerIsCollapsed: false,
-  metaDrawerIsCollapsed: true,
+  metaDrawerIsCollapsed: false,
   sideDrawerPreBreakpoint: false,
   metaDrawerPreBreakpoint: false,
   backgroundImageUrl: 'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/backgrounds/default-bg.jpg',
@@ -93,10 +90,17 @@ function toggleMetaDrawer() {
   state.metaDrawerIsCollapsed = !state.metaDrawerIsCollapsed;
 }
 
+// function sortByDateDesc(a: ITextMessage, b: ITextMessage) {
+//   var dateA = new Date(a.created_at).getTime();
+//   var dateB = new Date(b.created_at).getTime();
+//   return dateA < dateB ? 1 : -1;
+// }
+
 const activeUser = computed(() => users[1]);
 const activeDeck = computed(() => decks.find((x) => x.id === route.params.deck_id));
 const isCaptain = activeUser.value.id === activeDeck.value?.captain_id;
 const diskspaces = computed(() => all_diskspaces.filter((x) => x.deck_id === route.params.deck_id));
 const activeDiskspace = computed(() => diskspaces.value.find((x) => x.id === route.params.diskspace_id));
 const messages = computed(() => all_messages.filter((x) => x.diskspace_id === route.params.diskspace_id));
+const team = computed(() => teams.find((x) => x.diskspace_id === route.params.diskspace_id));
 </script>

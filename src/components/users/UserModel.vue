@@ -50,7 +50,7 @@ const assets = [
     url: '/src/assets/models/h010bot/xbot/xbot.json',
   }),
   new pc.Asset('ybot.json', 'model', {
-    url: '/src/assets/models/h010bot/ybot/ybot.json',
+    url: '/src/assets/models/h010bot/ybot/Y_Bot.json',
   }),
   new pc.Asset('idle.json', 'animation', {
     url: '/src/assets/models/h010bot/animations/idle.json',

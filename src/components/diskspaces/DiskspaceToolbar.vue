@@ -23,7 +23,7 @@
 
     <Popper placement="bottom">
       <template v-slot:activator>
-        <button class="btn btn-square btn-ghost" title="More Options">
+        <button class="btn btn-circle btn-ghost" title="More Options">
           <Icon icon="mdi:dots-vertical" width="24" />
         </button>
       </template>

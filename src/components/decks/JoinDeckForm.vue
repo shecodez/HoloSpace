@@ -18,7 +18,7 @@
         <label class="label">H010key</label>
         <div class="relative">
           <input v-focus type="text" placeholder="H6x35a" class="w-full pl-16 input input-accent input-bordered" />
-          <span class="absolute top-0 left-0 rounded-r-none btn btn-accent">
+          <span class="absolute top-0 left-0 rounded-r-none btn btn-accent btn-disabled">
             <Icon icon="mdi:key-variant" width="20" />
           </span>
         </div>

@@ -11,7 +11,7 @@
       >
         <div class="flex items-center pl-1 gap-2 overflow-hidden">
           <button
-            v-if="type !== DiskspaceType.TEXT"
+            v-if="type !== SpaceType.TEXT"
             @click="fetchDiskspaceTeam(diskspace.id)"
             :title="state.expanded ? 'Close' : 'Expand'"
             class="btn btn-xs btn-ghost btn-square"
@@ -26,8 +26,8 @@
           </button>
 
           <div v-else class="pl-2" />
-          <Icon icon="mdi:accounts" width="36" />
-          <router-link :to="`/direct/${diskspace.type}/${diskspace.id}`" class="truncate">
+          <Icon icon="mdi:account-group-outline" width="36" />
+          <router-link :to="`/team/${diskspace.type}/${diskspace.id}`" class="truncate">
             {{ diskspace.name }}</router-link
           >
         </div>
@@ -65,12 +65,12 @@ import { useRoute } from 'vue-router';
 
 import UserAvatar from '@/components/users/UserAvatar.vue';
 import { IDiskspace } from '@/data/interfaces';
-import { DiskspaceType } from '@/data/mock';
+import { SpaceType } from '@/data/mock';
 
 const props = defineProps({
   type: {
-    type: String as PropType<DiskspaceType>,
-    default: DiskspaceType.TEXT,
+    type: String as PropType<SpaceType>,
+    default: SpaceType.TEXT,
   },
   diskspace: {
     type: Object as PropType<IDiskspace>,

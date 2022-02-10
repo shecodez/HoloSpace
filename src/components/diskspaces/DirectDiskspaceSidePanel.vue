@@ -5,21 +5,9 @@
     </template>
 
     <div class="overflow-y-auto overflow-x-hidden">
-      <DirectSpaceList
-        :type="DiskspaceType.TEXT"
-        :diskspaces="textDiskspaces"
-        :open="isActiveType(DiskspaceType.TEXT)"
-      />
-      <DirectSpaceList
-        :type="DiskspaceType.VOIP"
-        :diskspaces="voipDiskspaces"
-        :open="isActiveType(DiskspaceType.VOIP)"
-      />
-      <DirectSpaceList
-        :type="DiskspaceType.H010"
-        :diskspaces="h010Diskspaces"
-        :open="isActiveType(DiskspaceType.H010)"
-      />
+      <DirectSpaceList :type="SpaceType.TEXT" :diskspaces="textspace" :open="isActiveType(SpaceType.TEXT)" />
+      <DirectSpaceList :type="SpaceType.VOIP" :diskspaces="voipspace" :open="isActiveType(SpaceType.VOIP)" />
+      <DirectSpaceList :type="SpaceType.H010" :diskspaces="h010space" :open="isActiveType(SpaceType.H010)" />
     </div>
 
     <template #footer>
@@ -33,7 +21,7 @@ import { computed, defineProps, PropType, ref, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 
 import Panel from '@/components/DockUI/Panel.vue';
-import { DiskspaceType } from '@/data/mock';
+import { SpaceType } from '@/data/mock';
 import { IDiskspace } from '@/data/interfaces';
 import DirectToolbar from '@/components/diskspaces/DirectToolbar.vue';
 import DirectSpaceList from '@/components/diskspaces/DirectDiskspaceList.vue';
@@ -45,13 +33,13 @@ const props = defineProps({
   },
 });
 
-const textDiskspaces = computed(() => diskspaces.value.filter((x) => x.type === DiskspaceType.TEXT));
-const voipDiskspaces = computed(() => diskspaces.value.filter((x) => x.type === DiskspaceType.VOIP));
-const h010Diskspaces = computed(() => diskspaces.value.filter((x) => x.type === DiskspaceType.H010));
+const textspace = computed(() => diskspaces.value.filter((x) => x.type === SpaceType.TEXT));
+const voipspace = computed(() => diskspaces.value.filter((x) => x.type === SpaceType.VOIP));
+const h010space = computed(() => diskspaces.value.filter((x) => x.type === SpaceType.H010));
 
 const route = useRoute();
 
-function isActiveType(listType: DiskspaceType) {
+function isActiveType(listType: SpaceType) {
   const activeDiskspace = diskspaces.value.find((x) => x.id === route.params.diskspace_id);
   return activeDiskspace?.type === listType;
 }
