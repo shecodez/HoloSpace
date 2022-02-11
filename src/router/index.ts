@@ -4,10 +4,11 @@ import { createToast, withProps } from 'mosha-vue-toastify';
 import Toast from '@/components/DockUI/Toast.vue';
 import useAuth from '@/use/auth';
 import Home from '@/views/Home.vue';
-import Chat from '@/views/Chat.vue';
-import TeamChat from '@/views/Team.vue';
 import Login from '@/views/auth/Login.vue';
 import Register from '@/views/auth/Register.vue';
+import Chat from '@/views/chat/Index.vue';
+import TeamChat from '@/views/chat/Team.vue';
+import H010 from '@/views/chat/H010.vue';
 
 const routes: Array<RouteRecordRaw> = [
   // {
@@ -55,7 +56,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/h010dex/Profile.vue'),
   },
   // {
-  //   path: '/d/:deck_id/:type/:diskspace_id',
+  //   path: '/d/:deck_id/:type/:space_id',
   //   name: 'Chat',
   //   component: Chat, // () => import('@/views/Chat.vue'),
   //   beforeEnter: (to, from, next) => {
@@ -72,17 +73,17 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Chat',
     component: Chat,
     children: [
-      { path: '/d/:deck_id/TEXT/:diskspace_id', name: 'TEXTChat', component: Chat },
-      { path: '/d/:deck_id/VoIP/:diskspace_id', name: 'VOIPChat', component: Chat },
+      { path: '/d/:deck_id/TEXT/:space_id', name: 'TEXTChat', component: Chat },
+      { path: '/d/:deck_id/VoIP/:space_id', name: 'VOIPChat', component: Chat },
     ],
     meta: {
       requiresAuth: true,
     },
   },
   {
-    path: '/d/:deck_id/H010/:diskspace_id',
+    path: '/d/:deck_id/H010/:space_id',
     name: 'H010Chat',
-    component: () => import('@/views/H010.vue'),
+    component: H010,
     meta: {
       requiresAuth: true,
     },
@@ -92,17 +93,17 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TeamChat',
     component: TeamChat,
     children: [
-      { path: '/team/TEXT/:diskspace_id', name: 'TeamTEXTChat', component: TeamChat },
-      { path: '/team/VoIP/:diskspace_id', name: 'TeamVOIPChat', component: TeamChat },
+      { path: '/team/TEXT/:space_id', name: 'TeamTEXTChat', component: TeamChat },
+      { path: '/team/VoIP/:space_id', name: 'TeamVOIPChat', component: TeamChat },
     ],
     meta: {
       requiresAuth: true,
     },
   },
   {
-    path: '/team/H010/:diskspace_id',
+    path: '/team/H010/:space_id',
     name: 'TeamH010Chat',
-    component: () => import('@/views/H010.vue'),
+    component: H010,
     meta: {
       requiresAuth: true,
     },
@@ -110,12 +111,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/terms',
     name: 'Terms',
-    component: () => import('@/views/Terms.vue'),
+    component: () => import('@/views/legal/Terms.vue'),
   },
   {
     path: '/privacy',
     name: 'Privacy',
-    component: () => import('@/views/Privacy.vue'),
+    component: () => import('@/views/legal/Privacy.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

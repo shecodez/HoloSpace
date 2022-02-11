@@ -4,8 +4,8 @@
     <span class="sr-only">Send H010Comm</span>
   </button>
 
-  <Modal :isOpen="openH010Comm" @close="closeModal" css="bg-base-100 w-11/12 md:max-w-sm mx-auto rounded shadow-lg">
-    <div class="diskspace-modal p-6">
+  <Modal :isOpen="isOpen" @close="closeModal" css="bg-base-100 w-11/12 md:max-w-sm mx-auto rounded shadow-lg">
+    <div class="h010gram-modal p-6">
       <div class="flex justify-between items-center mb-2">
         <h3 class="text-secondary font-bold">Send <span class="font-brand uppercase">H010Comm</span></h3>
         <button @click="closeModal" class="btn btn-sm btn-square btn-error btn-outline">
@@ -24,17 +24,11 @@ import { Icon } from '@iconify/vue';
 
 import Modal from '@/components/DockUI/Modal.vue';
 
-const openH010Comm = ref(false);
+const isOpen = ref(false);
 function openModal() {
-  openH010Comm.value = true;
+  isOpen.value = true;
 }
 function closeModal() {
-  openH010Comm.value = false;
+  isOpen.value = false;
 }
 </script>
-
-<style scoped>
-h2 {
-  @apply text-xl uppercase font-bold;
-}
-</style>

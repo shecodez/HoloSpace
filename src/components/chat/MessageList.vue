@@ -21,7 +21,7 @@
         </div>
 
         <div
-          class="comm p-2 rounded max-w-5xl bg-opacity-80"
+          class="messsage p-2 rounded max-w-5xl bg-opacity-80"
           :class="message.user_id === '1' ? 'bg-base-100 border border-primary' : 'bg-secondary'"
         >
           <div class="flex items-center w-full">
@@ -51,7 +51,7 @@ import { defineProps, PropType, toRefs } from 'vue';
 import { format, formatRelative, isSameDay, isSameMinute } from 'date-fns';
 import { Icon } from '@iconify/vue';
 
-import CommReactionMenu from '@/components/comms/CommReactionMenu.vue';
+import CommReactionMenu from '@/components/chat/MessageReactionMenu.vue';
 import Popper from '@/components/DockUI/Popper.vue';
 import { ITextMessage, IMessage } from '@/data/interfaces';
 
@@ -73,10 +73,10 @@ const { messages } = toRefs(props);
 </script>
 
 <style scoped>
-.comm .reply-reactions {
+.messsage .reply-reactions {
   visibility: hidden;
 }
-.comm:hover .reply-reactions {
+.messsage:hover .reply-reactions {
   visibility: visible;
 }
 </style>

@@ -5,7 +5,7 @@
   </button>
 
   <Modal :isOpen="openEvent" @close="closeModal" css="bg-base-100 w-11/12 md:max-w-lg mx-auto rounded shadow-lg">
-    <div class="diskspace-modal p-6">
+    <div class="event-modal p-6">
       <div class="flex justify-between items-center mb-2">
         <h3 class="text-accent font-bold">Add New Event</h3>
         <button @click="closeModal" class="btn btn-sm btn-square btn-error btn-outline">

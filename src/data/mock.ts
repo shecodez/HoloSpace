@@ -14,7 +14,7 @@ export enum SpaceType {
   H010 = 'H010',
 }
 
-export enum CommType {
+export enum MessageType {
   TEXT = 'TEXT',
   VOICE = 'VOICE',
   H010 = 'H010',
@@ -68,7 +68,7 @@ export const decks = [
   // { id: '19', name: 'Deck 19', boot_disk_id: '1', captain_id: '1', hq: Region.JP_ASIA, created_at: today },
 ];
 
-export const diskspaces = [
+export const spaces = [
   {
     id: '1',
     deck_id: '1',
@@ -237,11 +237,11 @@ export const users = [
 
 export const teams = [
   {
-    diskspace_id: '4',
+    space_id: '4',
     users: [users[5], users[6], users[3]] as IUser[],
   },
   {
-    diskspace_id: '5',
+    space_id: '5',
     users: [users[4], users[7]] as IUser[],
   },
 ];
@@ -254,7 +254,7 @@ export const messages = [
       name: 'Guest',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 11),
     text: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
   },
@@ -265,7 +265,7 @@ export const messages = [
       name: 'Niico',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/2.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 10),
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id cursus leo. Aenean condimentum dolor leo, id aliquet lorem consectetur in. Ut nec mattis odio. Suspendisse feugiat ex ac massa interdum posuere.',
   },
@@ -276,7 +276,7 @@ export const messages = [
       name: '龍ハヤブサ',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/3.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 10),
     text: 'Do you have Paris recommendations? Have you ever been?',
   },
@@ -287,7 +287,7 @@ export const messages = [
       name: '龍ハヤブサ',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/3.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 9),
     text: "Nvm, I'll just wing it. :)",
   },
@@ -298,7 +298,7 @@ export const messages = [
       name: 'Kai',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 8),
     updated_at: subDays(today, 7),
     text: 'Have any ideas about what we should get Heidi for her birthday?',
@@ -309,7 +309,7 @@ export const messages = [
     author: {
       name: '홍길동',
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 7),
     text: '`@Kai` We should eat this: Grate, Squash, Corn, and tomatillo Tacos. Also ~~The world is flat.~~ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id cursus leo. Aenean condimentum dolor leo, id aliquet lorem consectetur in. Ut nec mattis odio. Suspendisse feugiat ex ac massa interdum posuere.',
     is_markdown: true,
@@ -321,7 +321,7 @@ export const messages = [
       name: 'WillIAm',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 6),
     updated_at: subDays(today, 5),
     text: '`@홍길동`~~Hell~~ No',
@@ -334,7 +334,7 @@ export const messages = [
       name: 'Niico',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/2.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 4),
     text: 'This is great.',
   },
@@ -345,7 +345,7 @@ export const messages = [
       name: 'Niico',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/2.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 4),
     text: 'Just Fantastic! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id cursus leo. Aenean condimentum dolor leo, id aliquet lorem consectetur in. Ut nec mattis odio. Suspendisse feugiat ex ac massa interdum posuere.',
   },
@@ -356,7 +356,7 @@ export const messages = [
       name: 'Kai',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 3),
     text: "<span class='text--primary'>@홍길동 </span> We should eat MEAT!!!!11 :d",
   },
@@ -367,7 +367,7 @@ export const messages = [
       name: 'Kai',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/4.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 1),
     text: 'I got some Kobe beef!!!',
   },
@@ -378,7 +378,7 @@ export const messages = [
       name: 'WillIAm',
       //image_url: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
     },
-    diskspace_id: '1',
+    space_id: '1',
     created_at: subDays(today, 0),
     text: '`Thatz whatz up!',
   },

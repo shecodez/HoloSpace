@@ -1,16 +1,16 @@
 <template>
   <div class="mr-2">
     <div class="flex items-center bg-base-100 rounded-full px-2 h-12 border-2 border-primary">
-      <H010CommModal />
+      <H010gramModal />
 
       <div class="ml-2">
         <Icon v-if="state.isRecording" icon="bx:bxs-album" width="24" class="animate-spin text-primary" />
-        <button v-if="!state.isRecording && !!state.comm" class="btn btn-ghost btn-square btn-sm" title="Play">
+        <button v-if="!state.isRecording && !!state.message" class="btn btn-ghost btn-square btn-sm" title="Play">
           <Icon icon="mdi:play" width="24" />
         </button>
       </div>
       <h4 class="flex-1 text-xl mx-2">0.00</h4>
-      <ConfirmDeleteButton v-if="!!state.comm" @delete="reset" css="h-full" btnCss="btn btn-sm btn-error btn-square">
+      <ConfirmDeleteButton v-if="!!state.message" @delete="reset" css="h-full" btnCss="btn btn-sm btn-error btn-square">
         <Icon icon="mdi:trash-can" width="20" />
       </ConfirmDeleteButton>
 
@@ -40,11 +40,11 @@ import { onUnmounted, reactive } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import ConfirmDeleteButton from '@/components/ConfirmDeleteButton.vue';
-import H010CommModal from './H010CommModal.vue';
+import H010gramModal from '@/components/chat/H010gramModal.vue';
 
 const state = reactive({
   isRecording: true,
-  comm: undefined,
+  message: undefined,
 });
 
 onUnmounted(() => {
@@ -56,7 +56,7 @@ function submitVoiceComm() {
 }
 
 function reset() {
-  state.comm = undefined;
+  state.message = undefined;
 }
 
 function toggleRec() {

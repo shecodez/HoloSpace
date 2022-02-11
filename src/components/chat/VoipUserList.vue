@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-2 grid-cols-3" :class="`grid grid-cols-${team.length % 5} gap-2`">
+  <div class="m-2 grid-cols-3" :class="`grid grid-cols-${team.length % 5} gap-2`">
     <div v-for="user in team" class="h-48 flex items-center justify-center bg-base-300 bg-opacity-50">
       <UserAvatar :user="user" :size="16" :iconSize="20" textCss="text-4xl" hideIndicators />
       <div class="flex items-center">

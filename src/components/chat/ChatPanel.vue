@@ -1,7 +1,7 @@
 <template>
   <Panel css="w-0 bg-base-100 bg-opacity-80">
     <template #header>
-      <DiskspaceToolbar :diskspace="space" :collapsed="collapsed" @toggleCollapsed="emitToggleCollapsed" />
+      <SpaceToolbar :space="space" :collapsed="collapsed" @toggleCollapsed="emitToggleCollapsed" />
     </template>
 
     <div v-if="space.id" class="tabs mx-12">
@@ -22,8 +22,8 @@
 
     <template #footer>
       <div v-if="state.tabs[1].active" class="relative mb-4 mx-6 md:mx-24">
-        <TextCommForm v-if="state.commType === CommType.TEXT" @switchToVoiceComms="switchComm(CommType.VOICE)" />
-        <VoiceCommForm v-if="state.commType === CommType.VOICE" @switchToTextComms="switchComm(CommType.TEXT)" />
+        <TextMsgForm v-if="state.msgType === MessageType.TEXT" @switchToVoiceComms="setMsgType(MessageType.VOICE)" />
+        <VoiceMsgForm v-if="state.msgType === MessageType.VOICE" @switchToTextComms="setMsgType(MessageType.TEXT)" />
       </div>
     </template>
   </Panel>
@@ -34,19 +34,19 @@ import { computed, defineProps, onMounted, PropType, reactive, toRefs, watch } f
 import { Icon } from '@iconify/vue';
 
 import Panel from '@/components/DockUI/Panel.vue';
-import DiskspaceToolbar from '@/components/diskspaces/DiskspaceToolbar.vue';
-import VoiceCommForm from '@/components/comms/VoiceCommForm.vue';
-import TextCommForm from '@/components/comms/TextCommForm.vue';
+import SpaceToolbar from '@/components/spaces/SpaceToolbar.vue';
+import VoiceMsgForm from '@/components/chat/VoiceMessageForm.vue';
+import TextMsgForm from '@/components/chat/TextMessageForm.vue';
 import VoipUserList from '@/components/chat/VoipUserList.vue';
 import MessageList from '@/components/chat/MessageList.vue';
 import FileList from '@/components/chat/FileList.vue';
 import UserIOToolbar from '@/components/me/UserIOToolbar.vue';
-import { IDiskspace, ITextMessage, IUser } from '@/data/interfaces';
-import { CommType, SpaceType } from '@/data/mock';
+import { ISpace, ITextMessage, IUser } from '@/data/interfaces';
+import { MessageType, SpaceType } from '@/data/mock';
 
 const props = defineProps({
   space: {
-    type: Object as PropType<IDiskspace>,
+    type: Object as PropType<ISpace>,
     default: {},
   },
   collapsed: Boolean,
@@ -64,7 +64,7 @@ const { space } = toRefs(props);
 const showTeamTab = computed(() => space.value.type === SpaceType.VOIP);
 
 const state = reactive({
-  commType: CommType.TEXT,
+  msgType: MessageType.TEXT,
   tabs: [
     {
       id: 'voip',
@@ -89,21 +89,21 @@ onMounted(() => {
   if (space.value.type === SpaceType.VOIP) activeTab(0);
 });
 
-watch(space, (space: IDiskspace) => {
+watch(space, (space: ISpace) => {
   if (space.type === SpaceType.TEXT) activeTab(1);
   if (space.type === SpaceType.VOIP) activeTab(0);
 });
 
-function switchComm(type: CommType) {
+function setMsgType(type: MessageType) {
   switch (type) {
-    case CommType.VOICE:
-      state.commType = CommType.VOICE;
+    case MessageType.VOICE:
+      state.msgType = MessageType.VOICE;
       break;
-    case CommType.H010:
-      state.commType = CommType.H010;
+    case MessageType.H010:
+      state.msgType = MessageType.H010;
       break;
     default:
-      state.commType = CommType.TEXT;
+      state.msgType = MessageType.TEXT;
       break;
   }
 }

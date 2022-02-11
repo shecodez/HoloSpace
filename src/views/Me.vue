@@ -1,13 +1,13 @@
 <template>
   <Layout v-if="user" :backgroundImageUrl="state.backgroundImageUrl">
     <template v-slot:fixed>
-      <FixedPanel :decks="decks">
+      <DeckPanel :decks="decks">
         <template #linkTo>
           <router-link to="/team" class="btn btn-circle btn-primary m-2">
             <Icon icon="mdi:account-group-outline" width="26" />
           </router-link>
         </template>
-      </FixedPanel>
+      </DeckPanel>
     </template>
 
     <template v-slot:banner>
@@ -30,7 +30,7 @@
     />
 
     <template v-slot:right>
-      <MetaDrawer
+      <UserMetaDrawer
         title="Friends"
         :users="users"
         :collapsed="state.metaDrawerIsCollapsed"
@@ -47,8 +47,8 @@ import { Icon } from '@iconify/vue';
 
 import Layout from '@/layouts/DefaultLayout.vue';
 import BetaAlert from '@/components/alerts/BetaAlert.vue';
-import FixedPanel from '@/components/FixedPanel.vue';
-import MetaDrawer from '@/components/MetaDrawer.vue';
+import DeckPanel from '@/components/decks/DeckPanel.vue';
+import UserMetaDrawer from '@/components/users/UserMetaDrawer.vue';
 import UserModelPanel from '@/components/me/UserModelPanel.vue';
 import ShopSideDrawer from '@/components/me/ShopSideDrawer.vue';
 import { decks, users } from '@/data/mock';

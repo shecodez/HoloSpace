@@ -1,7 +1,7 @@
 <template>
-  <Layout :backgroundImageUrl="state.backgroundImageUrl">
+  <Layout :backgroundImageUrl="state.backgroundImageUrl" pageTitle="Ssh">
     <template v-slot:fixed>
-      <FixedPanel :decks="decks" />
+      <DeckPanel :decks="decks" />
     </template>
 
     <template v-slot:banner>
@@ -10,26 +10,30 @@
     </template>
 
     <template v-slot:left>
-      <SideDrawer
-        :deck="activeDeck"
-        :diskspaces="diskspaces"
+      <SpaceSideDrawer
         :collapsed="state.sideDrawerIsCollapsed"
         :isSmScreen="!lgAndLarger"
+        isTeam
+        :spaces="spaces"
         @close="state.sideDrawerIsCollapsed = true"
       />
     </template>
 
-    <ChatPanel
+    <TeamChatPanel
       :me="activeUser"
       :space="activeDiskspace"
       :messages="messages"
-      :team="team?.users"
       :collapsed="state.sideDrawerIsCollapsed"
       @toggleCollapsed="toggleSideDrawer"
     />
 
     <template v-slot:right>
-      <MetaDrawer :users="users" :collapsed="state.metaDrawerIsCollapsed" @toggleCollapsed="toggleMetaDrawer" />
+      <UserMetaDrawer
+        title="Contacts"
+        :users="users"
+        :collapsed="state.metaDrawerIsCollapsed"
+        @toggleCollapsed="toggleMetaDrawer"
+      />
     </template>
   </Layout>
 </template>
@@ -41,12 +45,11 @@ import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
 import Layout from '@/layouts/DefaultLayout.vue';
 import BetaAlert from '@/components/alerts/BetaAlert.vue';
-import FixedPanel from '@/components/FixedPanel.vue';
-import MetaDrawer from '@/components/MetaDrawer.vue';
-import SideDrawer from '@/components/SideDrawer.vue';
-import ChatPanel from '@/components/chat/ChatPanel.vue';
-import { decks, users, diskspaces as all_diskspaces, messages as all_messages, teams } from '../data/mock';
-import { IMessage, ITextMessage } from '@/data/interfaces';
+import DeckPanel from '@/components/decks/DeckPanel.vue';
+import UserMetaDrawer from '@/components/users/UserMetaDrawer.vue';
+import SpaceSideDrawer from '@/components/spaces/SpaceSideDrawer.vue';
+import TeamChatPanel from '@/components/chat/TeamChatPanel.vue';
+import { decks, users, spaces as all_spaces, messages as all_messages } from '@/data/mock';
 
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
@@ -54,7 +57,7 @@ const breakpoints = useBreakpoints(breakpointsTailwind);
 const state = reactive({
   showAlert: true,
   sideDrawerIsCollapsed: false,
-  metaDrawerIsCollapsed: false,
+  metaDrawerIsCollapsed: true,
   sideDrawerPreBreakpoint: false,
   metaDrawerPreBreakpoint: false,
   backgroundImageUrl: 'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/backgrounds/default-bg.jpg',
@@ -90,17 +93,10 @@ function toggleMetaDrawer() {
   state.metaDrawerIsCollapsed = !state.metaDrawerIsCollapsed;
 }
 
-// function sortByDateDesc(a: ITextMessage, b: ITextMessage) {
-//   var dateA = new Date(a.created_at).getTime();
-//   var dateB = new Date(b.created_at).getTime();
-//   return dateA < dateB ? 1 : -1;
-// }
-
 const activeUser = computed(() => users[1]);
 const activeDeck = computed(() => decks.find((x) => x.id === route.params.deck_id));
 const isCaptain = activeUser.value.id === activeDeck.value?.captain_id;
-const diskspaces = computed(() => all_diskspaces.filter((x) => x.deck_id === route.params.deck_id));
-const activeDiskspace = computed(() => diskspaces.value.find((x) => x.id === route.params.diskspace_id));
-const messages = computed(() => all_messages.filter((x) => x.diskspace_id === route.params.diskspace_id));
-const team = computed(() => teams.find((x) => x.diskspace_id === route.params.diskspace_id));
+const spaces = computed(() => all_spaces.filter((x) => x.deck_id === route.params.deck_id));
+const activeDiskspace = computed(() => spaces.value.find((x) => x.id === route.params.space_id));
+const messages = computed(() => all_messages.filter((x) => x.space_id === route.params.space_id));
 </script>

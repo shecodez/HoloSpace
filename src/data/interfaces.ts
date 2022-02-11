@@ -75,6 +75,24 @@ export interface IDiskspace {
   updated_by?: string; // string of uids
 }
 
+export interface ISpace {
+  id: string;
+
+  name: string;
+  topic?: string;
+  type: SpaceType;
+  h010_id?: string; // if type = H010
+  is_ssh: boolean; // default false
+  team?: IUser[]; // team members *only if is_ssh = true
+  user_id?: string;
+  deck_id?: string;
+  can_delete: boolean; // ex: cannot delete boot disk
+
+  created_at: Date;
+  updated_at?: Date;
+  updated_by?: string; // string of uids
+}
+
 export interface IMessageReaction {
   emoji: string;
   count: number;
@@ -86,7 +104,7 @@ export interface IMessage {
   attachments?: string; // .mp3 .wav .img .png .jpg .gif .doc(x) .pdf .zip .txt
   user_id: string;
   author?: IMessageAuthor;
-  diskspace_id: string;
+  space_id: string;
   reactions?: IMessageReaction[];
   reply_id?: string;
 

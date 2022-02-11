@@ -12,17 +12,5 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
-
-import { IDiskspace } from '@/data/interfaces';
-
-const props = defineProps({
-  diskspaces: {
-    type: Object as PropType<IDiskspace[]>,
-    default: {},
-  },
-});
-
-const { diskspaces } = toRefs(props);
 </script>

@@ -47,7 +47,7 @@
         </div>
       </div>
       <button v-else @click="openInput" class="btn btn-outline btn-primary flex items-center gap-2">
-        <span class="font-medium uppercase">Direct Comm</span>
+        <span class="font-medium uppercase">DM</span>
         <Icon icon="fa:paper-plane" width="24" />
       </button>
     </div>

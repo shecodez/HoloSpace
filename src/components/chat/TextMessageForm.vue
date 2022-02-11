@@ -4,7 +4,7 @@
     <div class="mr-2">
       <div class="flex relative items-center justify-between">
         <div class="absolute left-2 grid">
-          <H010CommModal />
+          <H010gramModal />
         </div>
 
         <textarea
@@ -54,8 +54,8 @@
 import { reactive } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import FormatToolbar from '@/components/comms/FormatTextToolbar.vue';
-import H010CommModal from '@/components/comms/H010CommModal.vue';
+import FormatToolbar from '@/components/chat/FormatTextToolbar.vue';
+import H010gramModal from '@/components/chat/H010gramModal.vue';
 
 const state = reactive({
   message: '',

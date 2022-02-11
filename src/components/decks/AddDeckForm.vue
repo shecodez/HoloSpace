@@ -8,8 +8,8 @@
     </div>
 
     <p class="text-center">
-      By creating a deck, you and your crew can access free VoIP, Text, &
-      <span class="font-brand">H010</span> diskspaces. Welcome aboard Captain!
+      By creating a deck, you and your crew can access free VoIP, Text, &amp;
+      <span class="font-brand">H010</span> spaces. Welcome aboard Captain!
     </p>
 
     <form>

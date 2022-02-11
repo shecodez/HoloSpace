@@ -40,8 +40,8 @@ const props = defineProps({
   },
 });
 
-// TODO: if the boot diskspace becomes changeable
-// on mounted get boot diskspace type from the db
+// TODO: if the boot space becomes changeable
+// on mounted get boot space type from the db
 
 const { decks } = toRefs(props);
 

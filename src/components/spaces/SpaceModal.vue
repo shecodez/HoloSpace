@@ -1,48 +1,45 @@
 <template>
   <Modal :isOpen="isOpen" @close="$emit('close')" css="bg-base-100 w-11/12 md:max-w-lg mx-auto rounded shadow-lg">
-    <div class="diskspace-modal p-6">
+    <div class="space-modal p-6">
       <div class="flex justify-between items-center mb-2">
-        <h3 class="text-secondary font-bold">Add New <span class="font-brand uppercase">space</span></h3>
+        <h3 class="text-secondary font-bold">
+          {{ space.id ? 'Edit' : 'Add' }} <span class="font-brand uppercase">{{ space.type }}space</span>
+        </h3>
         <button @click="$emit('close')" class="btn btn-sm btn-square btn-error btn-outline">
           <Icon icon="mdi:close" width="20" />
         </button>
       </div>
 
-      <DirectDiskspaceForm v-if="isDirect" :type="type" />
-      <DiskspaceForm v-else :type="type" />
+      <SpaceForm :type="space.type || type" :isTeam="isTeam" :space="space" />
     </div>
   </Modal>
 </template>
 
 <script setup lang="ts">
-import { PropType, toRefs } from 'vue';
+import { PropType } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import Modal from '@/components/DockUI/Modal.vue';
-import DiskspaceForm from '@/components/diskspaces/DiskspaceForm.vue';
+import SpaceForm from '@/components/spaces/SpaceForm.vue';
+import { ISpace } from '@/data/interfaces';
 import { SpaceType } from '@/data/mock';
-import DirectDiskspaceForm from './DirectDiskspaceForm.vue';
 
 const props = defineProps({
-  type: {
-    type: String as PropType<SpaceType>,
-    default: SpaceType.TEXT,
-  },
   isOpen: {
     type: Boolean,
     default: false,
   },
-  isDirect: {
+  type: {
+    type: String as PropType<SpaceType>,
+    default: SpaceType.TEXT,
+  },
+  isTeam: {
     type: Boolean,
     default: false,
   },
+  space: {
+    type: Object as PropType<ISpace>,
+    default: {},
+  },
 });
-
-const { type, isOpen } = toRefs(props);
 </script>
-
-<style scoped>
-h2 {
-  @apply text-xl uppercase font-bold;
-}
-</style>
