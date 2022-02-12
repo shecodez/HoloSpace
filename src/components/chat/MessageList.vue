@@ -35,7 +35,7 @@
                     <Icon icon="ic:twotone-quickreply" width="20" />
                   </button>
                 </template>
-                <CommReactionMenu />
+                <ReactionMenu />
               </Popper>
             </div>
           </div>
@@ -51,7 +51,7 @@ import { defineProps, PropType, toRefs } from 'vue';
 import { format, formatRelative, isSameDay, isSameMinute } from 'date-fns';
 import { Icon } from '@iconify/vue';
 
-import CommReactionMenu from '@/components/chat/MessageReactionMenu.vue';
+import ReactionMenu from '@/components/chat/MessageReactionMenu.vue';
 import Popper from '@/components/DockUI/Popper.vue';
 import { ITextMessage, IMessage } from '@/data/interfaces';
 
