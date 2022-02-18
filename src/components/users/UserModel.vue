@@ -52,8 +52,8 @@ const assets = [
   new pc.Asset('ybot.json', 'model', {
     url: '/src/assets/models/h010bot/ybot/Y_Bot.json',
   }),
-  new pc.Asset('idle.json', 'animation', {
-    url: '/src/assets/models/h010bot/animations/idle.json',
+  new pc.Asset('idle', 'animation', {
+    url: '/src/assets/animations/glb/Idle.glb',
   }),
   new pc.Asset('Montserrat-Black.json', 'font', {
     url: '/src/assets/fonts/Montserrat-Black/Montserrat-Black.json',

@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, PropType, reactive } from 'vue';
+import { onMounted, PropType, reactive } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import { IEvent } from '@/data/interfaces';
@@ -108,8 +108,4 @@ function submitEvent() {
 //const state = {};
 </script>
 
-<style scoped>
-.form-control:focus-within label {
-  @apply text-accent;
-}
-</style>
+<style scoped></style>

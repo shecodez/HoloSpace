@@ -12,9 +12,9 @@ import H010 from '@/views/chat/H010.vue';
 
 const routes: Array<RouteRecordRaw> = [
   // {
-  //   path: '/Test',
+  //   path: '/test',
   //   name: 'Test',
-  //   component: () => import('@/views/Test.vue'),
+  //   component: () => import('@/views/_test/Index.vue'),
   // },
   {
     path: '/',

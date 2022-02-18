@@ -1,9 +1,6 @@
 import { ref } from 'vue';
 import * as pc from 'playcanvas';
 
-const app = ref<pc.Application>();
-const error = ref();
-
 interface IAssetResourse {
   name: string;
   type: string;
@@ -17,36 +14,6 @@ interface IScriptResourse {
 }
 
 export default function usePlayCanvas() {
-  const initializeApp = (canvas: HTMLCanvasElement) => {
-    try {
-      app.value = new pc.Application(canvas, {
-        elementInput: new pc.ElementInput(canvas, {
-          useMouse: true,
-          useTouch: true,
-        }),
-        keyboard: new pc.Keyboard(window),
-        mouse: new pc.Mouse(canvas),
-        gamepads: new pc.GamePads(),
-        touch: pc.platform.touch ? new pc.TouchDevice(canvas) : undefined,
-      });
-      app.value.start();
-
-      // fill the available space at full resolution
-      app.value.setCanvasFillMode(pc.FILLMODE_NONE); // FILLMODE_FILL_WINDOW
-      app.value.setCanvasResolution(pc.RESOLUTION_AUTO);
-    } catch (e) {
-      if (e instanceof pc.UnsupportedBrowserError) {
-        error.value = 'This page requires a browser that supports WebGL. More information here: http://get.webgl.org';
-      } else if (e instanceof pc.ContextCreationError) {
-        error.value = 'Your computer may not support WebGL. Troubleshoot here: http://get.webgl.org/troubleshooting/';
-      } else {
-        error.value = `Could not initialize application. Error: ${e}`;
-      }
-    }
-  };
-
-  // const updateApp = (dt: string) => {}
-
   /**
    * loads assets from data or url
    * @param resource
@@ -99,6 +66,39 @@ export default function usePlayCanvas() {
     } catch (e) {
       console.error('ScriptLoaderError', e);
     }
+  };
+
+  /**
+   * Converts a coordinate in world space into a screen's space.
+   *
+   * @param {pc.Vec3} worldPosition - the Vec3 representing the world-space coordinate.
+   * @param {pc.CameraComponent} camera - the Camera.
+   * @param {pc.ScreenComponent} screen - the Screen
+   * @returns {pc.Vec3} a Vec3 of the input worldPosition relative to the camera and screen. The Z coordinate represents the depth,
+   * and negative numbers signal that the worldPosition is behind the camera.
+   */
+  const worldToScreenSpace = (
+    app: pc.Application,
+    worldPosition: pc.Vec3,
+    camera: pc.CameraComponent,
+    screen: pc.ScreenComponent,
+  ): pc.Vec3 => {
+    const screenPos = camera.worldToScreen(worldPosition);
+
+    // take pixel ratio into account
+    const pixelRatio = app.graphicsDevice.maxPixelRatio;
+    screenPos.x *= pixelRatio;
+    screenPos.y *= pixelRatio;
+
+    // account for screen scaling
+    // @ts-ignore engine-tsd
+    const scale = screen.scale;
+
+    // invert the y position
+    screenPos.y = screen.resolution.y - screenPos.y;
+
+    // put that into a Vec3
+    return new pc.Vec3(screenPos.x / scale, screenPos.y / scale, screenPos.z / scale);
   };
 
   /**
@@ -190,16 +190,24 @@ export default function usePlayCanvas() {
     return material;
   };
 
+  const createPhongMaterial = (name: string, color: pc.Color) => {
+    const material = new pc.PhongMaterial();
+    material.name = name;
+    material.diffuse = color;
+    material.update();
+
+    return material;
+  };
+
   return {
-    app,
-    error,
-    initializeApp,
     assetLoader,
     scriptLoader,
+    worldToScreenSpace,
     createPrimitiveEntity,
     createAssetEntity,
     createTextureEntity,
     createTextEntity,
     createStandardMaterial,
+    createPhongMaterial,
   };
 }

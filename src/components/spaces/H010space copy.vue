@@ -16,7 +16,7 @@ import * as pc from 'playcanvas';
 import usePlayCanvas from '@/use/playcanvas';
 import { IUser } from '@/data/interfaces';
 
-const { worldToScreenSpace, createPhongMaterial } = usePlayCanvas();
+const { worldToScreenSpace } = usePlayCanvas();
 
 const props = defineProps({
   width: Number,
@@ -43,40 +43,19 @@ const assetsToLoad = [
     url: '/src/assets/models/h010bot/ybot/Y_Bot.json',
   }),
   new pc.Asset('idle', 'animation', {
-    url: '/src/assets/animations/glb/Idle.glb',
+    url: '/src/assets/animations/glb/idle.glb',
+  }),
+  new pc.Asset('jog', 'animation', {
+    url: '/src/assets/animations/glb/jog.glb',
   }),
   new pc.Asset('jump', 'animation', {
-    url: '/src/assets/animations/glb/Jump.glb',
+    url: '/src/assets/animations/glb/jump.glb',
   }),
-  new pc.Asset('JogBackward', 'animation', {
-    url: '/src/assets/animations/glb/jog/JogBackward.glb',
+  new pc.Asset('run', 'animation', {
+    url: '/src/assets/animations/glb/run.glb',
   }),
-  new pc.Asset('JogBackwardDiagonalLeft', 'animation', {
-    url: '/src/assets/animations/glb/jog/JogBackwardDiagonalLeft.glb',
-  }),
-  new pc.Asset('JogBackwardDiagonalRight', 'animation', {
-    url: '/src/assets/animations/glb/jog/JogBackwardDiagonalRight.glb',
-  }),
-  new pc.Asset('JogForward', 'animation', {
-    url: '/src/assets/animations/glb/jog/JogForward.glb',
-  }),
-  new pc.Asset('JogForwardDiagonalLeft', 'animation', {
-    url: '/src/assets/animations/glb/jog/JogForwardDiagonalLeft.glb',
-  }),
-  new pc.Asset('JogForwardDiagonalRight', 'animation', {
-    url: '/src/assets/animations/glb/jog/JogForwardDiagonalRight.glb',
-  }),
-  new pc.Asset('JogStrafeLeft', 'animation', {
-    url: '/src/assets/animations/glb/jog/JogStrafeLeft.glb',
-  }),
-  new pc.Asset('JogStrafeRight', 'animation', {
-    url: '/src/assets/animations/glb/jog/JogStrafeRight.glb',
-  }),
-  new pc.Asset('LeftTurn', 'animation', {
-    url: '/src/assets/animations/glb/LeftTurn.glb',
-  }),
-  new pc.Asset('RightTurn', 'animation', {
-    url: '/src/assets/animations/glb/RightTurn.glb',
+  new pc.Asset('walk', 'animation', {
+    url: '/src/assets/animations/glb/walk.glb',
   }),
   new pc.Asset('Montserrat-Black.json', 'font', {
     url: '/src/assets/fonts/Montserrat-Black/Montserrat-Black.json',
@@ -92,24 +71,17 @@ const assets = ref({
     ybot: assetsToLoad[1],
   },
   animations: {
-    Idle: assetsToLoad[2],
-    Jump: assetsToLoad[3],
-    JogBackward: assetsToLoad[4],
-    JogBackwardDiagonalLeft: assetsToLoad[5],
-    JogBackwardDiagonalRight: assetsToLoad[6],
-    JogForward: assetsToLoad[7],
-    JogForwardDiagonalLeft: assetsToLoad[8],
-    JogForwardDiagonalRight: assetsToLoad[9],
-    JogStrafeLeft: assetsToLoad[10],
-    JogStrafeRight: assetsToLoad[11],
-    LeftTurn: assetsToLoad[12],
-    RightTurn: assetsToLoad[13],
+    idle: assetsToLoad[2],
+    jog: assetsToLoad[3],
+    jump: assetsToLoad[4],
+    run: assetsToLoad[5],
+    walk: assetsToLoad[6],
   },
   fonts: {
-    montserratBlack: assetsToLoad[14],
+    montserratBlack: assetsToLoad[7],
   },
   textures: {
-    checkboard: assetsToLoad[15],
+    checkboard: assetsToLoad[8],
   },
 });
 
@@ -199,7 +171,7 @@ function createApp(canvas: HTMLCanvasElement) {
     app.value.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // use device pixel ratio
-    app.value.graphicsDevice.maxPixelRatio = window.devicePixelRatio;
+    // app.value.graphicsDevice.maxPixelRatio = window.devicePixelRatio;
 
     // start the update loop
     app.value.start();
@@ -241,15 +213,12 @@ function onLoadComplete(app: pc.Application) {
 }
 
 function createH010space(app: pc.Application) {
-  // set up some general scene rendering properties
-  app.scene.toneMapping = pc.TONEMAP_ACES;
-
   // Create an Entity with a camera component
   const camera = new pc.Entity('camera');
   camera.addComponent('camera', {
     clearColor: new pc.Color(30, 30, 30),
   });
-  // app.root.addChild(camera);
+  app.root.addChild(camera);
 
   // Create an entity with a light component
   const light = new pc.Entity();
@@ -257,16 +226,16 @@ function createH010space(app: pc.Application) {
     type: 'directional',
     color: new pc.Color(1, 1, 1),
     castShadows: true,
+    intensity: 1,
+    shadowBias: 0.2,
+    shadowDistance: 16,
+    normalOffsetBias: 0.05,
     shadowResolution: 2048,
-    shadowDistance: 30,
-    shadowType: pc.SHADOW_PCF3,
-    normalOffsetBias: 0.5,
   });
-  light.translateLocal(0, 20, 0);
-  light.setLocalEulerAngles(-45, 0, -45);
+  light.setLocalEulerAngles(45, 30, 0);
   app.root.addChild(light);
 
-  const environment = createEnvironment(app);
+  const environment = createEnvironment();
   app.root.addChild(environment);
 
   // Create a 2D screen
@@ -278,206 +247,95 @@ function createH010space(app: pc.Application) {
   });
   app.root.addChild(screen);
 
-  createCharacterModel(app, screen, camera, `${me.value.name}#${me.value.pin}`);
+  createCharacterModel(app, screen, camera, `${me.value.name}#${me.value.pin}`, 300);
 }
 
-interface IWall {
-  name?: string;
-  type: string;
-  position: pc.Vec3;
-  rotation: pc.Vec3;
-  scale: pc.Vec3;
-  model?: boolean;
-  material?: pc.Material;
-  rigidbody?: boolean;
-  collision?: boolean;
-}
-
-function createEnvironment(app: pc.Application) {
-  // app.scene.ambientLight = new pc.Color(0.2, 0.2, 0.2);
-
-  // Set the gravity for our rigid bodies
-  app.systems.rigidbody.gravity.set(0, -9.81, 0);
-
-  // TODO: move to assets
-  // set a prefiltered cubemap as the skybox
-  const cubemapAsset = new pc.Asset(
-    'helipad',
-    'cubemap',
-    {
-      url: '/src/assets/textures/cubemap/Helipad.dds',
-    },
-    {
-      rgbm: true,
-    },
-  );
-  app.assets.add(cubemapAsset);
-  app.assets.load(cubemapAsset);
-  cubemapAsset.ready(function () {
-    app.scene.skyboxMip = 2;
-    app.scene.setSkybox(cubemapAsset.resources);
-  });
-
+function createEnvironment() {
   const environment = new pc.Entity();
 
   // Create ground material
-  const ground_mat = new pc.StandardMaterial();
-  ground_mat.diffuse = pc.Color.WHITE;
-  ground_mat.diffuseMap = assets.value.textures.checkboard.resource;
-  ground_mat.diffuseMapTiling = new pc.Vec2(50, 50);
-  ground_mat.update();
+  const material = new pc.StandardMaterial();
+  material.diffuse = pc.Color.WHITE;
+  material.diffuseMap = assets.value.textures.checkboard.resource;
+  material.diffuseMapTiling = new pc.Vec2(50, 50);
+  material.update();
 
-  // Create glass material
-  const glass_mat = new pc.StandardMaterial();
-  glass_mat.diffuse = pc.Color.WHITE;
-  glass_mat.useMetalness = true;
-  glass_mat.metalness = 0;
-  glass_mat.shininess = 100;
-  glass_mat.blendType = pc.BLEND_NORMAL;
-  glass_mat.reflectivity = 0;
-  glass_mat.refraction = 1;
-  glass_mat.lightMapUv = 0;
-  glass_mat.update();
-
-  const walls = [
-    {
-      name: 'Ground',
-      type: 'box',
-      position: { x: 0, y: 0, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-      scale: { x: 60, y: 1, z: 60 },
-      material: ground_mat,
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'N_Wall',
-      type: 'box',
-      position: { x: 0, y: 10, z: -30 },
-      rotation: { x: 90, y: 0, z: 0 },
-      scale: { x: 60, y: 1, z: 20 },
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'S_Wall',
-      type: 'box',
-      position: { x: 0, y: 10, z: 30 },
-      rotation: { x: 270, y: 0, z: 0 },
-      scale: { x: 60, y: 1, z: 20 },
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'W_Wall',
-      type: 'box',
-      position: { x: -30, y: 10, z: 0 },
-      rotation: { x: 270, y: 270, z: 0 },
-      scale: { x: 60, y: 1, z: 20 },
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'E_Window',
-      type: 'box',
-      position: { x: 30, y: 10, z: 0 },
-      rotation: { x: 270, y: 90, z: 0 },
-      scale: { x: 60, y: 1, z: 20 },
-      material: glass_mat,
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'Ceiling',
-      type: 'box',
-      position: { x: 0, y: 20, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-      scale: { x: 60, y: 1, z: 60 },
-      rigidbody: false,
-      collision: true,
-    },
-  ] as IWall[];
-
-  walls.map((wall) => {
-    const entity = createWallEntity(wall);
-    environment.addChild(entity);
+  // Create an Entity for the ground
+  const ground = new pc.Entity();
+  ground.addComponent('render', {
+    type: 'box',
+    material: material,
+  });
+  const scale = new pc.Vec3(60, 1, 60);
+  ground.setLocalScale(scale);
+  ground.setLocalPosition(0, 0, 0);
+  // add collision
+  ground.addComponent('collision', {
+    type: 'box',
+    halfExtents: new pc.Vec3(scale.x / 2, scale.y + 0.3, scale.z / 2),
+  });
+  // add rigidbody
+  ground.addComponent('rigidbody', {
+    type: pc.BODYTYPE_STATIC,
+    friction: 0.5,
+    restitution: 0.5,
   });
 
+  environment.addChild(ground);
   return environment;
 }
 
-const createWallEntity = (wall: IWall) => {
-  const { name, type, position, rotation, scale, material } = wall;
-
-  const entity = new pc.Entity(name);
-  entity.addComponent('render', {
-    type,
-    material,
-  });
-  entity.translateLocal(position.x, position.y, position.z);
-  entity.setLocalEulerAngles(rotation.x, rotation.y, rotation.z);
-  entity.setLocalScale(scale.x, scale.y, scale.z);
-  if (wall.collision) {
-    // add collision
-    entity.addComponent('collision', {
-      type,
-      halfExtents: new pc.Vec3(scale.x / 2, scale.y / 2 + 0.3, scale.z / 2),
-    });
-  }
-  if (wall.rigidbody) {
-    // add rigidbody
-    entity.addComponent('rigidbody', {
-      type: pc.BODYTYPE_STATIC,
-      friction: 0.5,
-      restitution: 0.5,
-    });
-  }
-  return entity;
-};
-
-function createCharacterModel(app: pc.Application, screen: pc.Entity, camera: pc.Entity, h010tag: string) {
+function createCharacterModel(
+  app: pc.Application,
+  screen: pc.Entity,
+  camera: pc.Entity,
+  h010tag: string,
+  speed: number,
+) {
   // Create an Entity to represent the user in the h010space (3d world)
   const character = new pc.Entity();
   character.setLocalPosition(0, 1.5, 0);
+  character.setLocalEulerAngles(0, 0, 0);
+  //character.setLocalScale(new pc.Vec3(0.5, 0.5, 0.5));
   // add rigidbody
   character.addComponent('rigidbody', {
     type: pc.BODYTYPE_DYNAMIC,
-    mass: 50,
-    linearDamping: 0.99,
-    angularDamping: 1,
-    linearFactor: pc.Vec3.ONE,
+    angularDamping: 0,
     angularFactor: pc.Vec3.ZERO,
     friction: 0.75,
+    linearDamping: 0.99,
+    linearFactor: pc.Vec3.ONE,
+    mass: 80,
     restitution: 0.5,
   });
   // add collision
   character.addComponent('collision', {
     type: 'capsule',
-    radius: 0.35,
-    height: 1.84,
-    axis: 1, // x:0 y:1 z:2
+    axis: 0,
+    radius: 0.24,
+    height: 1.8,
   });
-
   const characterModel = loadH010botFromUrl(app, 'xbot', '/src/assets/models/h010bot/xbot/xbot.json');
-  characterModel.translateLocal(0, -1, 0);
-  characterModel.setLocalEulerAngles(0, 180, 0);
+  characterModel.setLocalPosition(0, -1, 0);
+  characterModel.setLocalRotation(0, 180, 0);
   character.addChild(characterModel);
 
   const cameraAxis = new pc.Entity('Camera Axis');
   cameraAxis.translateLocal(0, 0.5, 0);
-  createCameraController(app, cameraAxis);
-  camera.addComponent('script');
-  camera.script.create('CameraController');
+  //createCameraController(app, cameraAxis);
+  //camera.addComponent('script');
+  //camera.script.create('CameraController');
   const raycastEndPoint = new pc.Entity('RaycastEndPoint');
-  raycastEndPoint.translateLocal(0, 0, 4.3);
-  cameraAxis.addChild(camera);
+  raycastEndPoint.translateLocal(0, 0, 4.43);
+  //cameraAxis.addChild(camera);
   cameraAxis.addChild(raycastEndPoint);
   character.addChild(cameraAxis);
 
   // TODO: Only add character controller scripts if isLocal user
-  createCharacterController(app, camera, character);
+  createCharacterController(app, camera, character, speed);
   character.addComponent('script');
   character.script.create('CharacterController');
+  // { attributes: { camera: camera } }
   characterAnimController(app, character, characterModel);
   app.root.addChild(character);
 
@@ -537,7 +395,13 @@ function createCharacterModel(app: pc.Application, screen: pc.Entity, camera: pc
   });
 }
 
-const loadH010botFromUrl = (app: pc.Application, name: string, url: string, colors?: pc.Color[]) => {
+const loadH010botFromUrl = (
+  app: pc.Application,
+  name: string,
+  url: string,
+
+  colors?: pc.Color[],
+) => {
   const h010bot = new pc.Entity(name);
   app.assets.loadFromUrl(url, 'model', function (err: any, asset: pc.Asset | any) {
     h010bot.addComponent('model');
@@ -565,12 +429,8 @@ const createCameraController = (app: pc.Application, cameraAxis: pc.Entity) => {
 
   const mouseSpeed = 1.4; // mouse sensitivity
   let euler = new pc.Vec3();
+  //let touchCoord =new pc.Vec2();
   let rayEnd: pc.GraphNode | null;
-
-  // @ts-ignore engine-tsd
-  script!.prototype.getEuler = function () {
-    return euler;
-  };
 
   script!.prototype.initialize = function () {
     app.mouse.on('mousemove', onMouseMove, this);
@@ -582,27 +442,30 @@ const createCameraController = (app: pc.Application, cameraAxis: pc.Entity) => {
       'destroy',
       function () {
         app.mouse.off('mousemove', onMouseMove);
-        //app.mouse.off('mousedown', onMouseDown);
+        app.mouse.off('mousedown', onMouseDown);
       },
       this,
     );
   };
 
   function onMouseMove(e: any) {
-    if (pc.Mouse.isPointerLocked() || e.buttons[0]) {
+    if (pc.Mouse.isPointerLocked() || pc.MOUSEBUTTON_LEFT) {
       euler.x -= ((mouseSpeed * e.dx) / 60) % 360;
       euler.y += ((mouseSpeed * e.dy) / 60) % 360;
 
       if (euler.x < 0) euler.x += 360; // yaw
       if (euler.y < 0) euler.y += 360; // pitch
+      // euler.y = pc.math.clamp(euler.y, -75, 75); clamp pitch
     }
   }
 
   function onMouseDown(e: any) {
+    e.preventDefault();
     app.mouse.enablePointerLock();
   }
 
   // function onMouseWheel(e: any) {
+  //   e.event.preventDefault();
   //   const distanceSensitivity = 0.15;
   //   camera.camera.fov -= e.wheel * distanceSensitivity * (Camera.distance * 0.1);
   // }
@@ -610,7 +473,6 @@ const createCameraController = (app: pc.Application, cameraAxis: pc.Entity) => {
   function getWorldPoint() {
     const from = cameraAxis.getPosition();
     const to = rayEnd?.getPosition();
-
     const hit = app.systems.rigidbody.raycastFirst(from, to as pc.Vec3);
 
     return hit ? hit.point : to;
@@ -627,28 +489,26 @@ const createCameraController = (app: pc.Application, cameraAxis: pc.Entity) => {
     originEntity.setEulerAngles(targetAng);
 
     this.entity.setPosition(getWorldPoint() as pc.Vec3);
+
     this.entity.lookAt(originEntity.getPosition());
   };
 };
 
-const createCharacterController = (app: pc.Application, camera: pc.Entity, character: pc.Entity) => {
+const createCharacterController = (app: pc.Application, camera: pc.Entity, character: pc.Entity, speed: number) => {
   const script = pc.createScript('CharacterController');
 
-  const moveSpeed = 0.07;
-  const turnSpeed = 300;
-
-  let anim = speedForState('Jog');
+  //const lookSpeed = 0.25;
+  //let force = new pc.Vec3();
+  let anim = speedForState('Walk');
   const keyboard = new pc.Keyboard(document.body); // limit to canvas?
 
   let isOnGround = true;
   let isJumping = false;
-  let groundCheckRay = new pc.Vec3(0, -4.2, 0);
+  let groundCheckRay = new pc.Vec3(0, -1.2, 0);
   let rayEnd = new pc.Vec3();
   let groundNormal = new pc.Vec3();
 
-  //@ts-ignore
-  const cameraScript = camera.script.CameraController;
-
+  //const cameraScript = camera.script.CameraController;
   enum Perspective {
     FirstPerson = 'FirstPerson',
     ThirdPerson = 'ThirdPerson',
@@ -665,6 +525,7 @@ const createCharacterController = (app: pc.Application, camera: pc.Entity, chara
     if (!character.collision) {
       state.error = "CharacterController script needs to have a 'collision' component";
     }
+
     if (!character.rigidbody || character.rigidbody.type !== pc.BODYTYPE_DYNAMIC) {
       state.error = "CharacterController script needs to have a DYNAMIC 'rigidbody' component";
     }
@@ -679,20 +540,16 @@ const createCharacterController = (app: pc.Application, camera: pc.Entity, chara
   }
 
   function changeCameraToTp(camera: pc.Entity) {
-    camera.translateLocal(0, 0, 4.3);
+    camera.translateLocal(0, 0, 4.43);
 
     camera.camera.fov = 45;
-    camera.camera.nearClip = 0.1;
+    camera.camera.nearClip = 0.3;
     camera.camera.farClip = 100;
   }
 
   function createFpCamera() {
     const fpcamera = new pc.Entity('fpcamera');
-    fpcamera.addComponent('camera', {
-      farClip: 100,
-      fov: 65,
-      nearClip: 0.1,
-    });
+    fpcamera.addComponent('camera');
     character.addChild(fpcamera);
     fpcamera.translateLocal(0, 1, 0);
 
@@ -704,7 +561,7 @@ const createCharacterController = (app: pc.Application, camera: pc.Entity, chara
     switch (state) {
       case 'Walk':
         return 1.0;
-      case 'Jog':
+      case 'Run':
         return 4.0;
       case 'Jump':
       case 'Idle':
@@ -732,36 +589,33 @@ const createCharacterController = (app: pc.Application, camera: pc.Entity, chara
 
   // update code called every frame
   script!.prototype.update = function (dt) {
-    // if (!character.anim.getInteger('speed')) return; // throw err?
-
-    let _worldDirection = worldDirection.set(0, 0, 0);
-    let _tempDirection = tempDirection;
+    //if (!character.anim.getInteger('speed')) return; // throw err?
 
     // Get camera directions to determine movement directions
-    const forward = this.entity.forward; //camera.forward;
-    const right = this.entity.right; //camera.right;
+    const forward = pov === Perspective.FirstPerson ? camera.forward : character.forward;
+    const right = pov === Perspective.FirstPerson ? camera.right : character.right;
 
     // movement
     let x = 0;
     let z = 0;
 
     if (keyboard.isPressed(pc.KEY_J)) {
-      anim = anim > 1 ? speedForState('Walk') : speedForState('Jog');
+      anim = anim > 1 ? speedForState('Walk') : speedForState('Run');
     }
 
-    // if (keyboard.isPressed(pc.KEY_V)) {
-    //   togglePerspective();
-    // }
+    if (keyboard.isPressed(pc.KEY_V)) {
+      togglePerspective();
+    }
 
     if (keyboard.isPressed(pc.KEY_W) || keyboard.isPressed(pc.KEY_UP)) {
       z += 1;
     }
 
     if (keyboard.isPressed(pc.KEY_A) || keyboard.isPressed(pc.KEY_LEFT)) {
-      x -= 1;
+      character.rotate(0, -1 + dt * speed, 0);
     }
     if (keyboard.isPressed(pc.KEY_Q)) {
-      character.rotate(0, -1 + dt * turnSpeed, 0);
+      x -= 1;
     }
 
     if (keyboard.isPressed(pc.KEY_S) || keyboard.isPressed(pc.KEY_DOWN)) {
@@ -769,44 +623,54 @@ const createCharacterController = (app: pc.Application, camera: pc.Entity, chara
     }
 
     if (keyboard.isPressed(pc.KEY_D) || keyboard.isPressed(pc.KEY_RIGHT)) {
-      x += 1;
+      character.rotate(0, 1 - dt * speed, 0);
     }
     if (keyboard.isPressed(pc.KEY_E)) {
-      character.rotate(0, 1 - dt * turnSpeed, 0);
+      x += 1;
     }
 
     if (keyboard.isPressed(pc.KEY_SPACE)) {
       isJumping = character.anim.baseLayer.activeState === 'Jump';
       if (!isJumping && isOnGround) {
         character.anim.setTrigger('jump');
-        character.rigidbody.applyImpulse(0, 99, 0);
+        character.rigidbody.applyImpulse(0, 200, 0);
       }
     }
 
     // move
     if (x !== 0 || z !== 0) {
       character.anim.setInteger('speed', anim);
+      // x *= dt;
+      // z *= dt;
+      // character.anim.setInteger('speed', anim);
+      // force
+      //   .set(x, 0, z)
+      //   .normalize()
+      //   .mulScalar(999 * anim); // run is faster than walk
+      // character.rigidbody.applyForce(force);
+      worldDirection.add(tempDirection.copy(forward).mulScalar(z));
+      worldDirection.add(tempDirection.copy(right).mulScalar(x));
+      worldDirection.normalize();
 
-      _worldDirection.add(_tempDirection.copy(forward).mulScalar(z));
-      _worldDirection.add(_tempDirection.copy(right).mulScalar(x));
-      _worldDirection.normalize();
+      var pos = new pc.Vec3(worldDirection.x * dt, 0, worldDirection.z * dt);
 
-      let pos = new pc.Vec3(_worldDirection.x * dt, 0, _worldDirection.z * dt);
-      pos.normalize().mulScalar(moveSpeed); // pos.normalize().scale(moveSpeed);
-      pos.add(character.getPosition());
+      pos.normalize(); //.scale(0.09);
+      pos.add(this.entity.getPosition());
 
-      var targetY = cameraScript.getEuler().x + 180;
-      let rot = new pc.Vec3(0, targetY, 0);
+      //var targetY = cameraScript.euler.x + 180;
+      var rot = new pc.Vec3(0, 180, 0);
 
-      character.rigidbody.teleport(pos, rot);
+      this.entity.rigidbody.teleport(pos, rot);
     } else {
       character.anim.setInteger('speed', 0);
     }
-
-    character.anim.setFloat('xDirection', x);
-    character.anim.setFloat('zDirection', z);
+    //character.anim.setFloat('xDirection', x);
+    //character.anim.setFloat('zDirection', z);
 
     checkIfOnGround();
+
+    // update camera angle from mouse events
+    //camera.setLocalEulerAngles(euler.y, euler.x, 0);
   };
 
   return script;
@@ -836,39 +700,15 @@ const characterAnimController = (app: pc.Application, character: pc.Entity, mode
             speed: 1,
           },
           {
+            name: 'Walk',
+            speed: 1,
+          },
+          {
             name: 'Jump',
             speed: 1,
           },
           {
-            name: 'JogBackward',
-            speed: 1,
-          },
-          {
-            name: 'JogBackwardDiagonalLeft',
-            speed: 1,
-          },
-          {
-            name: 'JogBackwardDiagonalRight',
-            speed: 1,
-          },
-          {
-            name: 'JogForward',
-            speed: 1,
-          },
-          {
-            name: 'JogForwardDiagonalLeft',
-            speed: 1,
-          },
-          {
-            name: 'JogForwardDiagonalRight',
-            speed: 1,
-          },
-          {
-            name: 'JogStrafeLeft',
-            speed: 1,
-          },
-          {
-            name: 'JogStrafeRight',
+            name: 'Run',
             speed: 1,
           },
           {
@@ -883,163 +723,14 @@ const characterAnimController = (app: pc.Application, character: pc.Entity, mode
             priority: 0,
           },
           {
-            from: 'ANY',
-            to: 'Idle',
-            time: 0.15,
+            from: 'Idle',
+            to: 'Walk',
+            time: 0.1,
             priority: 0,
             conditions: [
               {
-                parameterName: 'xDirection',
-                predicate: pc.ANIM_EQUAL_TO,
-                value: 0,
-              },
-              {
-                parameterName: 'zDirection',
-                predicate: pc.ANIM_EQUAL_TO,
-                value: 0,
-              },
-            ],
-          },
-          {
-            from: 'ANY',
-            to: 'JogForwardDiagonalLeft',
-            time: 0.15,
-            priority: 0,
-            conditions: [
-              {
-                parameterName: 'xDirection',
-                predicate: pc.ANIM_LESS_THAN,
-                value: 0,
-              },
-              {
-                parameterName: 'zDirection',
+                parameterName: 'speed',
                 predicate: pc.ANIM_GREATER_THAN,
-                value: 0,
-              },
-            ],
-          },
-          {
-            from: 'ANY',
-            to: 'JogForward',
-            time: 0.15,
-            priority: 0,
-            conditions: [
-              {
-                parameterName: 'xDirection',
-                predicate: pc.ANIM_EQUAL_TO,
-                value: 0,
-              },
-              {
-                parameterName: 'zDirection',
-                predicate: pc.ANIM_GREATER_THAN,
-                value: 0,
-              },
-            ],
-          },
-          {
-            from: 'ANY',
-            to: 'JogForwardDiagonalRight',
-            time: 0.15,
-            priority: 0,
-            conditions: [
-              {
-                parameterName: 'xDirection',
-                predicate: pc.ANIM_GREATER_THAN,
-                value: 0,
-              },
-              {
-                parameterName: 'zDirection',
-                predicate: pc.ANIM_GREATER_THAN,
-                value: 0,
-              },
-            ],
-          },
-          {
-            from: 'ANY',
-            to: 'JogStrafeLeft',
-            time: 0.15,
-            priority: 0,
-            conditions: [
-              {
-                parameterName: 'xDirection',
-                predicate: pc.ANIM_LESS_THAN,
-                value: 0,
-              },
-              {
-                parameterName: 'zDirection',
-                predicate: pc.ANIM_EQUAL_TO,
-                value: 0,
-              },
-            ],
-          },
-          {
-            from: 'ANY',
-            to: 'JogStrafeRight',
-            time: 0.15,
-            priority: 0,
-            conditions: [
-              {
-                parameterName: 'xDirection',
-                predicate: pc.ANIM_GREATER_THAN,
-                value: 0,
-              },
-              {
-                parameterName: 'zDirection',
-                predicate: pc.ANIM_EQUAL_TO,
-                value: 0,
-              },
-            ],
-          },
-          {
-            from: 'ANY',
-            to: 'JogBackwardDiagonalLeft',
-            time: 0.15,
-            priority: 0,
-            conditions: [
-              {
-                parameterName: 'xDirection',
-                predicate: pc.ANIM_LESS_THAN,
-                value: 0,
-              },
-              {
-                parameterName: 'zDirection',
-                predicate: pc.ANIM_LESS_THAN,
-                value: 0,
-              },
-            ],
-          },
-          {
-            from: 'ANY',
-            to: 'JogBackward',
-            time: 0.15,
-            priority: 0,
-            conditions: [
-              {
-                parameterName: 'xDirection',
-                predicate: pc.ANIM_EQUAL_TO,
-                value: 0,
-              },
-              {
-                parameterName: 'zDirection',
-                predicate: pc.ANIM_LESS_THAN,
-                value: 0,
-              },
-            ],
-          },
-          {
-            from: 'ANY',
-            to: 'JogBackwardDiagonalRight',
-            time: 0.15,
-            priority: 0,
-            conditions: [
-              {
-                parameterName: 'xDirection',
-                predicate: pc.ANIM_GREATER_THAN,
-                value: 0,
-              },
-              {
-                parameterName: 'zDirection',
-                predicate: pc.ANIM_LESS_THAN,
                 value: 0,
               },
             ],
@@ -1047,7 +738,7 @@ const characterAnimController = (app: pc.Application, character: pc.Entity, mode
           {
             from: 'ANY',
             to: 'Jump',
-            time: 0.15,
+            time: 0.1,
             priority: 0,
             conditions: [
               {
@@ -1060,24 +751,60 @@ const characterAnimController = (app: pc.Application, character: pc.Entity, mode
           {
             from: 'Jump',
             to: 'Idle',
-            time: 0.25,
+            time: 0.2,
             priority: 0,
             exitTime: 0.8,
+          },
+          {
+            from: 'Jump',
+            to: 'Walk',
+            time: 0.2,
+            priority: 0,
+            exitTime: 0.8,
+          },
+          {
+            from: 'Walk',
+            to: 'Idle',
+            time: 0.1,
+            priority: 0,
+            conditions: [
+              {
+                parameterName: 'speed',
+                predicate: pc.ANIM_LESS_THAN_EQUAL_TO,
+                value: 0,
+              },
+            ],
+          },
+          {
+            from: 'Walk',
+            to: 'Run',
+            time: 0.1,
+            priority: 0,
+            conditions: [
+              {
+                parameterName: 'speed',
+                predicate: pc.ANIM_GREATER_THAN,
+                value: 1,
+              },
+            ],
+          },
+          {
+            from: 'Run',
+            to: 'Walk',
+            time: 0.1,
+            priority: 0,
+            conditions: [
+              {
+                parameterName: 'speed',
+                predicate: pc.ANIM_LESS_THAN,
+                value: 2,
+              },
+            ],
           },
         ],
       },
     ],
     parameters: {
-      xDirection: {
-        name: 'xDirection',
-        type: pc.ANIM_PARAMETER_FLOAT,
-        value: 0,
-      },
-      zDirection: {
-        name: 'zDirection',
-        type: pc.ANIM_PARAMETER_FLOAT,
-        value: 0,
-      },
       speed: {
         name: 'speed',
         type: pc.ANIM_PARAMETER_INTEGER,
@@ -1096,18 +823,9 @@ const characterAnimController = (app: pc.Application, character: pc.Entity, mode
 
   // assign the loaded animation assets to each of the states present in the state graph
   const locomotionLayer = character.anim.baseLayer;
-  locomotionLayer.assignAnimation('Idle', assets.value.animations.Idle.resource);
-  locomotionLayer.assignAnimation('Jump', assets.value.animations.Jump.resource);
-  locomotionLayer.assignAnimation('JogBackward', assets.value.animations.JogBackward.resource);
-  locomotionLayer.assignAnimation('JogBackwardDiagonalLeft', assets.value.animations.JogBackwardDiagonalLeft.resource);
-  locomotionLayer.assignAnimation(
-    'JogBackwardDiagonalRight',
-    assets.value.animations.JogBackwardDiagonalRight.resource,
-  );
-  locomotionLayer.assignAnimation('JogForward', assets.value.animations.JogForward.resource);
-  locomotionLayer.assignAnimation('JogForwardDiagonalLeft', assets.value.animations.JogForwardDiagonalLeft.resource);
-  locomotionLayer.assignAnimation('JogForwardDiagonalRight', assets.value.animations.JogForwardDiagonalRight.resource);
-  locomotionLayer.assignAnimation('JogStrafeLeft', assets.value.animations.JogStrafeLeft.resource);
-  locomotionLayer.assignAnimation('JogStrafeRight', assets.value.animations.JogStrafeRight.resource);
+  locomotionLayer.assignAnimation('Idle', assets.value.animations.idle.resource);
+  locomotionLayer.assignAnimation('Walk', assets.value.animations.walk.resource);
+  locomotionLayer.assignAnimation('Run', assets.value.animations.run.resource);
+  locomotionLayer.assignAnimation('Jump', assets.value.animations.jump.resource);
 };
 </script>
