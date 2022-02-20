@@ -8,10 +8,12 @@
       <H010space :width="width" :height="height" :me="me" />
     </div>
     <StarfieldBackground v-else>
-      <h1 class="mb-4">
-        Welcome to {{ me.name }}'s <span class="font-bold">{{ space.name }}</span>
-      </h1>
-      <button @click="state.isReadyToJoin = true" class="btn btn-primary">Join</button>
+      <template #cta>
+        <h1 class="mb-4">
+          Welcome to {{ me.name }}'s <span class="font-bold">{{ space.name }}</span>
+        </h1>
+        <button @click="state.isReadyToJoin = true" class="btn btn-primary">Join</button>
+      </template>
     </StarfieldBackground>
   </Panel>
 </template>

@@ -5,11 +5,55 @@
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Barlow+Condensed:wght@400;700&family=Barlow:wght@400;700&display=swap');
 
-.app {
-  @apply h-full;
+/* ------------------- */
+/* Reset               */
+/* ------------------- */
+
+/* https://piccalil.li/blog/a-modern-css-reset/ */
+
+/* Box sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
+
+/* set up the body */
+body,
+#app {
+  /* @apply h-full; */
+  line-height: 1.5;
+  min-height: 100vh;
+  font-family: 'Barlow', sans-serif;
+}
+
+/* make images easier to work with */
+img,
+picutre {
+  max-width: 100%;
+  display: block;
+}
+
+/* remove animations for people who've turned them off */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* ------------------- */
+/* Global              */
+/* ------------------- */
 
 .bg-0d0d0d {
   background-color: #0d0d0d;
@@ -17,6 +61,12 @@
 
 .font-brand {
   font-family: 'Audiowide', cursive;
+}
+.font-sans-normal {
+  font-family: 'Barlow', sans-serif;
+}
+.font-sans-accent {
+  font-family: 'Barlow Condensed', sans-serif;
 }
 
 .my-divider {
@@ -42,19 +92,5 @@ label.label {
 .form-control.required .label:after {
   content: ' *';
   color: red;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    animation-delay: -1ms !important;
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    background-attachment: initial !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0s !important;
-    transition-delay: 0s !important;
-  }
 }
 </style>

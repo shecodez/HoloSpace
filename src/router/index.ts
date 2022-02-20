@@ -6,16 +6,16 @@ import useAuth from '@/use/auth';
 import Home from '@/views/Home.vue';
 import Login from '@/views/auth/Login.vue';
 import Register from '@/views/auth/Register.vue';
-import Chat from '@/views/chat/Index.vue';
+import Chat from '@/views/chat/Chat.vue';
 import TeamChat from '@/views/chat/Team.vue';
 import H010 from '@/views/chat/H010.vue';
 
 const routes: Array<RouteRecordRaw> = [
-  // {
-  //   path: '/test',
-  //   name: 'Test',
-  //   component: () => import('@/views/_test/Index.vue'),
-  // },
+  {
+    path: '/test',
+    name: 'Test',
+    component: () => import('@/views/_test/Test.vue'),
+  },
   {
     path: '/',
     name: 'Home',

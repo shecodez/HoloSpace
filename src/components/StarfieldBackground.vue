@@ -1,11 +1,14 @@
 <template>
-  <div class="starfield relative w-full h-full">
-    <div class="some-stars" />
-    <div class="stars" />
-    <div class="more-stars" />
-    <div class="cta">
-      <slot></slot>
-    </div>
+  <div class="starfield w-full h-full">
+    <div class="fixed some-stars" />
+    <div class="fixed stars" />
+    <div class="fixed more-stars" />
+
+    <slot>
+      <div class="cta">
+        <slot name="cta"></slot>
+      </div>
+    </slot>
   </div>
 </template>
 
@@ -26,8 +29,9 @@ $shadows-medium: multiple-box-shadow(200);
 $shadows-large: multiple-box-shadow(100);
 
 .starfield {
+  min-height: inherit;
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-  overflow: hidden;
+  // overflow: hidden;
 
   .some-stars {
     width: 2px;
@@ -83,13 +87,13 @@ $shadows-large: multiple-box-shadow(100);
     }
   }
 
-  .cta {
-    text-align: center;
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 9;
-  }
+  // .cta {
+  //   text-align: center;
+  //   position: absolute;
+  //   width: 100%;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  //   z-index: 9;
+  // }
 }
 </style>
