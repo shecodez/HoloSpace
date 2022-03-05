@@ -40,9 +40,9 @@
         </div>
         <div class="text-center m-auto flex-col">
           <div class="relative">
-            <div class="avatar" :class="deck.image_url ? '' : 'placeholder'">
+            <div class="avatar" :class="deck.imageURL ? '' : 'placeholder'">
               <div class="bg-primary text-neutral-content rounded-full w-32 h-32 border-4">
-                <img v-if="deck.image_url" :src="deck.image_url" alt="2d avatar" class="inline-block" />
+                <img v-if="deck.imageURL" :src="deck.imageURL" alt="2d avatar" class="inline-block" />
                 <span v-else class="text-4xl">{{ deck.name.charAt(0) }}</span>
               </div>
             </div>
@@ -76,7 +76,7 @@ import { Region } from '@/data/mock';
 
 const deck = reactive({
   name: '',
-  image_url: '',
+  imageURL: '',
   hq: Region.US_EAST,
 });
 

@@ -95,7 +95,7 @@ function toggleMetaDrawer() {
 
 const activeUser = computed(() => users[1]);
 const activeDeck = computed(() => decks.find((x) => x.id === route.params.deck_id));
-const isCaptain = activeUser.value.id === activeDeck.value?.captain_id;
+const isCaptain = activeUser.value.id === activeDeck.value?.user_id;
 const spaces = computed(() => all_spaces.filter((x) => x.deck_id === route.params.deck_id));
 const activeDiskspace = computed(() => spaces.value.find((x) => x.id === route.params.space_id));
 const messages = computed(() => all_messages.filter((x) => x.space_id === route.params.space_id));

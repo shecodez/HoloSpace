@@ -1,9 +1,30 @@
-import { SpaceType, OnlineStatus, Region } from './mock';
+import { SpaceType, OnlineStatus, Region, MessageType } from './mock';
 
 export interface IAuth {
   username?: string; // meta
   email: string;
   password?: string;
+}
+
+export interface IVec3 {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface IClient {
+  id: string;
+
+  h010tag: string;
+  space_id: string; // TODO: change to ISpace
+
+  modelURL: string;
+  model?: any; // pc.Entity
+
+  position?: IVec3;
+  rotation?: IVec3;
+
+  isDeleted?: boolean;
 }
 
 export interface IUser {
@@ -12,23 +33,13 @@ export interface IUser {
   name: string;
   pin: number | string;
   //h010tag: `${name}#${pin}`
-  image_url?: string;
-  model_url?: string;
-  is_online: boolean;
+  imageURL?: string;
+  modelURL?: string;
+  isOnline: boolean;
   status: OnlineStatus;
-  is_talking?: boolean;
-  is_typing?: boolean;
 
-  created_at: Date;
-  updated_at?: Date;
-}
-
-export interface IMessageAuthor {
-  name: string;
-  //pin: number | string;
-  //h010tag: `${name}#${pin}`
-  image_url?: string;
-  model_url?: string;
+  createdAt: Date;
+  updatedAt?: Date;
 }
 
 export interface IEvent {
@@ -46,33 +57,15 @@ export interface IDeck {
   id: string;
 
   name: string;
-  image_url?: string;
-  captain_id: string;
-  boot_disk_id: string;
+  imageURL?: string;
+  user_id: string;
+  initSpace_id: string;
   hq?: Region; // default Region.US_EAST
   crew?: IUser[]; // crew members
 
-  created_at: Date;
-  updated_at?: Date;
-  updated_by?: string; // string of uids
-}
-
-export interface IDiskspace {
-  id: string;
-
-  name: string;
-  topic?: string;
-  type: SpaceType;
-  h010space_id?: string; // if type = H010
-  is_ssh: boolean; // default false
-  user_id?: string;
-  deck_id?: string;
-  can_delete: boolean; // ex: cannot delete boot disk
-  team?: IUser[]; //team members *only if is_ssh = true
-
-  created_at: Date;
-  updated_at?: Date;
-  updated_by?: string; // string of uids
+  createdAt: Date;
+  updatedAt?: Date;
+  updatedBy_id?: string; // string of uids
 }
 
 export interface ISpace {
@@ -82,50 +75,46 @@ export interface ISpace {
   topic?: string;
   type: SpaceType;
   h010_id?: string; // if type = H010
-  is_ssh: boolean; // default false
-  team?: IUser[]; // team members *only if is_ssh = true
+  isPrivate: boolean; // default false
+  team?: IUser[]; // team members *only if isPrivate = true
   user_id?: string;
   deck_id?: string;
-  can_delete: boolean; // ex: cannot delete boot disk
+  canDelete: boolean; // ex: cannot delete boot disk
 
-  created_at: Date;
-  updated_at?: Date;
-  updated_by?: string; // string of uids
+  createdAt: Date;
+  updatedAt?: Date;
+  updatedBy_id?: string; // string of uids
 }
 
-export interface IMessageReaction {
-  emoji: string;
-  count: number;
+export interface IMessageAuthor {
+  name: string;
+  //pin: number | string;
+  //h010tag: `${name}#${pin}`
+  imageURL?: string;
+  modelURL?: string;
+}
+
+export interface IFile {
+  name: string;
+  size: number;
 }
 
 export interface IMessage {
-  id: string;
+  id?: string;
 
-  attachments?: string; // .mp3 .wav .img .png .jpg .gif .doc(x) .pdf .zip .txt
   user_id: string;
   author?: IMessageAuthor;
   space_id: string;
-  reactions?: IMessageReaction[];
-  reply_id?: string;
+  content: string;
+  replyTo_id?: string;
+  file?: IFile; // .mp3 .wav .img .png .jpg .gif .doc(x) .pdf .zip .txt .h010
+  type: MessageType;
+  reactions?: {
+    [key: string]: number;
+  };
 
-  created_at: Date;
-  updated_at?: Date;
-  deleted_by?: string;
-}
+  createdAt: Date;
+  updatedAt?: Date;
 
-export interface ITextMessage extends IMessage {
-  text: string;
-  is_markdown?: boolean;
-}
-
-export interface IVoiceMessage extends IMessage {
-  audio_url: string;
-}
-
-export interface IH010Message extends IMessage {
-  h010gram_url: string; // .h010 file
-}
-
-export interface IFile extends IMessage {
-  name: string;
+  deletedBy_id?: string;
 }

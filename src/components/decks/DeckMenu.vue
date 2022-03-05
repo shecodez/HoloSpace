@@ -52,6 +52,6 @@ const deckOptions = ref([
 
 const dangerOptions = ref([
   { id: '4', icon: 'mdi:logout', name: 'Leave deck', action: () => openSettings('DangerZone') }, // if !captain
-  { id: '5', icon: 'mdi:trash', name: 'Delete deck', action: () => openSettings('DangerZone') }, // if user can_delete
+  { id: '5', icon: 'mdi:trash', name: 'Delete deck', action: () => openSettings('DangerZone') }, // if user canDelete
 ]);
 </script>

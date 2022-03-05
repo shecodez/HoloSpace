@@ -9,14 +9,17 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, PropType, reactive, ref, toRefs } from 'vue';
+import { onMounted, onUnmounted, PropType, reactive, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
+import { useRoute } from 'vue-router';
 import * as pc from 'playcanvas';
+import { debounce } from 'lodash';
 
 import usePlayCanvas from '@/use/playcanvas';
-import { IUser } from '@/data/interfaces';
+import { IClient, IVec3, IUser } from '@/data/interfaces';
 
-const { worldToScreenSpace, createPhongMaterial } = usePlayCanvas();
+const { worldToScreenSpace } = usePlayCanvas();
+const route = useRoute();
 
 const props = defineProps({
   width: Number,
@@ -33,6 +36,10 @@ const canvas = ref<HTMLCanvasElement>();
 const state = reactive({
   loading: false,
   error: '',
+  // scene: 'Lobby' | 'H010SPACE'
+  ws: {} as WebSocket,
+  clientId: '',
+  joinedSpace: false,
 });
 
 const assetsToLoad = [
@@ -113,7 +120,14 @@ const assets = ref({
   },
 });
 
+// TODO: est connection to server (ws) then createApp() else display 500 server err
 onMounted(() => loadAmmo().then(() => createApp(canvas.value!)));
+
+onUnmounted(() => {
+  state.ws.send(JSON.stringify({ method: 'exit:h010space', id: state.clientId }));
+  state.joinedSpace = false;
+  // state.scene = 'Lobby'
+});
 
 // check for wasm module support
 function wasmSupported() {
@@ -237,7 +251,7 @@ function onLoadComplete(app: pc.Application) {
   createH010space(app);
 
   // show main menu
-  // showMenu();
+  // showH010spaceLobby();
 }
 
 function createH010space(app: pc.Application) {
@@ -281,164 +295,10 @@ function createH010space(app: pc.Application) {
   createCharacterModel(app, screen, camera, `${me.value.name}#${me.value.pin}`);
 }
 
-interface IWall {
-  name?: string;
-  type: string;
-  position: pc.Vec3;
-  rotation: pc.Vec3;
-  scale: pc.Vec3;
-  model?: boolean;
-  material?: pc.Material;
-  rigidbody?: boolean;
-  collision?: boolean;
-}
-
-function createEnvironment(app: pc.Application) {
-  // app.scene.ambientLight = new pc.Color(0.2, 0.2, 0.2);
-
-  // Set the gravity for our rigid bodies
-  app.systems.rigidbody.gravity.set(0, -9.81, 0);
-
-  // TODO: move to assets
-  // set a prefiltered cubemap as the skybox
-  const cubemapAsset = new pc.Asset(
-    'helipad',
-    'cubemap',
-    {
-      url: '/src/assets/textures/cubemap/Helipad.dds',
-    },
-    {
-      rgbm: true,
-    },
-  );
-  app.assets.add(cubemapAsset);
-  app.assets.load(cubemapAsset);
-  cubemapAsset.ready(function () {
-    app.scene.skyboxMip = 2;
-    app.scene.setSkybox(cubemapAsset.resources);
-  });
-
-  const environment = new pc.Entity();
-
-  // Create ground material
-  const ground_mat = new pc.StandardMaterial();
-  ground_mat.diffuse = pc.Color.WHITE;
-  ground_mat.diffuseMap = assets.value.textures.checkboard.resource;
-  ground_mat.diffuseMapTiling = new pc.Vec2(50, 50);
-  ground_mat.update();
-
-  // Create glass material
-  const glass_mat = new pc.StandardMaterial();
-  glass_mat.diffuse = pc.Color.WHITE;
-  glass_mat.useMetalness = true;
-  glass_mat.metalness = 0;
-  glass_mat.shininess = 100;
-  glass_mat.blendType = pc.BLEND_NORMAL;
-  glass_mat.reflectivity = 0;
-  glass_mat.refraction = 1;
-  glass_mat.lightMapUv = 0;
-  glass_mat.update();
-
-  const walls = [
-    {
-      name: 'Ground',
-      type: 'box',
-      position: { x: 0, y: 0, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-      scale: { x: 60, y: 1, z: 60 },
-      material: ground_mat,
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'N_Wall',
-      type: 'box',
-      position: { x: 0, y: 10, z: -30 },
-      rotation: { x: 90, y: 0, z: 0 },
-      scale: { x: 60, y: 1, z: 20 },
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'S_Wall',
-      type: 'box',
-      position: { x: 0, y: 10, z: 30 },
-      rotation: { x: 270, y: 0, z: 0 },
-      scale: { x: 60, y: 1, z: 20 },
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'W_Wall',
-      type: 'box',
-      position: { x: -30, y: 10, z: 0 },
-      rotation: { x: 270, y: 270, z: 0 },
-      scale: { x: 60, y: 1, z: 20 },
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'E_Window',
-      type: 'box',
-      position: { x: 30, y: 10, z: 0 },
-      rotation: { x: 270, y: 90, z: 0 },
-      scale: { x: 60, y: 1, z: 20 },
-      material: glass_mat,
-      rigidbody: true,
-      collision: true,
-    },
-    {
-      name: 'Ceiling',
-      type: 'box',
-      position: { x: 0, y: 20, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-      scale: { x: 60, y: 1, z: 60 },
-      rigidbody: false,
-      collision: true,
-    },
-  ] as IWall[];
-
-  walls.map((wall) => {
-    const entity = createWallEntity(wall);
-    environment.addChild(entity);
-  });
-
-  return environment;
-}
-
-const createWallEntity = (wall: IWall) => {
-  const { name, type, position, rotation, scale, material } = wall;
-
-  const entity = new pc.Entity(name);
-  entity.addComponent('render', {
-    type,
-    material,
-  });
-  entity.translateLocal(position.x, position.y, position.z);
-  entity.setLocalEulerAngles(rotation.x, rotation.y, rotation.z);
-  entity.setLocalScale(scale.x, scale.y, scale.z);
-  if (wall.collision) {
-    // add collision
-    entity.addComponent('collision', {
-      type,
-      halfExtents: new pc.Vec3(scale.x / 2, scale.y / 2 + 0.3, scale.z / 2),
-    });
-  }
-  if (wall.rigidbody) {
-    // add rigidbody
-    entity.addComponent('rigidbody', {
-      type: pc.BODYTYPE_STATIC,
-      friction: 0.5,
-      restitution: 0.5,
-    });
-  }
-  return entity;
-};
-
 function createCharacterModel(app: pc.Application, screen: pc.Entity, camera: pc.Entity, h010tag: string) {
   // Create an Entity to represent the user in the h010space (3d world)
   const character = new pc.Entity();
-  character.setLocalPosition(0, 1.5, 0);
+  character.translateLocal(0, 1.5, 0);
   // add rigidbody
   character.addComponent('rigidbody', {
     type: pc.BODYTYPE_DYNAMIC,
@@ -454,11 +314,15 @@ function createCharacterModel(app: pc.Application, screen: pc.Entity, camera: pc
   character.addComponent('collision', {
     type: 'capsule',
     radius: 0.35,
-    height: 1.84,
+    height: 2,
     axis: 1, // x:0 y:1 z:2
   });
 
-  const characterModel = loadH010botFromUrl(app, 'xbot', '/src/assets/models/h010bot/xbot/xbot.json');
+  const characterModel = loadH010botFromUrl(
+    app,
+    `${me.value.name}#${me.value.pin}`,
+    me.value.modelURL || '/src/assets/models/h010bot/xbot/xbot.json',
+  );
   characterModel.translateLocal(0, -1, 0);
   characterModel.setLocalEulerAngles(0, 180, 0);
   character.addChild(characterModel);
@@ -474,15 +338,29 @@ function createCharacterModel(app: pc.Application, screen: pc.Entity, camera: pc
   cameraAxis.addChild(raycastEndPoint);
   character.addChild(cameraAxis);
 
-  // TODO: Only add character controller scripts if isLocal user
   createCharacterController(app, camera, character);
   character.addComponent('script');
   character.script.create('CharacterController');
   characterAnimController(app, character, characterModel);
+
+  const networkManager = new pc.Entity('Network Manager');
+  state.ws = new WebSocket(`${import.meta.env.VITE_WS_URL}`); // TODO: is this the best place for this line?
+  const networkClient = {
+    space_id: route.params.space_id,
+    h010tag: `${me.value.name}#${me.value.pin}`,
+    modelURL: me.value.modelURL,
+    model: character,
+  } as IClient;
+  createNetworkManager(app, state.ws, networkClient, screen, camera);
+  networkManager.addComponent('script');
+  networkManager.script.create('NetworkManager');
+  app.root.addChild(networkManager);
+
   app.root.addChild(character);
 
   // Create a text element that will hover the character's head
-  const characterInfo = new pc.Entity();
+  // createH010tagBillboard(app, `${me.value.name}#${me.value.pin}`, character, camera, screen);
+  const characterInfo = new pc.Entity(`${me.value.name}#${me.value.pin}`);
   characterInfo.addComponent('element', {
     pivot: new pc.Vec2(0.5, 0),
     anchor: new pc.Vec4(0, 0, 0, 0),
@@ -535,12 +413,77 @@ function createCharacterModel(app: pc.Application, screen: pc.Entity, camera: pc
       characterInfo.enabled = false;
     }
   });
+
+  return character;
 }
+
+const createH010tagBillboard = (
+  app: pc.Application,
+  h010tag: string,
+  character: pc.Entity,
+  camera: pc.Entity,
+  screen: pc.Entity,
+) => {
+  // Create a text element that will hover the character's head
+  const characterInfo = new pc.Entity(h010tag);
+  characterInfo.addComponent('element', {
+    pivot: new pc.Vec2(0.5, 0),
+    anchor: new pc.Vec4(0, 0, 0, 0),
+    width: 150,
+    height: 50,
+    opacity: 0, // 0.05,
+    type: pc.ELEMENTTYPE_IMAGE,
+  });
+  screen.addChild(characterInfo);
+
+  const name = new pc.Entity();
+  name.addComponent('element', {
+    pivot: new pc.Vec2(0.5, 0.5),
+    anchor: new pc.Vec4(0, 1, 1, 1),
+    margin: new pc.Vec4(0, 0, 0, 0),
+    fontAsset: assets.value.fonts.montserratBlack.id,
+    fontSize: 16,
+    text: h010tag.split('#')[0],
+    useInput: true,
+    type: pc.ELEMENTTYPE_TEXT,
+  });
+  name.addComponent('button', {
+    imageEntity: name,
+  });
+  name.button.on('click', function (e) {
+    // const color = new pc.Color(Math.random(), Math.random(), Math.random());
+    // name.element.color = color;
+    // character.render.material.setParameter('material_diffuse', [color.r, color.g, color.b]);
+    name.element.text = name.element.text.includes('#') ? name.element.text.split('#')[0] : h010tag;
+  });
+  characterInfo.addChild(name);
+
+  // update the character text's position to always hover the character
+  app.on('update', function () {
+    // get the desired world position
+    const worldPosition = character.getPosition();
+    worldPosition.y += 1.6; // slightly above the character's head
+
+    // convert to screen position
+    const screenPosition = worldToScreenSpace(app, worldPosition, camera.camera, screen.screen);
+
+    if (screenPosition.z > 0) {
+      // if world position is in front of the camera, show it
+      characterInfo.enabled = true;
+
+      // set the UI position
+      characterInfo.setLocalPosition(screenPosition);
+    } else {
+      // if world position is actually *behind* the camera, hide the UI
+      characterInfo.enabled = false;
+    }
+  });
+};
 
 const loadH010botFromUrl = (app: pc.Application, name: string, url: string, colors?: pc.Color[]) => {
   const h010bot = new pc.Entity(name);
   app.assets.loadFromUrl(url, 'model', function (err: any, asset: pc.Asset | any) {
-    h010bot.addComponent('model');
+    h010bot.addComponent('model', { castShadows: true });
     h010bot.model.model = asset.resource;
 
     const mis = h010bot.model.model.meshInstances;
@@ -560,6 +503,38 @@ const loadH010botFromUrl = (app: pc.Application, name: string, url: string, colo
   return h010bot;
 };
 
+const loadModelFromUrl = (app: pc.Application, name: string, url: string) => {
+  const entity = new pc.Entity(name);
+  entity.addComponent('model', {
+    type: 'asset',
+    asset: assets.value.models.xbot,
+    castShadows: true,
+  });
+
+  // if (url) {
+  //   app.assets.loadFromUrl(url, 'model', function (err: any, asset: pc.Asset | any) {
+  //     entity.addComponent('model');
+  //     entity.model.model = assets.value.models.xbot.resource; //asset.resource;
+
+  //     // const mis = entity.model.model.meshInstances;
+  //     // if (mis && materials) {
+  //     //   mis.map((mi, i) => {
+  //     //     mi.material = materials[i];
+  //     //     mi.material.update();
+  //     //   });
+  //     // }
+  //   });
+  // } else {
+  //   entity.addComponent('model', {
+  //     type: 'asset',
+  //     asset: assets.value.models.xbot,
+  //     castShadows: true,
+  //   });
+  // }
+
+  return entity;
+};
+
 const createCameraController = (app: pc.Application, cameraAxis: pc.Entity) => {
   const script = pc.createScript('CameraController');
 
@@ -568,7 +543,7 @@ const createCameraController = (app: pc.Application, cameraAxis: pc.Entity) => {
   let rayEnd: pc.GraphNode | null;
 
   // @ts-ignore engine-tsd
-  script!.prototype.getEuler = function () {
+  script.prototype.getEuler = function () {
     return euler;
   };
 
@@ -582,7 +557,7 @@ const createCameraController = (app: pc.Application, cameraAxis: pc.Entity) => {
       'destroy',
       function () {
         app.mouse.off('mousemove', onMouseMove);
-        //app.mouse.off('mousedown', onMouseDown);
+        app.mouse.off('mousedown', onMouseDown);
       },
       this,
     );
@@ -1109,5 +1084,334 @@ const characterAnimController = (app: pc.Application, character: pc.Entity, mode
   locomotionLayer.assignAnimation('JogForwardDiagonalRight', assets.value.animations.JogForwardDiagonalRight.resource);
   locomotionLayer.assignAnimation('JogStrafeLeft', assets.value.animations.JogStrafeLeft.resource);
   locomotionLayer.assignAnimation('JogStrafeRight', assets.value.animations.JogStrafeRight.resource);
+};
+
+const createNetworkManager = (app: pc.Application, ws: any, target: IClient, screen: pc.Entity, camera: pc.Entity) => {
+  const script = pc.createScript('NetworkManager');
+
+  let clientId = '';
+  let clients = {} as { [key: string]: IClient };
+
+  script!.prototype.initialize = function () {
+    ws.onopen = function (event: any) {
+      console.log('ws open event:', JSON.stringify(event));
+      // @ts-ignore engine-tsd
+      script.prototype.requestClientIdFromServer();
+    };
+
+    ws.onclose = function (event: any) {
+      console.log('ws close event:', JSON.stringify(event));
+      // @ts-ignore engine-tsd
+      script.prototype.exitH010space();
+    };
+
+    ws.onerror = function (error: any) {
+      state.error = `ws error: ${JSON.stringify(error)}`;
+    };
+
+    ws.onmessage = function (message: any) {
+      const data = JSON.parse(message.data);
+
+      switch (data.method) {
+        case 'recv:id':
+          // from server -> data: { method: string, id: string }
+          state.clientId = data.id;
+          clientId = data.id;
+          // @ts-ignore engine-tsd
+          script.prototype.joinH010space();
+          break;
+        case 'init:h010space':
+          // from server -> data: { method: string, clients: IClient[] }
+          loadInitclients(data.clients);
+          break;
+        case 'load:client':
+          // from server -> data: { method: string, client: IClient }
+          loadClient(data.client);
+          break;
+        case 'move:client':
+          // from server -> data: { method: string, id: string, position: IVec3 }
+          moveClient({ id: data.id, position: data.position });
+          break;
+        case 'turn:client':
+          // from server -> data: { method: string, id: string, rotation: IVec3 }
+          turnClient({ id: data.id, rotation: data.rotation });
+          break;
+        case 'recv:exit':
+          // from server -> data: { method: string, id: string }
+          removeClient(data.id);
+          break;
+        default:
+          console.error(`server sent unknown message.method: ${JSON.stringify(data)}`);
+          break;
+      }
+    };
+  };
+
+  let prevPosX = parseInt(target.model.getPosition().x);
+  let prevPosY = parseInt(target.model.getPosition().y);
+  let prevPosZ = parseInt(target.model.getPosition().z);
+  script!.prototype.update = function (dt) {
+    if (state.joinedSpace) {
+      const posX = parseInt(target.model.getPosition().x);
+      const posY = parseInt(target.model.getPosition().y);
+      const posZ = parseInt(target.model.getPosition().z);
+      if (prevPosX === posX && prevPosY === posY && prevPosZ === posZ) {
+        // start afk timer
+      } else {
+        ws.send(JSON.stringify({ method: 'update:position', id: clientId, position: target.model.getPosition() }));
+        // update prev position with new position
+        prevPosX = parseInt(target.model.getPosition().x);
+        prevPosY = parseInt(target.model.getPosition().y);
+        prevPosZ = parseInt(target.model.getPosition().z);
+        // reset afk timer
+      }
+      // debounce(
+      //   ws.send(JSON.stringify({ method: 'update:rotation', id: clientId, rotation: target.model.getRotation() })),
+      //   5000,
+      // );
+    }
+  };
+
+  // @ts-ignore engine-tsd
+  script.prototype.requestClientIdFromServer = function () {
+    ws.send(JSON.stringify({ method: 'send:id' }));
+  };
+
+  // @ts-ignore engine-tsd
+  script.prototype.joinH010space = function () {
+    const client = {
+      id: clientId,
+      h010tag: target.h010tag,
+      space_id: target.space_id,
+      modelURL: target.modelURL,
+      position: { x: 0, y: -1, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+    };
+    ws.send(JSON.stringify({ method: 'join:h010space', client }));
+    state.joinedSpace = true;
+    // app.root.findByName("Lobby Camera")!.enabled = false;
+  };
+
+  // @ts-ignore engine-tsd
+  script.prototype.exitH010space = function () {
+    clients = {};
+    if (target.model) target.model.destroy();
+    ws.send(JSON.stringify({ method: 'exit:h010space', id: clientId }));
+    state.joinedSpace = false;
+    // app.root.findByName("Lobby Camera")?.enabled = true;
+  };
+
+  function loadInitclients(clients: { [key: string]: IClient }) {
+    const keys = Object.keys(clients);
+    keys.forEach((key, i) => {
+      if (key !== clientId) {
+        loadClient(clients[key]);
+      }
+    });
+  }
+
+  function loadClient(client: IClient) {
+    clients[client.id] = { ...client };
+    const characterModel = loadModelFromUrl(
+      app,
+      client.h010tag,
+      client.modelURL || '/src/assets/models/h010bot/ybot/ybot.json',
+    );
+    clients[client.id].model = characterModel;
+    // TODO: should add rigidbody to remote clients?
+
+    characterModel.translateLocal(new pc.Vec3(client.position?.x, client.position?.y, client.position?.z));
+    characterModel.setLocalEulerAngles(new pc.Vec3(client.rotation?.x, client.rotation?.y, client.rotation?.z));
+
+    createH010tagBillboard(app, client.h010tag, characterModel, camera, screen);
+
+    app.root.addChild(characterModel);
+  }
+
+  function removeClient(id: string) {
+    if (!clients[id]) return;
+
+    if (clients[id].model) {
+      clients[id].model.destroy();
+    }
+    const idx = screen.children.findIndex((c) => c.name === clients[id].h010tag);
+    if (idx >= 0) {
+      // @ts-ignore
+      screen.children[idx].destroy();
+    }
+
+    delete clients[id];
+  }
+
+  function moveClient(data: { id: string; position: IVec3 }) {
+    if (!clients[data.id] || clients[data.id].isDeleted) return;
+
+    // TODO: must add rigidbody component to client for rigidbody.teleport to work
+    // clients[data.id].model.rigidbody.teleport(
+    //   new pc.Vec3(data.position.x, data.position.y, data.position.z),
+    //   pc.Vec3.ZERO,
+    // );
+    clients[data.id].model.setPosition(data.position.x, data.position.y, data.position.z);
+  }
+
+  function turnClient(data: { id: string; rotation: IVec3 }) {
+    if (!clients[data.id] || clients[data.id].isDeleted) return;
+
+    clients[data.id].model.setLocalEulerAngles(new pc.Vec3(data.rotation.x, data.rotation.y, data.rotation.z));
+  }
+};
+
+interface IWall {
+  name?: string;
+  type: string;
+  position: pc.Vec3;
+  rotation: pc.Vec3;
+  scale: pc.Vec3;
+  model?: boolean;
+  material?: pc.Material;
+  rigidbody?: boolean;
+  collision?: boolean;
+}
+
+function createEnvironment(app: pc.Application) {
+  // app.scene.ambientLight = new pc.Color(0.2, 0.2, 0.2);
+
+  // Set the gravity for our rigid bodies
+  app.systems.rigidbody.gravity.set(0, -9.81, 0);
+
+  // TODO: move to assets
+  // set a prefiltered cubemap as the skybox
+  const cubemapAsset = new pc.Asset(
+    'helipad',
+    'cubemap',
+    {
+      url: '/src/assets/textures/cubemap/Helipad.dds',
+    },
+    {
+      rgbm: true,
+    },
+  );
+  app.assets.add(cubemapAsset);
+  app.assets.load(cubemapAsset);
+  cubemapAsset.ready(function () {
+    app.scene.skyboxMip = 2;
+    app.scene.setSkybox(cubemapAsset.resources);
+  });
+
+  const environment = new pc.Entity();
+
+  // Create ground material
+  const ground_mat = new pc.StandardMaterial();
+  ground_mat.diffuse = pc.Color.WHITE;
+  ground_mat.diffuseMap = assets.value.textures.checkboard.resource;
+  ground_mat.diffuseMapTiling = new pc.Vec2(50, 50);
+  ground_mat.update();
+
+  // Create glass material
+  const glass_mat = new pc.StandardMaterial();
+  glass_mat.diffuse = pc.Color.WHITE;
+  glass_mat.useMetalness = true;
+  glass_mat.metalness = 0;
+  glass_mat.shininess = 100;
+  glass_mat.blendType = pc.BLEND_NORMAL;
+  glass_mat.reflectivity = 0;
+  glass_mat.refraction = 1;
+  glass_mat.lightMapUv = 0;
+  glass_mat.update();
+
+  const walls = [
+    {
+      name: 'Ground',
+      type: 'box',
+      position: { x: 0, y: 0, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 60, y: 1, z: 60 },
+      material: ground_mat,
+      rigidbody: true,
+      collision: true,
+    },
+    {
+      name: 'N_Wall',
+      type: 'box',
+      position: { x: 0, y: 10, z: -30 },
+      rotation: { x: 90, y: 0, z: 0 },
+      scale: { x: 60, y: 1, z: 20 },
+      rigidbody: true,
+      collision: true,
+    },
+    {
+      name: 'S_Wall',
+      type: 'box',
+      position: { x: 0, y: 10, z: 30 },
+      rotation: { x: 270, y: 0, z: 0 },
+      scale: { x: 60, y: 1, z: 20 },
+      rigidbody: true,
+      collision: true,
+    },
+    {
+      name: 'W_Wall',
+      type: 'box',
+      position: { x: -30, y: 10, z: 0 },
+      rotation: { x: 270, y: 270, z: 0 },
+      scale: { x: 60, y: 1, z: 20 },
+      rigidbody: true,
+      collision: true,
+    },
+    {
+      name: 'E_Window',
+      type: 'box',
+      position: { x: 30, y: 10, z: 0 },
+      rotation: { x: 270, y: 90, z: 0 },
+      scale: { x: 60, y: 1, z: 20 },
+      material: glass_mat,
+      rigidbody: true,
+      collision: true,
+    },
+    {
+      name: 'Ceiling',
+      type: 'box',
+      position: { x: 0, y: 20, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 60, y: 1, z: 60 },
+      rigidbody: false,
+      collision: true,
+    },
+  ] as IWall[];
+
+  walls.map((wall) => {
+    const entity = createWallEntity(wall);
+    environment.addChild(entity);
+  });
+
+  return environment;
+}
+
+const createWallEntity = (wall: IWall) => {
+  const { name, type, position, rotation, scale, material } = wall;
+
+  const entity = new pc.Entity(name);
+  entity.addComponent('render', {
+    type,
+    material,
+  });
+  entity.translateLocal(position.x, position.y, position.z);
+  entity.setLocalEulerAngles(rotation.x, rotation.y, rotation.z);
+  entity.setLocalScale(scale.x, scale.y, scale.z);
+  if (wall.collision) {
+    // add collision
+    entity.addComponent('collision', {
+      type,
+      halfExtents: new pc.Vec3(scale.x / 2, scale.y / 2, scale.z / 2),
+    });
+  }
+  if (wall.rigidbody) {
+    // add rigidbody
+    entity.addComponent('rigidbody', {
+      type: pc.BODYTYPE_STATIC,
+      friction: 0.5,
+      restitution: 0.5,
+    });
+  }
+  return entity;
 };
 </script>

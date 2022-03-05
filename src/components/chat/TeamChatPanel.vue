@@ -46,7 +46,7 @@ import VoipUserList from '@/components/chat/VoipUserList.vue';
 import MessageList from '@/components/chat/MessageList.vue';
 import FileList from '@/components/chat/FileList.vue';
 import UserIOToolbar from '@/components/me/UserIOToolbar.vue';
-import { ISpace, ITextMessage, IUser } from '@/data/interfaces';
+import { ISpace, IMessage, IUser } from '@/data/interfaces';
 import { MessageType, SpaceType } from '@/data/mock';
 
 const props = defineProps({
@@ -56,7 +56,7 @@ const props = defineProps({
   },
   collapsed: Boolean,
   messages: {
-    type: Array as PropType<ITextMessage[]>,
+    type: Array as PropType<IMessage[]>,
     default: [],
   },
   team: {

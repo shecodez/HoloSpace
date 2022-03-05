@@ -58,8 +58,8 @@ const props = defineProps({
 
 const { users, collapsed } = toRefs(props);
 
-const usersOnline = computed(() => users.value.filter((x) => x.is_online && x.status !== 'HIDE'));
-const usersOffline = computed(() => users.value.filter((x) => !x.is_online || x.status === 'HIDE'));
+const usersOnline = computed(() => users.value.filter((x) => x.isOnline && x.status !== 'HIDE'));
+const usersOffline = computed(() => users.value.filter((x) => !x.isOnline || x.status === 'HIDE'));
 </script>
 
 <style>

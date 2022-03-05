@@ -1,8 +1,8 @@
 <template>
   <div class="relative overflow-hidden flex-shrink-0" :class="`w-${size} h-${size}`">
-    <div class="user avatar cursor-pointer" :class="user?.image_url ? '' : 'placeholder'" :title="user?.name">
+    <div class="user avatar cursor-pointer" :class="user?.imageURL ? '' : 'placeholder'" :title="user?.name">
       <div class="bg-primary text-neutral-content rounded-full" :class="`w-${size} h-${size}`">
-        <img v-if="user?.image_url" :src="user?.image_url" alt="User 2d-Avatar" class="inline-block" />
+        <img v-if="user?.imageURL" :src="user?.imageURL" alt="User 2d-Avatar" class="inline-block" />
         <span v-else :class="textCss">{{ user?.name.charAt(0) }}</span>
       </div>
     </div>
@@ -10,10 +10,10 @@
       <Icon v-if="isCaptain" icon="mdi:view-headline" :width="iconSize" class="absolute left-0 top-0 text-yellow-500" />
       <Icon
         v-if="user"
-        :icon="getStatusIcon(user.status, user.is_online)"
+        :icon="getStatusIcon(user.status, user.isOnline)"
         :width="iconSize"
         class="status absolute bottom-0 right-0"
-        :class="getStatusColor(user.status, user.is_online)"
+        :class="getStatusColor(user.status, user.isOnline)"
       />
     </template>
   </div>

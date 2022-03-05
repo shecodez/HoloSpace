@@ -185,7 +185,7 @@ onMounted(() => {
 
   loadAppAssets();
 
-  // TODO: if user.model_url createCustomUserModel(user.name, user.model_url)
+  // TODO: if user.modelURL createCustomUserModel(user.name, user.modelURL)
   // if user.h010bot createCustomH010botModel(user.h010bot.name, user.h010bot.colors)
   // else
   createDefaultH010botModel();

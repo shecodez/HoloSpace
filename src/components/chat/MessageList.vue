@@ -5,17 +5,17 @@
     </li>
     <!-- <li class="text-center p-2">Comms Start</li> -->
     <template v-for="(message, i) in messages" :key="message.id">
-      <li v-if="i > 0 && !isSameDay(messages[i].created_at, messages[i - 1].created_at)" class="mx-6 md:mx-16">
-        <div class="divider md:mx-2">{{ format(message.created_at, 'P') }}</div>
+      <li v-if="i > 0 && !isSameDay(messages[i].createdAt, messages[i - 1].createdAt)" class="mx-6 md:mx-16">
+        <div class="divider md:mx-2">{{ format(message.createdAt, 'P') }}</div>
       </li>
       <li
         class="flex mx-4 my-3"
         :class="message.user_id === '1' ? 'justify-self-end flex-row-reverse' : 'justify-self-start'"
       >
         <div :class="message.user_id === '1' ? 'invisible' : ''">
-          <div class="avatar" :class="message.author?.image_url ? '' : 'placeholder'">
+          <div class="avatar" :class="message.author?.imageURL ? '' : 'placeholder'">
             <div class="user bg-base-300 text-neutral-content rounded-full w-10 h-10 m-2">
-              <span v-if="!message.author?.image_url" class="text-xl">{{ message.author?.name.charAt(0) }}</span>
+              <span v-if="!message.author?.imageURL" class="text-xl">{{ message.author?.name.charAt(0) }}</span>
             </div>
           </div>
         </div>
@@ -26,8 +26,8 @@
         >
           <div class="flex items-center w-full">
             <span v-if="message.user_id !== '1'" class="font-medium mr-2">{{ message.author?.name }}</span>
-            <span class="text-xs text-gray-400">{{ formatRelative(message.created_at, new Date()) }}</span>
-            <span v-if="message.updated_at" class="italic text-xs pl-2">edited</span>
+            <span class="text-xs text-gray-400">{{ formatRelative(message.createdAt, new Date()) }}</span>
+            <span v-if="message.updatedAt" class="italic text-xs pl-2">edited</span>
             <div v-if="message.user_id !== '1'" class="reply-reactions relative ml-auto px-1">
               <Popper placement="top-end">
                 <template v-slot:activator>
@@ -39,7 +39,7 @@
               </Popper>
             </div>
           </div>
-          <p>{{ message.text }}</p>
+          <p>{{ message.content }}</p>
         </div>
       </li>
     </template>
@@ -53,18 +53,18 @@ import { Icon } from '@iconify/vue';
 
 import ReactionMenu from '@/components/chat/MessageReactionMenu.vue';
 import Popper from '@/components/DockUI/Popper.vue';
-import { ITextMessage, IMessage } from '@/data/interfaces';
+import { IMessage } from '@/data/interfaces';
 
 const props = defineProps({
   messages: {
-    type: Array as PropType<ITextMessage[]>,
+    type: Array as PropType<IMessage[]>,
     default: [],
   },
 });
 
 function checkIsSameMinute(message: IMessage, previousMessage: IMessage) {
   if (previousMessage && previousMessage.user_id === message.user_id) {
-    return isSameMinute(new Date(message.created_at), new Date(previousMessage.created_at));
+    return isSameMinute(new Date(message.createdAt), new Date(previousMessage.createdAt));
   }
   return false;
 }
