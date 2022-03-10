@@ -10,32 +10,19 @@
     </template>
 
     <template v-slot:left>
-      <SpaceSideDrawer
-        :collapsed="state.sideDrawerIsCollapsed"
-        :isSmScreen="!lgAndLarger"
-        :deck="activeDeck"
-        :spaces="spaces"
-        @close="state.sideDrawerIsCollapsed = true"
-      />
+      <SpaceSideDrawer :isSmScreen="!lgAndLarger" :deck="activeDeck" :spaces="spaces" />
     </template>
 
-    <ChatPanel
-      :me="activeUser"
-      :space="activeDiskspace"
-      :messages="messages"
-      :team="team?.users"
-      :collapsed="state.sideDrawerIsCollapsed"
-      @toggleCollapsed="toggleSideDrawer"
-    />
+    <ChatPanel :me="activeUser" :space="activeDiskspace" :messages="messages" :team="team?.users" />
 
     <template v-slot:right>
-      <UserMetaDrawer :users="users" :collapsed="state.metaDrawerIsCollapsed" @toggleCollapsed="toggleMetaDrawer" />
+      <UserMetaDrawer :users="users" />
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue';
+import { computed, onMounted, reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
@@ -46,55 +33,30 @@ import UserMetaDrawer from '@/components/users/UserMetaDrawer.vue';
 import SpaceSideDrawer from '@/components/spaces/SpaceSideDrawer.vue';
 import ChatPanel from '@/components/chat/ChatPanel.vue';
 import { decks, users, spaces as all_spaces, messages as all_messages, teams } from '@/data/mock';
+import { useAppStore } from '@/stores/app';
 // TODO: transform users to Array of labled users i.e. [{label: 'on-deck', [...users] }, { label: 'offline', [...users]}]
 
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
+const appStore = useAppStore();
 
 const state = reactive({
   showAlert: true,
-  sideDrawerIsCollapsed: false,
-  metaDrawerIsCollapsed: false,
-  sideDrawerPreBreakpoint: false,
-  metaDrawerPreBreakpoint: false,
+  // sideDrawerPreBreakpoint: false,
+  // metaDrawerPreBreakpoint: false,
   backgroundImageUrl: 'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/backgrounds/default-bg.jpg',
 });
 
-const lgAndLarger = breakpoints.greater('lg');
-watch(
-  () => lgAndLarger.value,
-  (lgAndLarger: Boolean) => {
-    if (lgAndLarger) {
-      state.sideDrawerIsCollapsed = state.sideDrawerPreBreakpoint;
-      state.metaDrawerIsCollapsed = state.metaDrawerPreBreakpoint;
-    } else {
-      state.sideDrawerPreBreakpoint = state.sideDrawerIsCollapsed;
-      state.metaDrawerPreBreakpoint = state.metaDrawerIsCollapsed;
+onMounted(() => {
+  appStore.setSideDrawerCollapsed(false);
+  appStore.setMetaDrawerCollapsed(false);
+});
 
-      state.sideDrawerIsCollapsed = true;
-      state.metaDrawerIsCollapsed = true;
-    }
-  },
-  { immediate: true },
-);
+const lgAndLarger = breakpoints.greater('lg');
 
 function dismissAlert() {
   state.showAlert = false;
 }
-
-function toggleSideDrawer() {
-  state.sideDrawerIsCollapsed = !state.sideDrawerIsCollapsed;
-}
-
-function toggleMetaDrawer() {
-  state.metaDrawerIsCollapsed = !state.metaDrawerIsCollapsed;
-}
-
-// function sortByDateDesc(a: IMessage, b: IMessage) {
-//   var dateA = new Date(a.createdAt).getTime();
-//   var dateB = new Date(b.createdAt).getTime();
-//   return dateA < dateB ? 1 : -1;
-// }
 
 const activeUser = computed(() => users[1]);
 const activeDeck = computed(() => decks.find((x) => x.id === route.params.deck_id));

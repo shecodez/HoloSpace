@@ -14,7 +14,7 @@ export enum SpaceType {
   H010 = 'H010',
 }
 
-// 'text' | 'markdown' | 'image' | 'file' | 'sticker' | 'removed' | 'voice' | 'h010';
+// 'TEXT' | 'markdown' | 'image' | 'file' | 'sticker' | 'REMOVED' | 'VOICE' | 'H010';
 export enum MessageType {
   TEXT = 'TEXT',
   VOICE = 'VOICE',
@@ -22,7 +22,7 @@ export enum MessageType {
   Markdown = 'markdown',
   Image = 'image',
   Sticker = 'sticker',
-  REMOVED = 'removed',
+  REMOVED = 'REMOVED',
 }
 
 export enum OnlineStatus {

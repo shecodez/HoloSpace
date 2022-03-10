@@ -33,8 +33,8 @@
             </router-link>
           </li>
         </template>
-        <li v-if="user?.email" class="flex items-center">
-          <router-link :to="{ name: 'Me' }" class="btn btn-outline gap-2 rounded-full"> Open App </router-link>
+        <li v-if="authStore.isAuthenticated" class="flex items-center">
+          <router-link :to="{ name: 'Me' }" class="btn btn-outline gap-2 rounded-full">Open App</router-link>
         </li>
         <li v-else class="flex items-center">
           <router-link :to="{ name: 'Login' }" class="btn btn-outline gap-2 rounded-full">
@@ -52,10 +52,9 @@ import { reactive } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import Logo from '@/components/Logo.vue';
-import LogoutButton from '@/components/LogoutButton.vue';
-import useAuth from '@/use/auth';
+import { useAuthStore } from '@/stores/auth';
 
-const { user } = useAuth();
+const authStore = useAuthStore();
 
 const menuItems = [
   {

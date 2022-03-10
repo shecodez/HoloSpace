@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import { createToast, withProps } from 'mosha-vue-toastify';
 
-import Toast from '@/components/DockUI/Toast.vue';
+import { authGuard } from './guards/auth';
 import useAuth from '@/use/auth';
 import Home from '@/views/Home.vue';
 import Login from '@/views/auth/Login.vue';
@@ -127,26 +126,8 @@ const routes: Array<RouteRecordRaw> = [
 
 // create router instance
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
 
-router.beforeEach(async (to, from, next) => {
-  const requiresAuth = to.matched.some((route) => route.meta.requiresAuth);
-  const requiresUnauth = to.matched.some((route) => route.meta.requiresUnauth);
-
-  const { isLoggedIn } = useAuth();
-
-  if (requiresAuth && !isLoggedIn()) {
-    createToast(
-      withProps(Toast, {
-        type: 'error',
-        title: 'Oops',
-        text: 'You must be logged in',
-      }),
-      { type: 'danger' },
-    );
-    next({ name: 'Login', query: { redirect: to.fullPath } });
-  } else if (requiresUnauth && isLoggedIn()) next('/');
-  else next();
-});
+router.beforeEach(authGuard);

@@ -2,7 +2,7 @@
   <div class="navbar bg-base-100">
     <div class="flex-none">
       <button
-        @click="$emit('toggleCollapsed')"
+        @click="appStore.toggleSideDrawerCollapsed"
         :title="collapsed ? 'Open' : 'Collapse'"
         class="btn btn-square btn-ghost"
         :class="!collapsed && 'transform rotate-180'"
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, toRefs } from 'vue';
+import { computed, defineProps, PropType, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import Popper from '@/components/DockUI/Popper.vue';
@@ -42,14 +42,15 @@ import NotificationDrawer from '@/components/me/NotificationDrawer.vue';
 import CalendarModal from '@/components/calendar/CalendarModal.vue';
 import SearchModal from '@/components/search/SearchModal.vue';
 import { ISpace } from '@/data/interfaces';
+import { useAppStore } from '@/stores/app';
 
 const props = defineProps({
   space: {
     type: Object as PropType<ISpace>,
     default: {},
   },
-  collapsed: Boolean,
 });
 
-const { space, collapsed } = toRefs(props);
+const appStore = useAppStore();
+const collapsed = computed(() => appStore.isSideDrawerCollapsed);
 </script>

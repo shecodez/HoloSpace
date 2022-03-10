@@ -17,9 +17,9 @@
         <img src="@/assets/branding/brand.png" alt="brand" class="p-2" />
       </div>
       <div class="bg-base-200 w-full md:w-3/5 py-10 px-4 md:px-8 bg-opacity-60 rounded-r md:rounded-br-3xl">
-        <div v-if="user" class="flex flex-col items-center justify-center h-full">
+        <div v-if="authStore.isAuthenticated" class="flex flex-col items-center justify-center h-full">
           <h3>You are logged in as:</h3>
-          <b class="mb-2">{{ user?.email }}</b>
+          <b class="mb-2">{{ authStore.userSession?.email }}</b>
 
           <LogoutButton />
         </div>
@@ -62,23 +62,24 @@ import { useRouter } from 'vue-router';
 import Logo from '@/components/Logo.vue';
 import LogoutButton from '@/components/LogoutButton.vue';
 import useAuth from '@/use/auth';
+import { useAuthStore } from '@/stores/auth';
 
 const props = defineProps({
   backgroundImageUrl: String,
   pageTitle: String,
 });
+const { backgroundImageUrl, pageTitle } = toRefs(props);
 
 const state = reactive({
   loading: false,
   error: '',
 });
 
-const { backgroundImageUrl, pageTitle } = toRefs(props);
-
 useTitle(`${pageTitle?.value} | ${import.meta.env.VITE_APP_NAME}`);
 
 const router = useRouter();
-const { user, authWithGoogle, authWithTwitter, authWithDiscord } = useAuth();
+const { authWithGoogle, authWithTwitter, authWithDiscord } = useAuth();
+const authStore = useAuthStore();
 
 async function handleAuth(provider: 'google' | 'twitter' | 'discord') {
   // console.log('social auth with', provider);

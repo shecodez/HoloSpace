@@ -45,12 +45,12 @@ const state = reactive({
   error: '',
 });
 
-const assets = [
+const assetsToLoad = [
   new pc.Asset('xbot.json', 'model', {
     url: '/src/assets/models/h010bot/xbot/xbot.json',
   }),
   new pc.Asset('ybot.json', 'model', {
-    url: '/src/assets/models/h010bot/ybot/Y_Bot.json',
+    url: '/src/assets/models/h010bot/ybot/ybot.json',
   }),
   new pc.Asset('idle', 'animation', {
     url: '/src/assets/animations/glb/Idle.glb',
@@ -60,21 +60,20 @@ const assets = [
   }),
 ];
 
-function loadAppAssets() {
-  assets.forEach((asset, i) => {
-    state.loading = true;
+const assets = ref({
+  models: {
+    xbot: assetsToLoad[0],
+    ybot: assetsToLoad[1],
+  },
+  animations: {
+    idle: assetsToLoad[2],
+  },
+  fonts: {
+    montserratBlack: assetsToLoad[3],
+  },
+});
 
-    app.value.assets.add(asset);
-    app.value.assets.load(asset);
-
-    // if loaded all assets
-    if (i + 1 >= assets.length) {
-      state.loading = false;
-    }
-  });
-}
-
-// TODO: function uploadCustomModelJSON() {} return modelUrl from db
+onMounted(() => createApp(canvas.value!));
 
 function saveH010bot() {
   state.h010bot.model === 'xbot'
@@ -90,6 +89,27 @@ function saveH010bot() {
     { type: 'success' },
   );
 }
+
+const loadAssets = (app: pc.Application) => {
+  var count = 0;
+  app.assets.on('load', function () {
+    count++;
+    if (count === assetsToLoad.length) {
+      onLoadComplete(app);
+    }
+  });
+
+  for (var i = 0; i < assetsToLoad.length; i++) {
+    app.assets.add(assetsToLoad[i]);
+    app.assets.load(assetsToLoad[i]);
+  }
+};
+
+// called when all assets are loaded
+const onLoadComplete = (app: pc.Application) => {
+  // create the entities
+  createUserModelScene(app);
+};
 
 /**
  * create and random color h010bot entity from url in pc
@@ -136,34 +156,34 @@ function createH010botModel(name: 'xbot' | 'ybot', random = false) {
   } else if (name === 'ybot') {
     userModel.value = loadH010botFromUrl(name, '/src/assets/models/h010bot/ybot/ybot.json', random);
   }
-  userModel.value?.addComponent('animation', { assets: [assets[2]], speed: 1 });
+  userModel.value?.addComponent('animation', { assets: [assets.value.animations.idle], speed: 1 });
   app.value.root.addChild(userModel.value);
 }
 
-function createRandomColorH010botModel(name: 'xbot' | 'ybot') {
-  createH010botModel(name, true);
-}
-
-function createDefaultH010botModel() {
-  createH010botModel('xbot');
-}
-
-function setColorSelected(name: string) {
-  return userModel.value?.name === name ? new pc.Color(0, 1, 1) : new pc.Color(1, 1, 1);
-}
-
-onMounted(() => {
+function createApp(canvas: HTMLCanvasElement) {
   try {
-    app.value = new pc.Application(canvas.value!, {
-      elementInput: new pc.ElementInput(canvas.value!, {
+    app.value = new pc.Application(canvas, {
+      elementInput: new pc.ElementInput(canvas, {
         useMouse: true,
         useTouch: true,
       }),
       keyboard: new pc.Keyboard(window),
-      mouse: new pc.Mouse(canvas.value),
+      mouse: new pc.Mouse(canvas),
       gamepads: new pc.GamePads(),
-      touch: pc.platform.touch ? new pc.TouchDevice(canvas.value!) : undefined,
+      touch: pc.platform.touch ? new pc.TouchDevice(canvas) : undefined,
     });
+
+    // fill the available space at full resolution
+    app.value.setCanvasFillMode(pc.FILLMODE_NONE); // FILLMODE_FILL_WINDOW
+    app.value.setCanvasResolution(pc.RESOLUTION_AUTO);
+
+    // ensure canvas is resized when window changes size
+    // window.addEventListener("resize", () => {
+    //   app.value.resizeCanvas(width?.value, height?.value);
+    // });
+    app.value.start();
+
+    loadAssets(app.value);
   } catch (e) {
     if (e instanceof pc.UnsupportedBrowserError) {
       state.error = 'This page requires a browser that supports WebGL. More information here: http://get.webgl.org';
@@ -173,36 +193,16 @@ onMounted(() => {
       state.error = `Could not initialize application. Error: ${e}`;
     }
   }
+}
 
-  // fill the available space at full resolution
-  app.value.setCanvasFillMode(pc.FILLMODE_NONE); // FILLMODE_FILL_WINDOW
-  app.value.setCanvasResolution(pc.RESOLUTION_AUTO);
-
-  // ensure canvas is resized when window changes size
-  // window.addEventListener("resize", () => {
-  //   app.value.resizeCanvas(width?.value, height?.value);
-  // });
-
-  loadAppAssets();
-
-  // TODO: if user.modelURL createCustomUserModel(user.name, user.modelURL)
-  // if user.h010bot createCustomH010botModel(user.h010bot.name, user.h010bot.colors)
-  // else
-  createDefaultH010botModel();
-
-  // create character platform
-  const platform = createPrimitiveEntity('platform', 'cylinder', [0, -0.25, 0], [0, 0, 0], [2, 0.5, 2]);
-  app.value.root.addChild(platform);
-
-  // TODO: create 3 mirrors in background (like dressing room)
-
+const createUserModelScene = (app: pc.Application) => {
   // create camera entity
   const camera = new pc.Entity('camera');
   camera.addComponent('camera', {
     clearColor: new pc.Color(0.1, 0.1, 0.1),
   });
   camera.setPosition(0, 1, 3);
-  app.value.root.addChild(camera);
+  app.root.addChild(camera);
 
   // create directional light entity
   const light = new pc.Entity('light');
@@ -217,13 +217,26 @@ onMounted(() => {
     shadowResolution: 2048,
   });
   light.setEulerAngles(35, 15, 0);
-  app.value.root.addChild(light);
+  app.root.addChild(light);
+
+  // create character platform
+  const platform = createPrimitiveEntity('platform', 'cylinder', [0, -0.25, 0], [0, 0, 0], [2, 0.5, 2]);
+  app.root.addChild(platform);
+
+  // TODO: create 3 mirrors in background (like dressing room)
+
+  createH010botModel('xbot');
 
   // create ui
-  const ui = new pc.Entity('ui');
-  app.value.root.addChild(ui);
+  const ui = createSelectionMenu();
+  app.root.addChild(ui);
+};
 
-  // h010bot selection menu
+const createSelectionMenu = () => {
+  const fontAsset = assets.value.fonts.montserratBlack;
+
+  const ui = new pc.Entity('ui');
+
   const h010botMenu = new pc.Entity('h010bot select menu');
   h010botMenu.addComponent('screen', {
     resolution: new pc.Vec2(640, 480),
@@ -232,55 +245,67 @@ onMounted(() => {
   h010botMenu.screen.scaleMode = pc.SCALEMODE_BLEND;
   h010botMenu.screen.referenceResolution = new pc.Vec2(1280, 720);
 
-  const xBotBtn = createTextEntity('xbot button', 'xbot', assets[3], true, 32, setColorSelected('xbot'));
+  const xBotBtn = createTextEntity('xbot button', 'xbot', fontAsset, true, 32);
+  xBotBtn.addComponent('button', { imageIntity: 'xbtn' });
   xBotBtn.setLocalPosition(-150, 0, 0);
   h010botMenu.addChild(xBotBtn);
 
-  const yBotBtn = createTextEntity('ybot button', 'ybot', assets[3], true, 32, setColorSelected('ybot'));
+  const yBotBtn = createTextEntity('ybot button', 'ybot', fontAsset, true, 32);
+  yBotBtn.addComponent('button', { imageIntity: 'ybtn' });
   yBotBtn.setLocalPosition(150, 0, 0);
   h010botMenu.addChild(yBotBtn);
 
-  const xBotRandomBtn = createTextEntity('random xbot button', 'random', assets[3], true);
-  xBotRandomBtn.setLocalPosition(-150, -50, 0);
-  h010botMenu.addChild(xBotRandomBtn);
+  const xBotRandBtn = createTextEntity('random xbot button', 'random', fontAsset, true);
+  xBotRandBtn.addComponent('button', { imageIntity: 'xRandbtn' });
+  xBotRandBtn.setLocalPosition(-150, -50, 0);
+  h010botMenu.addChild(xBotRandBtn);
 
-  const yBotRandomBtn = createTextEntity('random ybot button', 'random', assets[3], true);
-  yBotRandomBtn.setLocalPosition(150, -50, 0);
-  h010botMenu.addChild(yBotRandomBtn);
+  const yBotRandBtn = createTextEntity('random ybot button', 'random', fontAsset, true);
+  yBotRandBtn.addComponent('button', { imageIntity: 'yRandbtn' });
+  yBotRandBtn.setLocalPosition(150, -50, 0);
+  h010botMenu.addChild(yBotRandBtn);
 
-  h010botMenu.enabled = true; // TODO: if not custom user model
+  h010botMenu.enabled = true;
   ui.addChild(h010botMenu);
 
   // create menu script
-  const script = pc.createScript('h010botSelectScript');
+  createCharacterCreatorScript(xBotBtn, yBotBtn, xBotRandBtn, yBotRandBtn);
+  ui.addComponent('script');
+  ui.script.create('CharacterCreator');
+
+  return ui;
+};
+
+const createCharacterCreatorScript = (xBtn: pc.Entity, yBtn: pc.Entity, xRandBtn: pc.Entity, yRandBtn: pc.Entity) => {
+  const script = pc.createScript('CharacterCreator');
+
+  const selectedColor = pc.Color.CYAN;
+  const defaultColor = pc.Color.WHITE;
+
   script!.prototype.initialize = function () {
-    app.value.root.findByName('xbot button').element.on('click', () => {
+    xBtn.element.color = selectedColor; // default selected btn
+
+    xBtn.button.on('click', function (e) {
       createH010botModel('xbot');
-      app.value.root.findByName('xbot button').element.color = new pc.Color(0, 1, 1);
-      app.value.root.findByName('ybot button').element.color = new pc.Color(1, 1, 1);
+      xBtn.element.color = selectedColor;
+      yBtn.element.color = defaultColor;
     });
-    app.value.root.findByName('ybot button').element.on('click', () => {
+    yBtn.button.on('click', function (e) {
       createH010botModel('ybot');
-      app.value.root.findByName('ybot button').element.color = new pc.Color(0, 1, 1);
-      app.value.root.findByName('xbot button').element.color = new pc.Color(1, 1, 1);
+      yBtn.element.color = selectedColor;
+      xBtn.element.color = defaultColor;
     });
 
-    app.value.root.findByName('random xbot button').element.on('click', () => {
-      createRandomColorH010botModel('xbot');
-      app.value.root.findByName('xbot button').element.color = new pc.Color(0, 1, 1);
-      app.value.root.findByName('ybot button').element.color = new pc.Color(1, 1, 1);
+    xRandBtn.button.on('click', function (e) {
+      createH010botModel('xbot', true);
+      xBtn.element.color = selectedColor;
+      yBtn.element.color = defaultColor;
     });
-    app.value.root.findByName('random ybot button').element.on('click', () => {
-      createRandomColorH010botModel('ybot');
-      app.value.root.findByName('ybot button').element.color = new pc.Color(0, 1, 1);
-      app.value.root.findByName('xbot button').element.color = new pc.Color(1, 1, 1);
+    yRandBtn.button.on('click', function (e) {
+      createH010botModel('ybot', true);
+      yBtn.element.color = selectedColor;
+      xBtn.element.color = defaultColor;
     });
   };
-  ui.addComponent('script');
-  ui.script.create('h010botSelectScript');
-
-  // TODO: h010bot color selection menu
-
-  app.value.start();
-});
+};
 </script>

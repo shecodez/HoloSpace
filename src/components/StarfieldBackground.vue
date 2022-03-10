@@ -5,7 +5,7 @@
     <div class="fixed more-stars" />
 
     <slot>
-      <div class="cta">
+      <div class="h-full flex flex-col items-center justify-center">
         <slot name="cta"></slot>
       </div>
     </slot>
@@ -86,14 +86,5 @@ $shadows-large: multiple-box-shadow(100);
       box-shadow: $shadows-large;
     }
   }
-
-  // .cta {
-  //   text-align: center;
-  //   position: absolute;
-  //   width: 100%;
-  //   top: 50%;
-  //   transform: translateY(-50%);
-  //   z-index: 9;
-  // }
 }
 </style>

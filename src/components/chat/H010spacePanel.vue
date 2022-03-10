@@ -1,10 +1,10 @@
 <template>
   <Panel css="w-0 bg-base-100 bg-opacity-80">
     <template #header>
-      <SpaceToolbar :space="space" :collapsed="collapsed" @toggleCollapsed="emitToggleCollapsed" />
+      <SpaceToolbar :space="space" />
     </template>
 
-    <div ref="canvasarea" v-if="state.isReadyToJoin" class="relative block w-full h-full">
+    <div ref="canvasarea" v-if="state.isReady" class="relative block w-full h-full">
       <H010space :width="width" :height="height" :me="me" />
     </div>
     <StarfieldBackground v-else>
@@ -12,7 +12,7 @@
         <h1 class="mb-4">
           Welcome to {{ me.name }}'s <span class="font-bold">{{ space.name }}</span>
         </h1>
-        <button @click="state.isReadyToJoin = true" class="btn btn-primary">Join</button>
+        <button @click="state.isReady = true" class="btn btn-primary">Enter Lobby</button>
       </template>
     </StarfieldBackground>
   </Panel>
@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { defineProps, PropType, reactive, ref } from 'vue';
-import { Icon } from '@iconify/vue';
+//import { Icon } from '@iconify/vue';
 import { useElementSize } from '@vueuse/core';
 
 import Panel from '@/components/DockUI/Panel.vue';
@@ -38,20 +38,19 @@ const props = defineProps({
     type: Object as PropType<ISpace>,
     default: {},
   },
-  collapsed: Boolean,
 });
 
 const canvasarea = ref();
 const state = reactive({
-  isReadyToJoin: true,
+  isReady: false,
 });
 const { width, height } = useElementSize(canvasarea);
 
-const emit = defineEmits<{
-  (e: 'toggleCollapsed'): void;
-}>();
+// const emit = defineEmits<{
+//   (e: 'toggleCollapsed'): void;
+// }>();
 
-function emitToggleCollapsed() {
-  emit('toggleCollapsed');
-}
+// function emitToggleCollapsed() {
+//   emit('toggleCollapsed');
+// }
 </script>

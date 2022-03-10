@@ -13,7 +13,6 @@ import { onMounted, onUnmounted, PropType, reactive, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useRoute } from 'vue-router';
 import * as pc from 'playcanvas';
-import { debounce } from 'lodash';
 
 import usePlayCanvas from '@/use/playcanvas';
 import { IClient, IVec3, IUser } from '@/data/interfaces';
@@ -248,13 +247,13 @@ function loadAssets(app: pc.Application) {
 // called when all assets are loaded
 function onLoadComplete(app: pc.Application) {
   // create the entities
-  createH010space(app);
+  createH010spaceScene(app);
 
-  // show main menu
-  // showH010spaceLobby();
+  // TODO: show lobby first
+  // createH010LobbyScene();
 }
 
-function createH010space(app: pc.Application) {
+function createH010spaceScene(app: pc.Application) {
   // set up some general scene rendering properties
   app.scene.toneMapping = pc.TONEMAP_ACES;
 

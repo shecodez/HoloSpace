@@ -42,6 +42,12 @@ export interface IUser {
   updatedAt?: Date;
 }
 
+export interface IProfile {
+  id: string;
+
+  bio: string;
+}
+
 export interface IEvent {
   id: string;
 
@@ -95,8 +101,12 @@ export interface IMessageAuthor {
 }
 
 export interface IFile {
+  id?: string;
+
   name: string;
   size: number;
+
+  message_id?: string;
 }
 
 export interface IMessage {
@@ -107,6 +117,7 @@ export interface IMessage {
   space_id: string;
   content: string;
   replyTo_id?: string;
+  file_id?: string;
   file?: IFile; // .mp3 .wav .img .png .jpg .gif .doc(x) .pdf .zip .txt .h010
   type: MessageType;
   reactions?: {

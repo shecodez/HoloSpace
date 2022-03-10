@@ -155,27 +155,17 @@ export default function usePlayCanvas() {
     return entity;
   };
 
-  const createTextEntity = (
-    name: string,
-    text: string,
-    fontAsset: any,
-    useInput = false,
-    fontSize = 32,
-    color = pc.Color.WHITE,
-    opacity = 1,
-  ) => {
+  const createTextEntity = (name: string, text: string, fontAsset: any, useInput = false, fontSize = 32) => {
     const entity = new pc.Entity(name);
     entity.addComponent('element', {
-      anchor: new pc.Vec4(0.5, 0.5, 0.5, 0.5),
       pivot: new pc.Vec2(0.5, 0.5),
-      type: pc.ELEMENTTYPE_TEXT,
-      rect: [0, 0, 1, 1],
-      text,
-      fontSize,
+      anchor: new pc.Vec4(0.5, 0.5, 0.5, 0.5),
+      margin: new pc.Vec4(0, 0, 0, 0),
       fontAsset,
+      fontSize,
+      text,
       useInput,
-      color,
-      opacity,
+      type: pc.ELEMENTTYPE_TEXT,
     });
 
     return entity;

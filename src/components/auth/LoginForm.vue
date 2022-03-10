@@ -67,12 +67,11 @@ import { computed, reactive } from 'vue';
 import useValidate from '@vuelidate/core';
 import { email, required, requiredIf } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';
-import { createToast, withProps } from 'mosha-vue-toastify';
 import { useRouter } from 'vue-router';
 
 import { IAuth } from '@/data/interfaces';
 import useAuth from '@/use/auth';
-import Toast from '@/components/DockUI/Toast.vue';
+import { useAppStore } from '@/stores/app';
 
 const state = reactive({
   showPassword: false,
@@ -100,6 +99,7 @@ const rules = computed(() => {
 
 const v$ = useValidate(rules, credentials);
 const { login, sendPasswordResetEmail } = useAuth();
+const appStore = useAppStore();
 const router = useRouter();
 
 async function submitLogin() {
@@ -130,14 +130,9 @@ async function submitForgot() {
   try {
     state.loading = true;
     await sendPasswordResetEmail(email);
-
-    createToast(
-      withProps(Toast, {
-        type: 'success',
-        title: 'Forgot Password?',
-        text: `Password recovery email has been sent to '${email}'`,
-      }),
-      { type: 'success' },
+    appStore.setToast(
+      { title: 'Forgot Password?', text: `Password recovery email has been sent to '${email}'` },
+      'success',
     );
   } catch (e: any) {
     state.error = e.error_description || e.message;
@@ -157,13 +152,12 @@ async function submitLoginPasswordless() {
     state.loading = true;
     await login({ email });
 
-    createToast(
-      withProps(Toast, {
-        type: 'success',
+    appStore.setToast(
+      {
         title: 'Passwordless Login',
         text: `We sent a magic link to ${email}, check your email`,
-      }),
-      { type: 'success' },
+      },
+      'success',
     );
   } catch (e: any) {
     state.error = e.error_description || e.message;

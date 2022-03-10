@@ -89,12 +89,11 @@ import { computed, reactive, watch } from 'vue';
 import useValidate from '@vuelidate/core';
 import { email, required } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';
-import { createToast, withProps } from 'mosha-vue-toastify';
 
 import { IAuth } from '@/data/interfaces';
 //import { PasswordStrength } from '@/data/mock';
 import useAuth from '@/use/auth';
-import Toast from '@/components/DockUI/Toast.vue';
+import { useAppStore } from '@/stores/app';
 
 const state = reactive({
   showPassword: false,
@@ -163,8 +162,8 @@ const rules = computed(() => {
 });
 
 const v$ = useValidate(rules, credentials);
-
 const { register } = useAuth();
+const appStore = useAppStore();
 
 async function submitRegister(): Promise<void> {
   state.error = null;
@@ -176,13 +175,12 @@ async function submitRegister(): Promise<void> {
     state.loading = true;
     await register(credentials);
 
-    createToast(
-      withProps(Toast, {
-        type: 'success',
+    appStore.setToast(
+      {
         title: 'Registration successful',
         text: `A confirmation e-mail should be sent to '${credentials.email}' soon!`,
-      }),
-      { type: 'success' },
+      },
+      'success',
     );
   } catch (e: any) {
     state.error = e.error_description || e.message;

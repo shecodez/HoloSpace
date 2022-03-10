@@ -1,7 +1,7 @@
 <template>
   <Panel css="w-0 bg-base-100 bg-opacity-80">
     <template #header>
-      <SpaceToolbar :space="space" :collapsed="collapsed" @toggleCollapsed="emitToggleCollapsed" />
+      <SpaceToolbar :space="space" />
     </template>
 
     <div v-if="!$route.params.space_id" class="flex items-center justify-center overflow-hidden">
@@ -54,7 +54,6 @@ const props = defineProps({
     type: Object as PropType<ISpace>,
     default: {},
   },
-  collapsed: Boolean,
   messages: {
     type: Array as PropType<IMessage[]>,
     default: [],
@@ -111,14 +110,6 @@ function setMsgType(type: MessageType) {
       state.msgType = MessageType.TEXT;
       break;
   }
-}
-
-const emit = defineEmits<{
-  (e: 'toggleCollapsed'): void;
-}>();
-
-function emitToggleCollapsed() {
-  emit('toggleCollapsed');
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <Panel css="w-0 bg-base-100 bg-opacity-80">
     <template #header>
-      <SpaceToolbar :space="space" :collapsed="collapsed" @toggleCollapsed="emitToggleCollapsed" />
+      <SpaceToolbar :space="space" />
     </template>
 
     <div v-if="space.id" class="tabs mx-12">
@@ -49,7 +49,6 @@ const props = defineProps({
     type: Object as PropType<ISpace>,
     default: {},
   },
-  collapsed: Boolean,
   messages: {
     type: Array as PropType<IMessage[]>,
     default: [],

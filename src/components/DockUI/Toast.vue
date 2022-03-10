@@ -13,7 +13,7 @@
       </div>
       <div class="shadow absolute w-10 h-1 bg-gray-800 bg-opacity-50 left-5 top-11 z-10" />
     </div>
-    <div class="message uppercase mr-4" :class="type === 'error' ? 'ml-4' : 'ml-20'">
+    <div class="message uppercase mr-4" :class="type === 'error' || type === 'danger' ? 'ml-4' : 'ml-20'">
       <h4>
         <slot name="title">{{ title }}</slot>
       </h4>
@@ -28,7 +28,7 @@
 import { defineProps, toRefs } from 'vue';
 
 const props = defineProps({
-  type: String, // success, error, info, warning
+  type: String, // success, error, danger, info, warning
   title: String,
   text: String,
 });
@@ -79,7 +79,8 @@ const { type, title, text } = toRefs(props);
   border-color: transparent #777 #777 transparent;
   transform: rotate(45deg);
 }
-.error-face .mouth {
+.error-face .mouth,
+.danger-face .mouth {
   border: 1px solid;
   border-color: #777 transparent transparent #777;
   transform: rotate(45deg);
@@ -102,12 +103,13 @@ const { type, title, text } = toRefs(props);
   animation: scale 1s ease-in infinite;
 }
 
-.error-face .face {
+.error-face .face,
+.danger-face .face {
   left: initial;
   right: 5%;
   animation: roll 3s ease-in-out infinite;
 }
-.error-face .shadow {
+.error-face .shadow .danger-face .shadow {
   left: initial;
   right: 5%;
   animation: move 3s ease-in-out infinite;

@@ -4,7 +4,7 @@
       <div class="navbar bg-base-100">
         <div class="flex-none">
           <button
-            @click="emitToggleCollapsed"
+            @click="appStore.toggleSideDrawerCollapsed"
             :title="collapsed ? 'Open' : 'Collapse'"
             class="btn btn-square btn-ghost"
             :class="!collapsed && 'transform rotate-180'"
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, toRefs } from 'vue';
+import { computed, defineProps, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useElementSize } from '@vueuse/core';
 
@@ -52,21 +52,15 @@ import NotificationDrawer from '@/components/me/NotificationDrawer.vue';
 import CalendarModal from '@/components/calendar/CalendarModal.vue';
 import SearchModal from '@/components/search/SearchModal.vue';
 import UserModel from '@/components/users/UserModel.vue';
+import { useAppStore } from '@/stores/app';
 
 const props = defineProps({
-  collapsed: Boolean,
   me: String,
 });
+const { me } = toRefs(props);
 
-const { collapsed, me } = toRefs(props);
-
-const emit = defineEmits<{
-  (e: 'toggleCollapsed'): void;
-}>();
-
-function emitToggleCollapsed() {
-  emit('toggleCollapsed');
-}
+const appStore = useAppStore();
+const collapsed = computed(() => appStore.isSideDrawerCollapsed);
 
 const canvasarea = ref(null);
 const { width, height } = useElementSize(canvasarea);

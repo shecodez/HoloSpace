@@ -1,12 +1,12 @@
 import { Provider, User } from '@supabase/supabase-js';
-import { ref } from 'vue';
+//import { ref } from 'vue';
 
 import { IAuth } from '@/data/interfaces';
 import useSupabase from '@/use/supabase';
 
 // Note: user is set outside the useAuth function
 // so user is global, and refers to a single user
-const user = ref<User>();
+// const user = ref<User>();
 
 export default function useAuth() {
   const { supabase } = useSupabase();
@@ -64,7 +64,7 @@ export default function useAuth() {
   /**
    * Check if the user is logged in or not
    */
-  const isLoggedIn = () => !!user.value;
+  //const isLoggedIn = () => !!user.value;
 
   /**
    * Register
@@ -105,13 +105,13 @@ export default function useAuth() {
   };
 
   return {
-    user,
+    // user,
     login,
     authWithExternalProvider,
     authWithGoogle,
     authWithTwitter,
     authWithDiscord,
-    isLoggedIn,
+    //isLoggedIn,
     logout,
     register,
     update,

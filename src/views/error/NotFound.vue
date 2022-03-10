@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import Layout from '@/layouts/SiteLayout.vue';
 </script>
 

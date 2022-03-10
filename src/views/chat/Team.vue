@@ -10,36 +10,19 @@
     </template>
 
     <template v-slot:left>
-      <SpaceSideDrawer
-        :collapsed="state.sideDrawerIsCollapsed"
-        :isSmScreen="!lgAndLarger"
-        isTeam
-        :spaces="spaces"
-        @close="state.sideDrawerIsCollapsed = true"
-      />
+      <SpaceSideDrawer :isSmScreen="!lgAndLarger" isTeam :spaces="spaces" />
     </template>
 
-    <TeamChatPanel
-      :me="activeUser"
-      :space="activeDiskspace"
-      :messages="messages"
-      :collapsed="state.sideDrawerIsCollapsed"
-      @toggleCollapsed="toggleSideDrawer"
-    />
+    <TeamChatPanel :me="activeUser" :space="activeDiskspace" :messages="messages" />
 
     <template v-slot:right>
-      <UserMetaDrawer
-        title="Contacts"
-        :users="users"
-        :collapsed="state.metaDrawerIsCollapsed"
-        @toggleCollapsed="toggleMetaDrawer"
-      />
+      <UserMetaDrawer title="Contacts" :users="users" />
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue';
+import { computed, onMounted, reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
@@ -50,47 +33,28 @@ import UserMetaDrawer from '@/components/users/UserMetaDrawer.vue';
 import SpaceSideDrawer from '@/components/spaces/SpaceSideDrawer.vue';
 import TeamChatPanel from '@/components/chat/TeamChatPanel.vue';
 import { decks, users, spaces as all_spaces, messages as all_messages } from '@/data/mock';
+import { useAppStore } from '@/stores/app';
 
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
+const appStore = useAppStore();
 
 const state = reactive({
   showAlert: true,
-  sideDrawerIsCollapsed: false,
-  metaDrawerIsCollapsed: true,
-  sideDrawerPreBreakpoint: false,
-  metaDrawerPreBreakpoint: false,
+  //sideDrawerIsCollapsed: false,
+  //metaDrawerIsCollapsed: true,
   backgroundImageUrl: 'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/backgrounds/default-bg.jpg',
 });
 
-const lgAndLarger = breakpoints.greater('lg');
-watch(
-  () => lgAndLarger.value,
-  (lgAndLarger: Boolean) => {
-    if (lgAndLarger) {
-      state.sideDrawerIsCollapsed = state.sideDrawerPreBreakpoint;
-      state.metaDrawerIsCollapsed = state.metaDrawerPreBreakpoint;
-    } else {
-      state.sideDrawerPreBreakpoint = state.sideDrawerIsCollapsed;
-      state.metaDrawerPreBreakpoint = state.metaDrawerIsCollapsed;
+onMounted(() => {
+  appStore.setSideDrawerCollapsed(false);
+  appStore.setMetaDrawerCollapsed(true);
+});
 
-      state.sideDrawerIsCollapsed = true;
-      state.metaDrawerIsCollapsed = true;
-    }
-  },
-  { immediate: true },
-);
+const lgAndLarger = breakpoints.greater('lg');
 
 function dismissAlert() {
   state.showAlert = false;
-}
-
-function toggleSideDrawer() {
-  state.sideDrawerIsCollapsed = !state.sideDrawerIsCollapsed;
-}
-
-function toggleMetaDrawer() {
-  state.metaDrawerIsCollapsed = !state.metaDrawerIsCollapsed;
 }
 
 const activeUser = computed(() => users[1]);

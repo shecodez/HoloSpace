@@ -1,5 +1,5 @@
 <template>
-  <DrawerModal v-if="isSmScreen" :isOpen="!collapsed" @close="$emit('close')">
+  <DrawerModal v-if="isSmScreen" :isOpen="!collapsed" @close="appStore.setSideDrawerCollapsed(true)">
     <div class="w-64 h-screen bg-base-100">
       <SpacePanel :deck="deck" :isTeam="isTeam" :spaces="spaces" />
     </div>
@@ -10,18 +10,15 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType } from 'vue';
+import { computed, defineProps, PropType } from 'vue';
 
 import Drawer from '@/components/DockUI/Drawer.vue';
 import DrawerModal from '@/components/DockUI/DrawerModal.vue';
 import SpacePanel from '@/components/spaces/SpacePanel.vue';
 import { IDeck, ISpace } from '@/data/interfaces';
+import { useAppStore } from '@/stores/app';
 
 const props = defineProps({
-  collapsed: {
-    type: Boolean,
-    default: false,
-  },
   isSmScreen: Boolean,
   deck: {
     type: Object as PropType<IDeck>,
@@ -36,4 +33,8 @@ const props = defineProps({
     default: [],
   },
 });
+
+const appStore = useAppStore();
+
+const collapsed = computed(() => appStore.isSideDrawerCollapsed);
 </script>

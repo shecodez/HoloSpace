@@ -16,32 +16,19 @@
     </template>
 
     <template v-slot:left>
-      <ShopSideDrawer
-        :collapsed="state.sideDrawerIsCollapsed"
-        :isSmScreen="!lgAndLarger"
-        @close="state.sideDrawerIsCollapsed = true"
-      />
+      <ShopSideDrawer :isSmScreen="!lgAndLarger" />
     </template>
 
-    <UserModelPanel
-      :me="user.user_metadata.username"
-      :collapsed="state.sideDrawerIsCollapsed"
-      @toggleCollapsed="toggleSideDrawer"
-    />
+    <UserModelPanel :me="user.user_metadata.username" />
 
     <template v-slot:right>
-      <UserMetaDrawer
-        title="Friends"
-        :users="users"
-        :collapsed="state.metaDrawerIsCollapsed"
-        @toggleCollapsed="toggleMetaDrawer"
-      />
+      <UserMetaDrawer title="Friends" :users="users" />
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { reactive, watch } from 'vue';
+import { onMounted, reactive, computed } from 'vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { Icon } from '@iconify/vue';
 
@@ -52,48 +39,46 @@ import UserMetaDrawer from '@/components/users/UserMetaDrawer.vue';
 import UserModelPanel from '@/components/me/UserModelPanel.vue';
 import ShopSideDrawer from '@/components/me/ShopSideDrawer.vue';
 import { decks, users } from '@/data/mock';
-import useAuth from '@/use/auth';
-
-const { user } = useAuth();
+import { useAppStore } from '@/stores/app';
+import { useAuthStore } from '@/stores/auth';
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
+const appStore = useAppStore();
+const authStore = useAuthStore();
 
 const state = reactive({
   showAlert: true,
-  sideDrawerIsCollapsed: true,
-  metaDrawerIsCollapsed: false,
-  sideDrawerPreBreakpoint: false,
-  metaDrawerPreBreakpoint: false,
+  // sideDrawerIsCollapsed: true,
+  // metaDrawerIsCollapsed: false,
   backgroundImageUrl: 'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/backgrounds/default-bg.jpg',
 });
 
-const lgAndLarger = breakpoints.greater('lg');
-watch(
-  () => lgAndLarger.value,
-  (lgAndLarger: Boolean) => {
-    if (lgAndLarger) {
-      state.sideDrawerIsCollapsed = state.sideDrawerPreBreakpoint;
-      state.metaDrawerIsCollapsed = state.metaDrawerPreBreakpoint;
-    } else {
-      state.sideDrawerPreBreakpoint = state.sideDrawerIsCollapsed;
-      state.metaDrawerPreBreakpoint = state.metaDrawerIsCollapsed;
+onMounted(() => {
+  appStore.setSideDrawerCollapsed(true);
+  appStore.setMetaDrawerCollapsed(false);
+});
 
-      state.sideDrawerIsCollapsed = true;
-      state.metaDrawerIsCollapsed = true;
-    }
-  },
-  { immediate: true },
-);
+const user = computed(() => authStore.userSession);
+
+const lgAndLarger = breakpoints.greater('lg');
+// watch(
+//   () => lgAndLarger.value,
+//   (lgAndLarger: Boolean) => {
+//     if (lgAndLarger) {
+//       state.sideDrawerIsCollapsed = state.sideDrawerPreBreakpoint;
+//       state.metaDrawerIsCollapsed = state.metaDrawerPreBreakpoint;
+//     } else {
+//       state.sideDrawerPreBreakpoint = state.sideDrawerIsCollapsed;
+//       state.metaDrawerPreBreakpoint = state.metaDrawerIsCollapsed;
+
+//       state.sideDrawerIsCollapsed = true;
+//       state.metaDrawerIsCollapsed = true;
+//     }
+//   },
+//   { immediate: true },
+// );
 
 function dismissAlert() {
   state.showAlert = false;
-}
-
-function toggleSideDrawer() {
-  state.sideDrawerIsCollapsed = !state.sideDrawerIsCollapsed;
-}
-
-function toggleMetaDrawer() {
-  state.metaDrawerIsCollapsed = !state.metaDrawerIsCollapsed;
 }
 </script>

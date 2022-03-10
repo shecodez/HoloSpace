@@ -5,7 +5,7 @@
         <div class="navbar" :class="collapsed ? 'collapsed flex justify-center' : ''">
           <div class="flex-none">
             <button
-              @click="$emit('toggleCollapsed')"
+              @click="appStore.toggleMetaDrawerCollapsed"
               :title="collapsed ? `Open ${title}` : `Collapse ${title}`"
               class="btn btn-square btn-ghost"
               :class="collapsed && 'transform rotate-180'"
@@ -40,6 +40,7 @@ import Panel from '@/components/DockUI/Panel.vue';
 import UserList from '@/components/users/UserList.vue';
 import UserToolbar from '@/components/me/UserToolbar.vue';
 import { IUser } from '@/data/interfaces';
+import { useAppStore } from '@/stores/app';
 
 const props = defineProps({
   title: {
@@ -50,13 +51,12 @@ const props = defineProps({
     type: Array as PropType<IUser[]>,
     default: [],
   },
-  collapsed: {
-    type: Boolean,
-    default: false,
-  },
 });
+const { users } = toRefs(props);
 
-const { users, collapsed } = toRefs(props);
+const appStore = useAppStore();
+
+const collapsed = computed(() => appStore.isMetaDrawerCollapsed);
 
 const usersOnline = computed(() => users.value.filter((x) => x.isOnline && x.status !== 'HIDE'));
 const usersOffline = computed(() => users.value.filter((x) => !x.isOnline || x.status === 'HIDE'));
