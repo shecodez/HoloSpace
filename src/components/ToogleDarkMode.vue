@@ -1,7 +1,13 @@
 <template>
-  <button @click="toggleDark()" :class="css" :title="isDark ? 'Theme: light' : 'Theme: dark'">
-    <Icon v-if="isDark" icon="mdi:brightness-5" width="24" />
-    <Icon v-else icon="mdi:weather-night" width="24" />
+  <button
+    @click="toggleDark()"
+    class="swap swap-rotate"
+    :class="[css, isDark && 'swap-active']"
+    :title="isDark ? 'Theme: light' : 'Theme: dark'"
+  >
+    <Icon icon="ic:outline-wb-sunny" width="24" class="swap-on" />
+    <Icon icon="mdi:weather-night" width="24" class="swap-off" />
+    <span class="sr-only">Toggle Theme</span>
   </button>
 </template>
 

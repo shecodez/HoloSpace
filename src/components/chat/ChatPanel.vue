@@ -6,12 +6,21 @@
 
     <div v-if="space.id" class="tabs mx-12">
       <template v-for="(tab, i) in state.tabs" :key="tab.id">
-        <a @click="activeTab(i)" v-if="tab.show" class="tab tab-lg tab-bordered" :class="tab.active && 'tab-active'">
-          <Icon :icon="tab.icon" /> {{ tab.label }}
+        <a
+          @click="activeTab(i)"
+          v-if="tab.show"
+          class="tab tab-lg tab-bordered"
+          :class="tab.active && 'tab-active'"
+          :title="tab.label"
+        >
+          <Icon :icon="tab.icon" />
         </a>
       </template>
-      <div class="ml-auto">
-        <UserIOToolbar v-if="state.tabs[0].active" collapsed />
+      <div v-if="showTeamTab" class="ml-auto flex items-center">
+        <VoipControlToolbar />
+        <!-- <button class="btn btn-sm btn-square btn-ghost ml-1">
+          <Icon icon="ic:twotone-screen-share" width="20" />
+        </button> -->
       </div>
     </div>
     <div class="overflow-y-auto overflow-x-hidden flex flex-col-reverse">
@@ -40,9 +49,9 @@ import TextMsgForm from '@/components/chat/TextMessageForm.vue';
 import VoipUserList from '@/components/chat/VoipUserList.vue';
 import MessageList from '@/components/chat/MessageList.vue';
 import FileList from '@/components/chat/FileList.vue';
-import UserIOToolbar from '@/components/me/UserIOToolbar.vue';
 import { ISpace, IMessage, IUser } from '@/data/interfaces';
 import { MessageType, SpaceType } from '@/data/mock';
+import VoipControlToolbar from '@/components/me/VoipControlToolbar.vue';
 
 const props = defineProps({
   space: {

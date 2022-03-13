@@ -7,7 +7,7 @@
       </div>
     </div>
     <template v-if="!hideIndicators">
-      <Icon v-if="isCaptain" icon="mdi:view-headline" :width="iconSize" class="absolute left-0 top-0 text-yellow-500" />
+      <Icon v-if="isCaptain" icon="emojione:crown" :width="iconSize" class="absolute left-0 top-0" />
       <Icon
         v-if="user"
         :icon="getStatusIcon(user.status, user.isOnline)"

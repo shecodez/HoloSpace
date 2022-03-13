@@ -10,3 +10,5 @@ module.exports = {
   },
   plugins: [require('daisyui')],
 };
+
+// "daisyui": "^1.22.0",

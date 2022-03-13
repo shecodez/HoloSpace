@@ -1,7 +1,7 @@
 import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 
 import { useAuthStore } from '@/stores/auth';
-import { useAppStore } from '@/stores/app';
+//import { useAppStore } from '@/stores/app';
 
 export function authGuard(
   to: RouteLocationNormalized,
@@ -12,15 +12,15 @@ export function authGuard(
   const requiresUnauth = to.matched.some((route) => route.meta.requiresUnauth);
 
   const authStore = useAuthStore();
-  const appStore = useAppStore();
+  //const appStore = useAppStore();
 
-  if (requiresAuth && !authStore.isAuthenticated) {
+  if (requiresUnauth && authStore.isAuthenticated) {
+    return next('/');
+  } else if (requiresAuth && !authStore.isAuthenticated) {
     authStore.saveRedirectRoute(to);
-    next({ name: 'Login', query: { redirect: to.fullPath } });
-    appStore.setToast({ title: 'Auth Error', text: 'You must be logged in' }, 'danger');
-  } else if (requiresUnauth && authStore.isAuthenticated) {
-    next('/');
+    // appStore.setToast({ title: 'Auth Error', text: 'You must be logged in' }, 'danger');
+    return next({ name: 'Login', query: { redirect: to.fullPath } });
   } else {
-    next();
+    return next();
   }
 }

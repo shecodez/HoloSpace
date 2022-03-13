@@ -1,5 +1,8 @@
 import { SpaceType, OnlineStatus, Region, MessageType } from './mock';
 
+export type BannerType = 'error' | 'info' | 'success' | 'warning';
+export type ToastType = 'danger' | 'info' | 'success' | 'warning';
+
 export interface IAuth {
   username?: string; // meta
   email: string;

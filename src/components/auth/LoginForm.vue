@@ -32,7 +32,7 @@
       </span>
     </div>
 
-    <div class="form-control required">
+    <div class="form-control">
       <label class="label">Password</label>
       <div class="relative">
         <input

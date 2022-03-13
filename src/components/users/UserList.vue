@@ -1,7 +1,7 @@
 <template>
   <div class="indicator m-4">
     <div class="indicator-item badge badge-xs py-2" :class="!offline && 'badge-primary'">{{ users.length }}</div>
-    <h5 class="mr-2 text-xs font-bold">{{ title }}</h5>
+    <h5 class="mr-2 text-xs uppercase font-medium">{{ title }}</h5>
   </div>
 
   <ul class="user-list flex-1 flex flex-col gap-2" :class="offline ? 'offline' : 'online'">

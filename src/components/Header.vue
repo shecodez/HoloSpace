@@ -9,19 +9,18 @@
     <button
       @click="toggleMenu"
       aria-controls="main-nav"
-      :aria-expanded="state.menuOpen"
-      class="block md:hidden btn btn-square btn-ghost absolute z-50 top-4 right-4"
+      :aria-expanded="menuOpen"
+      class="block md:hidden absolute z-50 top-4 right-4"
     >
-      <label class="btn btn-square swap swap-rotate">
-        <input type="checkbox" :checked="state.menuOpen" />
-        <Icon icon="mdi:menu" width="24" />
-        <Icon icon="mdi:close" width="24" />
+      <label class="btn btn-circle swap swap-rotate" :class="menuOpen && 'swap-active'">
+        <Icon icon="mdi:menu" width="24" class="swap-off" />
+        <Icon icon="mdi:close" width="24" class="swap-on" />
         <span class="sr-only">Menu</span>
       </label>
     </button>
 
     <nav>
-      <ul id="main-nav" :data-visible="state.menuOpen" class="main-nav flex gap-4 lg:gap-6">
+      <ul id="main-nav" :data-visible="menuOpen" class="main-nav flex gap-4 lg:gap-6">
         <template v-for="(item, i) in menuItems" :key="item.id">
           <li class="nav-li hover:border-b-2" :class="$route.name === item.id && 'active'">
             <router-link
@@ -48,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { ref } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import Logo from '@/components/Logo.vue';
@@ -75,12 +74,10 @@ const menuItems = [
   },
 ];
 
-const state = reactive({
-  menuOpen: false,
-});
+const menuOpen = ref(false);
 
 function toggleMenu() {
-  state.menuOpen = !state.menuOpen;
+  menuOpen.value = !menuOpen.value;
 }
 </script>
 

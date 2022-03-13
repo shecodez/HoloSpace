@@ -1,5 +1,5 @@
 <template>
-  <Layout v-if="user" :backgroundImageUrl="state.backgroundImageUrl">
+  <Layout v-if="user" :pageTitle="`@${users[0]?.name}`">
     <template v-slot:fixed>
       <DeckPanel :decks="decks">
         <template #linkTo>
@@ -8,11 +8,6 @@
           </router-link>
         </template>
       </DeckPanel>
-    </template>
-
-    <template v-slot:banner>
-      <!-- <ConfirmEmailAlert :show="state.showAlert" @close="dismissAlert" /> -->
-      <BetaAlert :show="state.showAlert" @close="dismissAlert" />
     </template>
 
     <template v-slot:left>
@@ -28,12 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, computed } from 'vue';
+import { onMounted, computed } from 'vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { Icon } from '@iconify/vue';
 
 import Layout from '@/layouts/DefaultLayout.vue';
-import BetaAlert from '@/components/alerts/BetaAlert.vue';
 import DeckPanel from '@/components/decks/DeckPanel.vue';
 import UserMetaDrawer from '@/components/users/UserMetaDrawer.vue';
 import UserModelPanel from '@/components/me/UserModelPanel.vue';
@@ -46,13 +40,6 @@ const breakpoints = useBreakpoints(breakpointsTailwind);
 const appStore = useAppStore();
 const authStore = useAuthStore();
 
-const state = reactive({
-  showAlert: true,
-  // sideDrawerIsCollapsed: true,
-  // metaDrawerIsCollapsed: false,
-  backgroundImageUrl: 'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/backgrounds/default-bg.jpg',
-});
-
 onMounted(() => {
   appStore.setSideDrawerCollapsed(true);
   appStore.setMetaDrawerCollapsed(false);
@@ -61,24 +48,4 @@ onMounted(() => {
 const user = computed(() => authStore.userSession);
 
 const lgAndLarger = breakpoints.greater('lg');
-// watch(
-//   () => lgAndLarger.value,
-//   (lgAndLarger: Boolean) => {
-//     if (lgAndLarger) {
-//       state.sideDrawerIsCollapsed = state.sideDrawerPreBreakpoint;
-//       state.metaDrawerIsCollapsed = state.metaDrawerPreBreakpoint;
-//     } else {
-//       state.sideDrawerPreBreakpoint = state.sideDrawerIsCollapsed;
-//       state.metaDrawerPreBreakpoint = state.metaDrawerIsCollapsed;
-
-//       state.sideDrawerIsCollapsed = true;
-//       state.metaDrawerIsCollapsed = true;
-//     }
-//   },
-//   { immediate: true },
-// );
-
-function dismissAlert() {
-  state.showAlert = false;
-}
 </script>

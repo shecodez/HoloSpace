@@ -1,7 +1,7 @@
 <template>
   <Banner v-if="show" dismissible>
-    <div class="alert alert-info flex-1 border-l-4 border-info rounded-none">
-      <div class="flex-1 items-center">
+    <div class="alert alert-info bg-opacity-20 flex-1 border-l-4 border-info rounded-none">
+      <div class="flex-1 items-center text-white text-lg">
         <Icon icon="vs:party" width="24" />
         <label class="mx-3">The <span class="font-brand">H010SPACE</span> beta is live!</label>
       </div>

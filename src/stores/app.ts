@@ -1,17 +1,20 @@
 import { defineStore } from 'pinia';
 
-type AlertType = 'info' | 'danger' | 'success' | 'warning';
+import { BannerType, ToastType } from '@/data/interfaces';
 
 type State = {
   theme: string;
+  bannerIcon?: string;
+  bannerTitle?: string;
   bannerText: string;
-  bannerType: AlertType | undefined;
+  bannerType: BannerType | undefined;
+  bannerDismissible?: boolean;
   //bannerFunc?: Function;
   sideDrawerCollapsed: boolean;
   metaDrawerCollapsed: boolean;
-  toastTitle: string;
+  toastTitle?: string;
   toastText: string;
-  toastType: AlertType | undefined;
+  toastType: ToastType | undefined;
   //toastFunc?: Function;
 };
 
@@ -25,13 +28,14 @@ type Getters = {
 
 type Actions = {
   setTheme(theme: string): void;
-  setBanner(type: AlertType, text: string): void;
+  //getLatestSiteNotification(): void;
+  setBanner(banner: { icon?: string; title?: string; text: string }, type: BannerType, isDismissible: boolean): void;
   clearBanner(): void;
   toggleSideDrawerCollapsed(): void;
   setSideDrawerCollapsed(collapsed: boolean): void;
   toggleMetaDrawerCollapsed(): void;
   setMetaDrawerCollapsed(collapsed: boolean): void;
-  setToast(toast: { title: string; text: string }, type: AlertType): void;
+  setToast(toast: { title: string; text: string }, type: ToastType): void;
   clearToast(): void;
 };
 
@@ -39,8 +43,11 @@ export const useAppStore = defineStore<'app', State, Getters, Actions>('app', {
   state() {
     return {
       theme: 'dark',
+      bannerIcon: undefined,
+      bannerTitle: undefined,
       bannerType: undefined,
       bannerText: '',
+      bannerDismissible: false,
       //bannerFunc: () => {},
       sideDrawerCollapsed: false,
       metaDrawerCollapsed: false,
@@ -74,13 +81,19 @@ export const useAppStore = defineStore<'app', State, Getters, Actions>('app', {
       this.theme = theme;
       // TODO: set theme in localstorage
     },
-    setBanner(text: string, type: AlertType) {
-      this.bannerText = text;
+    setBanner(banner: { text: string; icon?: string; title?: string }, type: BannerType, isDismissible: boolean) {
+      this.bannerIcon = banner.icon;
+      this.bannerTitle = banner.title;
+      this.bannerText = banner.text;
       this.bannerType = type;
+      this.bannerDismissible = isDismissible;
     },
     clearBanner() {
+      this.bannerIcon = undefined;
+      this.bannerTitle = undefined;
       this.bannerText = '';
       this.bannerType = undefined;
+      this.bannerDismissible = false;
     },
     toggleSideDrawerCollapsed() {
       this.sideDrawerCollapsed = !this.sideDrawerCollapsed;
@@ -94,7 +107,7 @@ export const useAppStore = defineStore<'app', State, Getters, Actions>('app', {
     setMetaDrawerCollapsed(collapsed: boolean) {
       this.metaDrawerCollapsed = collapsed;
     },
-    setToast(toast: { title: string; text: string }, type: AlertType) {
+    setToast(toast: { title: string; text: string }, type: ToastType) {
       this.toastTitle = toast.title;
       this.toastText = toast.text;
       this.toastType = type;

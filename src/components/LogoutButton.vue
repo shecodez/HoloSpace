@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 const props = defineProps({
@@ -14,6 +13,4 @@ const props = defineProps({
     default: 'btn btn-square btn-outline border-none btn-error',
   },
 });
-
-const { css } = toRefs(props);
 </script>
