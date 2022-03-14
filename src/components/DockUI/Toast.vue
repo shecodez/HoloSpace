@@ -109,7 +109,8 @@ const { type, title, text } = toRefs(props);
   right: 5%;
   animation: roll 3s ease-in-out infinite;
 }
-.error-face .shadow .danger-face .shadow {
+.error-face .shadow,
+.danger-face .shadow {
   left: initial;
   right: 5%;
   animation: move 3s ease-in-out infinite;

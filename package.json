@@ -7,6 +7,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@giphy/js-fetch-api": "^4.1.2",
     "@popperjs/core": "^2.11.2",
     "@supabase/supabase-js": "^1.29.1",
     "@types/lodash": "^4.14.179",
@@ -15,7 +16,10 @@
     "@vueuse/core": "^7.5.3",
     "daisyui": "^2.6.4",
     "date-fns": "^2.28.0",
+    "dompurify": "^2.3.6",
+    "emoji-picker-element": "^1.11.0",
     "lodash": "^4.17.21",
+    "marked": "^4.0.12",
     "mosha-vue-toastify": "^1.0.23",
     "pinia": "^2.0.11",
     "playcanvas": "^1.52.1",
@@ -27,6 +31,8 @@
   },
   "devDependencies": {
     "@iconify/vue": "^3.1.2",
+    "@types/dompurify": "^2.3.3",
+    "@types/marked": "^4.0.2",
     "@types/node": "^17.0.8",
     "@vitejs/plugin-vue": "^2.0.0",
     "autoprefixer": "^10.4.2",

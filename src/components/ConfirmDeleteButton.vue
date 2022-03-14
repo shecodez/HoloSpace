@@ -24,10 +24,15 @@ const props = defineProps({
     default: 'btn-error',
   },
 });
+const { label, css, btnCss } = toRefs(props);
 
 const isRdyToDelete = ref(false);
 function prepForDelete() {
   isRdyToDelete.value = true;
+}
+
+function cancelDelete() {
+  isRdyToDelete.value = false;
 }
 
 const emit = defineEmits<{
@@ -38,10 +43,4 @@ function emitDelete() {
   emit('delete');
   isRdyToDelete.value = false;
 }
-
-function cancelDelete() {
-  isRdyToDelete.value = false;
-}
-
-const { label, css, btnCss } = toRefs(props);
 </script>

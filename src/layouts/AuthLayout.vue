@@ -3,7 +3,7 @@
     <router-link to="/">
       <div class="inline-flex md:flex items-center gap-2 h-12">
         <Logo color="#fff" :size="56" />
-        <span class="text-3xl font-brand font-bold tracking-wide">H010SPACE</span>
+        <span class="text-3xl font-brand font-bold tracking-wide text-white">H010SPACE</span>
       </div>
     </router-link>
   </div>

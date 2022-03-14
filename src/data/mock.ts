@@ -21,6 +21,7 @@ export enum MessageType {
   H010 = 'H010',
   Markdown = 'markdown',
   Image = 'image',
+  File = 'file',
   Sticker = 'sticker',
   REMOVED = 'REMOVED',
 }
