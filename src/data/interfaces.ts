@@ -62,6 +62,11 @@ export interface IAuth {
   password?: string;
 }
 
+export interface IAuthLogin {
+  email: string;
+  password: string;
+}
+
 export interface IVec3 {
   x: number;
   y: number;
@@ -74,7 +79,7 @@ export interface IClient {
   h010tag: string;
   space_id: string; // TODO: change to ISpace
 
-  modelURL: string;
+  model_url: string;
   model?: any; // pc.Entity
 
   position?: IVec3;
@@ -89,13 +94,13 @@ export interface IUser {
   name: string;
   pin: number | string;
   //h010tag: `${name}#${pin}`
-  imageURL?: string;
-  modelURL?: string;
-  isOnline: boolean;
-  status: OnlineStatus;
+  image_url?: string;
+  model_url?: string;
+  is_online?: boolean;
+  status?: OnlineStatus;
 
-  createdAt: Date;
-  updatedAt?: Date;
+  created_at: Date;
+  updated_at?: Date;
 }
 
 export interface IProfile {
@@ -110,8 +115,8 @@ export interface IEvent {
   title: string; // name
   description?: string;
   url?: string;
-  startDate: Date;
-  endDate?: Date;
+  start_date: Date;
+  end_date?: Date;
   classes?: string; // color
 }
 
@@ -119,15 +124,15 @@ export interface IDeck {
   id: string;
 
   name: string;
-  imageURL?: string;
-  user_id: string;
-  initSpace_id: string;
+  image_url?: string;
+  captain_id: string;
+  boot_space_id: string;
   hq?: Region; // default Region.US_EAST
+  crew_ids?: string[];
   crew?: IUser[]; // crew members
 
-  createdAt: Date;
-  updatedAt?: Date;
-  updatedBy_id?: string; // string of uids
+  created_at: Date;
+  updated_at?: Date;
 }
 
 export interface ISpace {
@@ -136,25 +141,35 @@ export interface ISpace {
   name: string;
   topic?: string;
   type: SpaceType;
-  h010_id?: string; // if type = H010
-  isPrivate: boolean; // default false
-  team?: IUser[]; // team members *only if isPrivate = true
-  typingUser_ids?: string[];
-  user_id?: string;
+  h010space_id?: string; // if type = H010
+  is_private: boolean; // default false
+  team_ids?: string[];
+  team?: IUser[]; // team members *only if is_private = true
+  usersTyping?: IUser[];
+  usersSpeaking?: IUser[];
+  leader_id?: string;
   deck_id?: string;
-  canDelete: boolean; // ex: cannot delete boot disk
+  can_delete: boolean; // ex: cannot delete boot disk
 
-  createdAt: Date;
-  updatedAt?: Date;
-  updatedBy_id?: string; // string of uids
+  created_at: Date;
+  updated_at?: Date;
 }
 
 export interface IMessageAuthor {
   name: string;
   //pin: number | string;
   //h010tag: `${name}#${pin}`
-  imageURL?: string;
-  modelURL?: string;
+  image_url?: string;
+  model_url?: string;
+}
+
+export interface IMessageReaction {
+  emoji: string;
+  message_id: StringOrNumber;
+  user_id: string;
+  user?: { name: string };
+  messages?: { space_id: string };
+  username?: string;
 }
 
 export interface IMessageReactions {
@@ -176,8 +191,8 @@ export interface IFile {
   message_id?: string;
   space_id?: string;
 
-  createdAt: Date;
-  updatedAt?: Date;
+  created_at: Date;
+  updated_at?: Date;
 }
 
 export interface IMessageMetaData {
@@ -191,14 +206,16 @@ export interface IMessageMetaData {
   disableReactions?: boolean;
 }
 
+export const IMessageType = MessageType;
+
 export interface IMessage {
   id?: string;
 
-  user_id: string;
-  author?: IMessageAuthor;
+  author_id: string;
+  author?: Partial<IUser>; //IMessageAuthor;
   space_id: string;
   content: string;
-  replyTo_id?: string;
+  reply_to_id?: string;
   replyMessage?: IMessage;
   file_id?: string;
   files?: IFile[];
@@ -206,8 +223,6 @@ export interface IMessage {
   reactions?: IMessageReactions;
   metaData?: IMessageMetaData;
 
-  createdAt: Date;
-  updatedAt?: Date;
-
-  deletedBy_id?: string;
+  created_at: Date;
+  updated_at?: Date;
 }

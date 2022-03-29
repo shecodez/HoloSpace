@@ -121,7 +121,7 @@ async function fetchSpaceTeam(spaceId?: string) {
 }
 
 const isActive = (spaceId: string) => {
-  return spaceId === route.params.space_id;
+  return spaceId === route.params.spaceId;
 };
 </script>
 

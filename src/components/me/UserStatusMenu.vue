@@ -78,23 +78,23 @@ const statuses = ref([
   { id: OnlineStatus.HIDE, name: 'Hide', description: 'Go Invisible' },
 ]);
 
-function getStatusIcon(status: OnlineStatus, isOnline = true) {
-  if (!isOnline) return 'mdi:circle';
+function getStatusIcon(status: OnlineStatus, is_online = true) {
+  if (!is_online) return 'mdi:circle';
 
   switch (status) {
     case OnlineStatus.SHOW:
       return 'mdi:check-circle';
     case OnlineStatus.BRB:
-      return 'mdi:clock-outline';
+      return 'mdi:clock';
     case OnlineStatus.DND:
-      return 'mdi:minus-circle-outline';
+      return 'mdi:minus-circle';
     default:
       return 'mdi:circle';
   }
 }
 
-function getStatusColor(status: OnlineStatus, isOnline = true) {
-  if (!isOnline) return 'text-gray-500';
+function getStatusColor(status: OnlineStatus, is_online = true) {
+  if (!is_online) return 'text-gray-500';
 
   switch (status) {
     case OnlineStatus.AWAY:

@@ -1,22 +1,23 @@
 <template>
-  <div class="relative overflow-hidden flex-shrink-0" :class="`w-${size} h-${size}`">
-    <div class="user avatar cursor-pointer" :class="user?.imageURL ? '' : 'placeholder'" :title="user?.name">
-      <div class="bg-primary text-neutral-content rounded-full" :class="`w-${size} h-${size}`">
-        <img v-if="user?.imageURL" :src="user?.imageURL" alt="User 2d-Avatar" class="inline-block" />
+  <div v-if="user?.name" class="relative overflow-hidden flex-shrink-0" :class="`w-${size} h-${size}`">
+    <div class="user avatar cursor-pointer" :class="user?.image_url ? '' : 'placeholder'" :title="user?.name">
+      <div class="text-neutral-content rounded-full" :class="[bgCss, `w-${size} h-${size}`]">
+        <img v-if="user?.image_url" :src="user?.image_url" alt="User 2d-Avatar" class="inline-block" />
         <span v-else :class="textCss">{{ user?.name.charAt(0) }}</span>
       </div>
     </div>
     <template v-if="!hideIndicators">
       <Icon v-if="isCaptain" icon="emojione:crown" :width="iconSize" class="absolute left-0 top-0" />
       <Icon
-        v-if="user"
-        :icon="getStatusIcon(user.status, user.isOnline)"
+        v-if="user.status"
+        :icon="getStatusIcon(user.status, user.is_online)"
         :width="iconSize"
         class="status absolute bottom-0 right-0"
-        :class="getStatusColor(user.status, user.isOnline)"
+        :class="getStatusColor(user.status, user.is_online)"
       />
     </template>
   </div>
+  <Skeleton v-else :css="`bg-accent w-${size} h-${size}`" />
 </template>
 
 <script setup lang="ts">
@@ -25,9 +26,10 @@ import { Icon } from '@iconify/vue';
 
 import { OnlineStatus } from '@/data/mock';
 import { IUser } from '@/data/interfaces';
+import Skeleton from '@/components/DockUI/Skeleton.vue';
 
 const props = defineProps({
-  user: Object as PropType<IUser>,
+  user: Object as PropType<IUser | Partial<IUser>>,
   isCaptain: {
     type: Boolean,
     default: false,
@@ -48,27 +50,31 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  bgCss: {
+    type: String,
+    default: 'bg-primary',
+  },
 });
 
 const { user } = toRefs(props);
 
-function getStatusIcon(status: OnlineStatus, isOnline: boolean) {
-  if (!isOnline) return 'mdi:circle';
+function getStatusIcon(status: OnlineStatus, is_online?: boolean) {
+  if (!is_online) return 'mdi:circle';
 
   switch (status) {
     case OnlineStatus.SHOW:
       return 'mdi:check-circle';
     case OnlineStatus.BRB:
-      return 'mdi:clock-outline';
+      return 'mdi:clock';
     case OnlineStatus.DND:
-      return 'mdi:minus-circle-outline';
+      return 'mdi:minus-circle';
     default:
       return 'mdi:circle';
   }
 }
 
-function getStatusColor(status: OnlineStatus, isOnline: boolean) {
-  if (!isOnline) return 'text-gray-500';
+function getStatusColor(status: OnlineStatus, is_online?: boolean) {
+  if (!is_online) return 'text-gray-500';
 
   switch (status) {
     case OnlineStatus.AWAY:

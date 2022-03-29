@@ -1,7 +1,7 @@
 <template>
   <div class="user-card bg-base-200 max-w-xs rounded py-2 px-4 shadow-md">
     <div class="flex items-center space-x-4">
-      <UserAvatar :user="user" :size="16" :iconSize="20" textCss="text-4xl" />
+      <UserAvatar :user="user" :isCaptain="isCaptain" :size="16" :iconSize="20" textCss="text-4xl" />
       <div class="flex-1 flex-col overflow-hidden">
         <div class="indicator max-w-full mt-4">
           <div class="indicator-item indicator-start badge badge-xs badge-accent ml-6">#{{ user.pin }}</div>
@@ -68,6 +68,10 @@ const props = defineProps({
     default: {},
   },
   isActiveUser: {
+    type: Boolean,
+    default: false,
+  },
+  isCaptain: {
     type: Boolean,
     default: false,
   },

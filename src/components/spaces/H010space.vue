@@ -320,7 +320,7 @@ function createCharacterModel(app: pc.Application, screen: pc.Entity, camera: pc
   const characterModel = loadH010botFromUrl(
     app,
     `${me.value.name}#${me.value.pin}`,
-    me.value.modelURL || '/src/assets/models/h010bot/xbot/xbot.json',
+    me.value.model_url || '/src/assets/models/h010bot/xbot/xbot.json',
   );
   characterModel.translateLocal(0, -1, 0);
   characterModel.setLocalEulerAngles(0, 180, 0);
@@ -345,9 +345,9 @@ function createCharacterModel(app: pc.Application, screen: pc.Entity, camera: pc
   const networkManager = new pc.Entity('Network Manager');
   state.ws = new WebSocket(`${import.meta.env.VITE_WS_URL}`); // TODO: is this the best place for this line?
   const networkClient = {
-    space_id: route.params.space_id,
+    space_id: route.params.spaceId,
     h010tag: `${me.value.name}#${me.value.pin}`,
-    modelURL: me.value.modelURL,
+    model_url: me.value.model_url,
     model: character,
   } as IClient;
   createNetworkManager(app, state.ws, networkClient, screen, camera);
@@ -1182,7 +1182,7 @@ const createNetworkManager = (app: pc.Application, ws: any, target: IClient, scr
       id: clientId,
       h010tag: target.h010tag,
       space_id: target.space_id,
-      modelURL: target.modelURL,
+      model_url: target.model_url,
       position: { x: 0, y: -1, z: 0 },
       rotation: { x: 0, y: 0, z: 0 },
     };
@@ -1214,7 +1214,7 @@ const createNetworkManager = (app: pc.Application, ws: any, target: IClient, scr
     const characterModel = loadModelFromUrl(
       app,
       client.h010tag,
-      client.modelURL || '/src/assets/models/h010bot/ybot/ybot.json',
+      client.model_url || '/src/assets/models/h010bot/ybot/ybot.json',
     );
     clients[client.id].model = characterModel;
     // TODO: should add rigidbody to remote clients?

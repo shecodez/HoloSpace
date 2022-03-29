@@ -3,16 +3,12 @@
     <FormatToolbar v-if="state.showFormatToolbar" @addMarkdown="addMarkdown" @addEmoji="addEmoji" @addGif="addGif" />
     <div class="mr-2">
       <div class="flex relative items-center justify-between">
-        <div class="t-ctrl absolute left-2 grid" :class="state.isMultiline && ' pb-8'">
+        <div class="t-ctrl left-2 grid" :class="state.isMultiline && ' pb-8'">
           <H010gramModal />
         </div>
 
         <div v-if="state.isMultiline" class="form-control w-full bg-base-100 bg-opacity-40">
-          <div
-            v-if="state.isHTML"
-            v-html="markdownToHTML"
-            class="mdHtml w-full h-28 py-3.5 pl-12 pr-32 overflow-auto"
-          />
+          <div v-if="state.isHTML" v-html="markdownToHTML" class="md2html-preview" />
           <textarea
             v-else
             ref="multilineTextareaEl"
@@ -23,21 +19,13 @@
           />
           <label class="flex items-center border-t border-dashed border-primary">
             <input ref="fileInputEl" type="file" class="hidden" @change="uploadFile" />
-            <button
-              @click="fileInputEl.click()"
-              class="btn btn-block flex-1 flex justify-start gap-2 btn-sm rounded-t-none rounded-r-none"
-            >
+            <button @click="fileInputEl.click()" class="upload-btn btn btn-sm btn-block">
               <Icon icon="clarity:paperclip-line" />
               <span class="normal-case font-normal invisible md:visible">
                 Attach files by dragging &amp; dropping, selecting or pasting them
               </span>
             </button>
-            <button
-              @click="toggleMdHTML"
-              title="View as Markdown"
-              class="btn btn-sm rounded-t-none rounded-l-none"
-              :class="state.isHTML && 'btn-primary'"
-            >
+            <button @click="toggleMdHTML" class="toggle-md2html-btn btn btn-sm" :class="state.isHTML && 'btn-primary'">
               <Icon icon="ri:markdown-fill" width="20" />
             </button>
           </label>
@@ -52,15 +40,10 @@
           />
         </div>
 
-        <button
-          v-if="state.message.length"
-          class="t-ctrl absolute right-32"
-          :class="state.isMultiline && ' pb-8'"
-          @click="reset"
-        >
+        <button v-if="state.message.length" class="t-ctrl right-32" :class="state.isMultiline && 'pb-8'" @click="reset">
           <Icon icon="mdi:close" width="24" />
         </button>
-        <div class="t-ctrl absolute right-2 flex items-center" :class="state.isMultiline && ' pb-8'">
+        <div class="t-ctrl right-2 flex items-center" :class="state.isMultiline && ' pb-8'">
           <button @click="toggleFormatToolbar" class="btn btn-ghost btn-square btn-sm" title="Format">
             <Icon icon="mdi:format-textbox" width="20" />
           </button>
@@ -69,12 +52,7 @@
           </button>
 
           <div class="my-divider border-l ml-1">
-            <button
-              type="submit"
-              @click="submitMessage"
-              title="Send Message"
-              class="btn btn-outline btn-primary btn-square btn-sm border-none ml-1"
-            >
+            <button @click="submitMessage" class="submit-msg-btn btn btn-outline btn-primary btn-square">
               <Icon icon="fa:paper-plane" width="24" />
             </button>
           </div>
@@ -155,7 +133,7 @@ async function uploadFile(event: any) {
     console.log('Upload file data', uploadData);
 
     const message = {
-      space_id: route.params.space_id,
+      space_id: route.params.spaceId,
       content: fileName,
       type: MessageType.File,
     };
@@ -216,7 +194,22 @@ textarea {
 }
 
 .t-ctrl {
+  position: absolute;
   z-index: 20;
 }
-/* .md-html {} */
+.md2html-preview {
+  @apply w-full h-28 py-3.5 pl-12 pr-32 overflow-auto;
+}
+
+.upload-btn {
+  @apply flex-1 flex justify-start gap-2 rounded-t-none rounded-r-none;
+}
+
+.toggle-md2html-btn {
+  @apply rounded-t-none rounded-l-none;
+}
+
+.submit-msg-btn {
+  @apply btn-sm border-none ml-1;
+}
 </style>

@@ -8,9 +8,13 @@
     <li v-for="user in users" :key="user.id" class="user px-3 flex items-center hover:bg-gradient-to-r from-black">
       <Popper placement="left">
         <template v-slot:activator>
-          <UserAvatar :user="user" :isCaptain="user.id === '1' ? true : false" />
+          <UserAvatar :user="user" :isCaptain="user.id === captainId || user.id === leaderId" />
         </template>
-        <UserCard :user="user" :isActiveUser="user.id === '1'" />
+        <UserCard
+          :user="user"
+          :isActiveUser="user.id === uId"
+          :isCaptain="user.id === captainId || user.id === leaderId"
+        />
       </Popper>
 
       <div class="hide-on-collapsed ml-4 overflow-hidden">
@@ -21,12 +25,15 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, toRefs } from 'vue';
+import { computed, defineProps, PropType, toRefs } from 'vue';
 
 import UserAvatar from '@/components/users/UserAvatar.vue';
 import Popper from '@/components/DockUI/Popper.vue';
 import UserCard from '@/components/users/UserCard.vue';
 import { IUser } from '@/data/interfaces';
+import { useAuthStore } from '@/stores/auth';
+import { useDeckStore } from '@/stores/deck';
+import { useSpaceStore } from '@/stores/space';
 
 const props = defineProps({
   title: String,
@@ -39,8 +46,15 @@ const props = defineProps({
     default: false,
   },
 });
+const store = {
+  auth: useAuthStore(),
+  deck: useDeckStore(),
+  space: useSpaceStore(),
+};
 
-const { title, users, offline } = toRefs(props);
+const uId = computed(() => store.auth.userId);
+const captainId = computed(() => store.deck.currentDeck?.captain_id);
+const leaderId = computed(() => store.space.currentSpace?.leader_id);
 </script>
 
 <style>

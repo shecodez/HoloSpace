@@ -48,6 +48,14 @@ authStore.$onAction(({ name, store, after }) => {
   }
 });
 
+authStore.$onAction(({ name, store, after }) => {
+  if (name === 'loadUser') {
+    after(async () => {
+      authStore.setUserData(authStore.userId!);
+    });
+  }
+});
+
 appStore.$onAction(({ name, store, after }) => {
   if (name === 'setToast') {
     after(async () => {

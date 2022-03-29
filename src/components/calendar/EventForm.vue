@@ -34,7 +34,7 @@
       <div class="form-control required w-full md:w-1/2 overflow-hidden">
         <label class="label">Start Date</label>
         <div class="relative">
-          <input v-model="form.startDate" type="date" class="w-full pl-16 input input-accent input-bordered" />
+          <input v-model="form.start_date" type="date" class="w-full pl-16 input input-accent input-bordered" />
           <span class="absolute top-0 left-0 rounded-r-none btn btn-accent">
             <Icon icon="mdi:calendar-clock" width="20" />
           </span>
@@ -43,7 +43,7 @@
       <div class="form-control mb-2 w-full md:w-1/2 overflow-hidden">
         <label class="label">End Date</label>
         <div class="relative">
-          <input v-model="form.endDate" type="date" class="w-full pl-16 input input-accent input-bordered" />
+          <input v-model="form.end_date" type="date" class="w-full pl-16 input input-accent input-bordered" />
           <span class="absolute top-0 left-0 rounded-r-none btn btn-accent">
             <Icon icon="mdi:calendar-clock" width="20" />
           </span>
@@ -81,8 +81,8 @@ const form = reactive({
   title: '',
   url: '',
   description: '',
-  startDate: new Date(),
-  endDate: new Date(),
+  start_date: new Date(),
+  end_date: new Date(),
   classes: '',
 });
 
@@ -91,8 +91,8 @@ onMounted(() => {
     form.title = props.event.title;
     form.description = props.event.description as string;
     form.url = props.event.url as string;
-    form.startDate = props.event.startDate;
-    form.endDate = props.event.endDate as Date;
+    form.start_date = props.event.start_date;
+    form.end_date = props.event.end_date as Date;
     form.classes = props.event.classes as string;
   }
 });

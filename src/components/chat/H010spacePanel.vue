@@ -26,7 +26,7 @@ import { useElementSize } from '@vueuse/core';
 import Panel from '@/components/DockUI/Panel.vue';
 import SpaceToolbar from '@/components/spaces/SpaceToolbar.vue';
 import H010space from '@/components/spaces/H010space.vue';
-import { ISpace, IUser } from '@/data/interfaces';
+import { IMessage, ISpace, IUser } from '@/data/interfaces';
 import StarfieldBackground from '../StarfieldBackground.vue';
 
 const props = defineProps({
@@ -37,6 +37,10 @@ const props = defineProps({
   space: {
     type: Object as PropType<ISpace>,
     default: {},
+  },
+  mesages: {
+    type: Array as PropType<IMessage[]>,
+    default: [],
   },
 });
 

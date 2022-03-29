@@ -55,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/h010dex/Profile.vue'),
   },
   // {
-  //   path: '/d/:deck_id/:type/:space_id',
+  //   path: '/d/:deckId/:type/:spaceId',
   //   name: 'Chat',
   //   component: Chat, // () => import('@/views/Chat.vue'),
   //   beforeEnter: (to, from, next) => {
@@ -71,18 +71,20 @@ const routes: Array<RouteRecordRaw> = [
     path: '/d',
     name: 'Chat',
     component: Chat,
+    props: (route) => ({ deckId: route.params.deckId, spaceId: route.params.spaceId }),
     children: [
-      { path: '/d/:deck_id/TEXT/:space_id', name: 'TEXTChat', component: Chat },
-      { path: '/d/:deck_id/VoIP/:space_id', name: 'VOIPChat', component: Chat },
+      { path: '/d/:deckId/TEXT/:spaceId', name: 'TEXTChat', component: Chat },
+      { path: '/d/:deckId/VoIP/:spaceId', name: 'VOIPChat', component: Chat },
     ],
     meta: {
       requiresAuth: true,
     },
   },
   {
-    path: '/d/:deck_id/H010/:space_id',
+    path: '/d/:deckId/H010/:spaceId',
     name: 'H010Chat',
     component: H010,
+    //props: (route) => ({ deckId: route.params.deckId, spaceId: route.params.spaceId }),
     meta: {
       requiresAuth: true,
     },
@@ -91,18 +93,20 @@ const routes: Array<RouteRecordRaw> = [
     path: '/team',
     name: 'TeamChat',
     component: TeamChat,
+    //props: (route) => ({ spaceId: route.params.spaceId }),
     children: [
-      { path: '/team/TEXT/:space_id', name: 'TeamTEXTChat', component: TeamChat },
-      { path: '/team/VoIP/:space_id', name: 'TeamVOIPChat', component: TeamChat },
+      { path: '/team/TEXT/:spaceId', name: 'TeamTEXTChat', component: TeamChat },
+      { path: '/team/VoIP/:spaceId', name: 'TeamVOIPChat', component: TeamChat },
     ],
     meta: {
       requiresAuth: true,
     },
   },
   {
-    path: '/team/H010/:space_id',
+    path: '/team/H010/:spaceId',
     name: 'TeamH010Chat',
     component: H010,
+    //props: (route) => ({ spaceId: route.params.spaceId }),
     meta: {
       requiresAuth: true,
     },

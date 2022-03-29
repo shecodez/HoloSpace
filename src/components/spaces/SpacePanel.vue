@@ -47,7 +47,7 @@ const h010Spaces = computed(() => spaces.value.filter((x) => x.type === SpaceTyp
 const route = useRoute();
 
 function isActiveType(listType: SpaceType) {
-  const activeSpace = spaces.value.find((x) => x.id === route.params.space_id);
+  const activeSpace = spaces.value.find((x) => x.id === route.params.spaceId);
   return activeSpace?.type === listType;
 }
 

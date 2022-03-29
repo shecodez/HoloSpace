@@ -30,23 +30,35 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, onMounted, ref, toRefs } from 'vue';
+import { computed, defineProps, onMounted, ref, toRefs, watch } from 'vue';
 import { useTitle } from '@vueuse/core';
+import { useRoute } from 'vue-router';
 
 import Banner from '@/components/DockUI/Banner.vue';
 import { useAppStore } from '@/stores/app';
+import { useAuthStore } from '@/stores/auth';
+import { useDeckStore } from '@/stores/deck';
+import { useSpaceStore } from '@/stores/space';
+import { useChatStore } from '@/stores/chat';
 
 const props = defineProps({
   pageTitle: String,
+  deckId: String,
+  spaceId: String,
 });
-const { pageTitle } = toRefs(props);
+const { pageTitle, deckId, spaceId } = toRefs(props);
 
 const title = computed(() =>
   pageTitle?.value ? `${pageTitle?.value} | ${import.meta.env.VITE_APP_NAME}` : import.meta.env.VITE_APP_NAME,
 );
 useTitle(title);
 
+const route = useRoute();
 const appStore = useAppStore();
+const authStore = useAuthStore();
+const deckStore = useDeckStore();
+const spaceStore = useSpaceStore();
+const chatStore = useChatStore();
 
 const backgroundImageURL = ref(
   'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/backgrounds/default-bg.jpg',
@@ -54,10 +66,35 @@ const backgroundImageURL = ref(
 
 // TODO: allow HTML in banner message i.e. "The <span class="font-brand">H010SPACE</span> beta is live!"
 onMounted(() => {
-  // get latest notification where notify = 'SITE' and date.now() >= startDate && date.now() <= endDate
+  // get latest notification where notify = 'SITE' and date.now() >= start_date && date.now() <= end_date
   appStore.setBanner({ text: 'The H010SPACE beta is live!', icon: 'vs:party' }, 'info', true);
   // get user backgroundImageURL
+  deckStore.setUserDecks(authStore.userId!);
+  spaceStore.setTeamSpaces(authStore.userId!);
 });
+
+watch(
+  () => route.params.deckId,
+  (deckId) => {
+    if (deckId) {
+      deckStore.setCurrentDeck(deckId as string);
+      deckStore.setCrew(deckId as string);
+      spaceStore.setDeckSpaces(deckId as string);
+    }
+  },
+  { deep: true, immediate: true },
+);
+watch(
+  () => route.params.spaceId,
+  (spaceId) => {
+    if (spaceId) {
+      spaceStore.setCurrentSpace(spaceId as string);
+      chatStore.setCurrentChat(spaceId as string);
+      spaceStore.setTeam(spaceId as string);
+    }
+  },
+  { deep: true, immediate: true },
+);
 </script>
 
 <style scoped>

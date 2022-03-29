@@ -4,7 +4,6 @@ import { User } from '@supabase/supabase-js';
 
 import { IUser, IProfile } from '@/data/interfaces';
 import useSupabase from '@/use/supabase';
-
 const { supabase } = useSupabase();
 
 type State = {
@@ -17,12 +16,13 @@ type State = {
 
 type Getters = {
   isAuthenticated(): boolean;
+  userId(): string | undefined;
 };
 
 type Actions = {
   loadUser(): void;
-  fetchUserData(userId: string): void;
-  fetchUserProfile(userId: string): void;
+  setUserData(userId: string): void;
+  setUserProfile(userId: string): void;
   clearUser(): void;
   saveRedirectRoute(route: Partial<RouteLocation>): void;
   loadRedirectRoute(): void;
@@ -43,19 +43,22 @@ export const useAuthStore = defineStore<'auth', State, Getters, Actions>('auth',
     isAuthenticated() {
       return !!this.userSession;
     },
+    userId() {
+      return !!this.userSession ? this.userSession.id : undefined;
+    },
   },
 
   actions: {
     loadUser() {
       this.userSession = supabase.auth.user();
     },
-    async fetchUserData(userId: string) {
+    async setUserData(userId: string) {
       const { data, error } = await supabase.from('users').select('*').eq('id', userId).single();
       if (error) throw error;
 
       this.userData = data;
     },
-    async fetchUserProfile(userId: string) {
+    async setUserProfile(userId: string) {
       const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
       if (error) throw error;
 

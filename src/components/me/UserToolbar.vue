@@ -4,7 +4,7 @@
       <Popper placement="top">
         <template v-slot:activator>
           <button class="btn btn-circle btn-ghost">
-            <UserAvatar :user="user" :isCaptain="true" />
+            <UserAvatar :user="user" :isCaptain="captainIsMe || leaderIsMe" />
           </button>
         </template>
         <UserStatusMenu :user="user" :collapsed="collapsed" @openSettings="openModal" />
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, ref, toRefs } from 'vue';
+import { computed, defineProps, PropType, ref, toRefs } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import UserAvatar from '@/components/users/UserAvatar.vue';
@@ -43,6 +43,9 @@ import UserStatusMenu from '@/components/me/UserStatusMenu.vue';
 import IOToolbar from '@/components/me/UserIOToolbar.vue';
 import UserSettings from '@/components/me/UserSettingsModal.vue';
 import { IUser } from '@/data/interfaces';
+import { useDeckStore } from '@/stores/deck';
+import { useAuthStore } from '@/stores/auth';
+import { useSpaceStore } from '@/stores/space';
 
 const props = defineProps({
   user: {
@@ -52,15 +55,20 @@ const props = defineProps({
   collapsed: Boolean,
 });
 
-const openSettings = ref(false);
+const store = {
+  auth: useAuthStore(),
+  deck: useDeckStore(),
+  space: useSpaceStore(),
+};
 
+const captainIsMe = computed(() => store.auth.userId === store.deck.currentDeck?.captain_id);
+const leaderIsMe = computed(() => store.auth.userId === store.space.currentSpace?.leader_id);
+
+const openSettings = ref(false);
 function openModal() {
   openSettings.value = true;
 }
-
 function closeModal() {
   openSettings.value = false;
 }
-
-const { user, collapsed } = toRefs(props);
 </script>

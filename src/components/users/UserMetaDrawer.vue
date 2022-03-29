@@ -25,7 +25,7 @@
       </div>
 
       <template #footer>
-        <UserToolbar :user="users[1]" :collapsed="collapsed" />
+        <UserToolbar :user="me" :collapsed="collapsed" />
       </template>
     </Panel>
   </Drawer>
@@ -51,6 +51,10 @@ const props = defineProps({
     type: Array as PropType<IUser[]>,
     default: [],
   },
+  me: {
+    type: Object as PropType<IUser>,
+    default: {},
+  },
 });
 const { users } = toRefs(props);
 
@@ -58,8 +62,8 @@ const appStore = useAppStore();
 
 const collapsed = computed(() => appStore.isMetaDrawerCollapsed);
 
-const usersOnline = computed(() => users.value.filter((x) => x.isOnline && x.status !== 'HIDE'));
-const usersOffline = computed(() => users.value.filter((x) => !x.isOnline || x.status === 'HIDE'));
+const usersOnline = computed(() => users.value.filter((x) => x.is_online && x.status !== 'HIDE'));
+const usersOffline = computed(() => users.value.filter((x) => !x.is_online || x.status === 'HIDE'));
 </script>
 
 <style>

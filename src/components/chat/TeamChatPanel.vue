@@ -4,7 +4,7 @@
       <SpaceToolbar :space="space" />
     </template>
 
-    <div v-if="!$route.params.space_id" class="flex items-center justify-center overflow-hidden">
+    <div v-if="!$route.params.spaceId" class="flex items-center justify-center overflow-hidden">
       <img src="@/assets/branding/brand.png" alt="brand" class="w-11/12 md:w-3/4 lg:w-1/2" />
     </div>
     <template v-else>
@@ -26,7 +26,7 @@
     </template>
 
     <template #footer>
-      <div v-if="state.tabs[1].active && $route.params.space_id" class="relative mb-4 mx-6 md:mx-24">
+      <div v-if="state.tabs[1].active && $route.params.spaceId" class="relative mb-4 mx-6 md:mx-24">
         <TextMsgForm v-if="state.msgType === MessageType.TEXT" @switchToVoiceComms="setMsgType(MessageType.VOICE)" />
         <VoiceMsgForm v-if="state.msgType === MessageType.VOICE" @switchToTextComms="setMsgType(MessageType.TEXT)" />
       </div>

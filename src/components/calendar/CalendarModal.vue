@@ -55,7 +55,7 @@
               <div v-if="!events.length" class="text-center p-4 font-bold">No upcoming events.</div>
               <div v-else class="p-3">
                 <h5 class="text-xs font-bold mb-2">Upcoming Events:</h5>
-                <!-- TODO: events.slice(0,3) where event.startDate >= today -->
+                <!-- TODO: events.slice(0,3) where event.start_date >= today -->
                 <ul>
                   <li v-for="event in events.slice(0, 3)" :key="event.id" class="my-divider border-b py-2">
                     {{ event.title || 'Untitled' }}
