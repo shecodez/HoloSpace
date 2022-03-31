@@ -64,10 +64,13 @@ const backgroundImageURL = ref(
   'https://heipqgxfpjhqerywembc.supabase.in/storage/v1/object/public/backgrounds/default-bg.jpg',
 );
 
-// TODO: allow HTML in banner message i.e. "The <span class="font-brand">H010SPACE</span> beta is live!"
 onMounted(() => {
   // get latest notification where notify = 'SITE' and date.now() >= start_date && date.now() <= end_date
-  appStore.setBanner({ text: 'The H010SPACE beta is live!', icon: 'vs:party' }, 'info', true);
+  appStore.setBanner(
+    { text: 'The <span class="font-brand">H010SPACE</span> beta is live!', icon: 'vs:party' },
+    'info',
+    true,
+  );
   // get user backgroundImageURL
   deckStore.setUserDecks(authStore.userId!);
   spaceStore.setTeamSpaces(authStore.userId!);
@@ -89,7 +92,8 @@ watch(
   (spaceId) => {
     if (spaceId) {
       spaceStore.setCurrentSpace(spaceId as string);
-      chatStore.setCurrentChat(spaceId as string);
+      chatStore.setCurrentChatMessages(spaceId as string);
+      chatStore.setCurrentChatMessageReactions(spaceId as string);
       spaceStore.setTeam(spaceId as string);
     }
   },

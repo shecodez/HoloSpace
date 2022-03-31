@@ -44,6 +44,7 @@ export const useDeckStore = defineStore<'deck', State, Getters, Actions>('deck',
   actions: {
     async setUserDecks(userId) {
       //const { data, error } = await supabase.from('decks').select('*').eq('captain_id', userId);
+      // TODO: order by crew_members.last_seen_at DESC
       const { data, error } = await supabase
         .from('decks')
         .select('*, crew_members!inner(*)')

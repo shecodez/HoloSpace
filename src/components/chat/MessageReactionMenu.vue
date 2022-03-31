@@ -1,12 +1,16 @@
 <template>
   <ul class="t-border-menu menu horizontal bg-base-100 shadow-lg">
     <li v-for="reaction in reactions" :key="reaction.emoji">
-      <button class="btn btn-sm btn-square btn-ghost rounded-none" :title="reaction.name">
+      <button
+        @click="$emit('reaction', reaction.emoji)"
+        class="btn btn-sm btn-square btn-ghost rounded-none"
+        :title="reaction.name"
+      >
         {{ reaction.emoji }}
       </button>
     </li>
     <li>
-      <button class="btn btn-sm btn-square btn-ghost rounded-none" title="Reply">
+      <button @click="$emit('reply')" class="btn btn-sm btn-square btn-ghost rounded-none" title="Reply">
         <Icon icon="carbon:reply" width="20" class="text-primary" />
       </button>
     </li>

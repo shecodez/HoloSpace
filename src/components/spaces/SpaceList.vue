@@ -16,7 +16,7 @@
       </ul>
     </div>
   </div>
-  <div class="my-divider border-t"></div>
+  <div class="divider m-0"></div>
 
   <SpaceModal :isOpen="isOpen" :type="type" :isTeam="isTeam" :space="editSpace" @close="closeModal" />
 </template>

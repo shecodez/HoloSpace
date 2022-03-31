@@ -166,9 +166,9 @@ export interface IMessageAuthor {
 export interface IMessageReaction {
   emoji: string;
   message_id: StringOrNumber;
+  space_id?: string;
   user_id: string;
   user?: { name: string };
-  messages?: { space_id: string };
   username?: string;
 }
 

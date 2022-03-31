@@ -9,19 +9,25 @@ type State = {
   loading: boolean;
   messages: IMessage[];
   messageReactions: IMessageReaction[];
+  replyToMessage: IMessage | null;
   error: null;
 };
 
 type Getters = {
   isLoading(): boolean;
   messageReactionsObject(): any;
+  isReplyToMessage(): boolean;
 };
 
 type Actions = {
-  setCurrentChat(spaceId: string): void;
+  setCurrentChatMessages(spaceId: string): void;
   subscribeToMessages(spaceId: string): void;
-  fetchMessageReactions(messageId: string): void;
+  setCurrentChatMessageReactions(messageId: string): void;
+  subscribeToMessageReactions(spaceId: string): void;
+  setReplyToMessage(message: IMessage): void;
+  clearReplyToMessage(): void;
   insertMessage(message: IMessage): void;
+  insertMessageReaction(reaction: IMessageReaction): void;
 };
 
 export const useChatStore = defineStore<'chat', State, Getters, Actions>('chat', {
@@ -30,6 +36,7 @@ export const useChatStore = defineStore<'chat', State, Getters, Actions>('chat',
       loading: false,
       messages: [],
       messageReactions: [],
+      replyToMessage: null,
       error: null,
     };
   },
@@ -52,28 +59,32 @@ export const useChatStore = defineStore<'chat', State, Getters, Actions>('chat',
       }
       return obj;
     },
+    isReplyToMessage() {
+      return !!this.replyToMessage?.id;
+    },
   },
 
   actions: {
-    async setCurrentChat(spaceId) {
+    async setCurrentChatMessages(spaceId) {
       const { data, error } = await supabase
         .from('messages')
         .select(`*, author:author_id(*), replyMessage:reply_to_id(type, content, author:author_id(name))`)
         .eq('space_id', spaceId);
       if (error) throw error;
       if (data === null) return (this.messages = []);
-      this.fetchMessageReactions(spaceId);
-      this.subscribeToMessages(spaceId);
 
       this.messages = data;
+      this.subscribeToMessages(spaceId);
     },
+
     subscribeToMessages(spaceId) {
       supabase
         .from(`messages:space_id=eq.${spaceId}`)
         .on('*', (payload) => {
-          // console.log('Change received!', payload);
+          //console.log('Change received! messages', payload);
           switch (payload.eventType) {
             case 'INSERT':
+              // TODO: fix doesnt include joins (author_id, reply_to_id)
               this.messages.push(payload.new);
               break;
             case 'UPDATE':
@@ -85,22 +96,52 @@ export const useChatStore = defineStore<'chat', State, Getters, Actions>('chat',
         })
         .subscribe();
     },
-    async fetchMessageReactions(spaceId) {
+
+    async setCurrentChatMessageReactions(spaceId) {
       const { data, error } = await supabase
         .from('message_reactions')
-        .select(`*, user:user_id(name), messages!inner(space_id)`)
-        .eq('messages.space_id', spaceId);
+        .select(`*, user:user_id(name)`)
+        .eq('space_id', spaceId);
       if (error) throw error;
       if (data === null) return (this.messageReactions = []);
 
       this.messageReactions = data;
+      this.subscribeToMessageReactions(spaceId);
     },
+
+    subscribeToMessageReactions(spaceId) {
+      supabase
+        .from(`message_reactions:space_id=eq.${spaceId}`)
+        .on('*', (payload) => {
+          //console.log('Change received! message_reactions', payload);
+          switch (payload.eventType) {
+            case 'INSERT':
+              this.messageReactions.push(payload.new);
+              break;
+          }
+        })
+        .subscribe();
+    },
+
     async insertMessage(message) {
-      const { body, error } = await supabase.from('messages').insert(message);
+      const { error } = await supabase.from('messages').insert(message);
       if (error) throw error;
 
-      const data: IMessage = body ? { ...body[0] } : null;
-      this.messages.push(data);
+      //const data: IMessage = body ? { ...body[0] } : null;
+      //this.messages.push(data); handled by subscription?
+    },
+
+    async insertMessageReaction(reaction) {
+      const { error } = await supabase.from('message_reactions').insert(reaction);
+      if (error) throw error;
+    },
+
+    setReplyToMessage(message: IMessage) {
+      this.replyToMessage = message;
+    },
+
+    clearReplyToMessage() {
+      this.replyToMessage = null;
     },
   },
 });

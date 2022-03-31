@@ -30,9 +30,17 @@
     </div>
 
     <template #footer>
+      <div class="divider mx-2 md:mx-12" />
       <div v-if="state.tabs[1].active" class="relative mb-4 mx-6 md:mx-24">
-        <TextMsgForm v-if="state.msgType === MessageType.TEXT" @switchToVoiceComms="setMsgType(MessageType.VOICE)" />
-        <VoiceMsgForm v-if="state.msgType === MessageType.VOICE" @switchToTextComms="setMsgType(MessageType.TEXT)" />
+        <div v-if="chatStore.isReplyToMessage" class="bg-base-100 rounded my-2 mr-2">
+          <Message :message="chatStore.replyToMessage!" isReply @close="chatStore.clearReplyToMessage" />
+        </div>
+        <TextMsgForm
+          v-if="state.msgType === MessageType.TEXT"
+          @switchToVoiceComm="setMsgType(MessageType.VOICE)"
+          @send="sendMessage"
+        />
+        <VoiceMsgForm v-if="state.msgType === MessageType.VOICE" @switchToTextComm="setMsgType(MessageType.TEXT)" />
       </div>
     </template>
   </Panel>
@@ -49,9 +57,11 @@ import TextMsgForm from '@/components/chat/TextMessageForm.vue';
 import VoipUserList from '@/components/chat/VoipUserList.vue';
 import MessageList from '@/components/chat/MessageList.vue';
 import FileList from '@/components/chat/FileList.vue';
+import VoipControlToolbar from '@/components/me/VoipControlToolbar.vue';
+import Message from '@/components/chat/MessageListItem.vue';
 import { ISpace, IMessage, IUser } from '@/data/interfaces';
 import { MessageType, SpaceType } from '@/data/mock';
-import VoipControlToolbar from '@/components/me/VoipControlToolbar.vue';
+import { useChatStore } from '@/stores/chat';
 
 const props = defineProps({
   space: {
@@ -67,7 +77,9 @@ const props = defineProps({
     default: [],
   },
 });
-const { space } = toRefs(props);
+const { space, messages } = toRefs(props);
+
+const chatStore = useChatStore();
 
 const showTeamTab = computed(() => space.value.type === SpaceType.VOIP);
 
@@ -85,6 +97,7 @@ const state = reactive({
     { id: 'file', label: 'Files', icon: 'clarity:paperclip-line', active: false, show: true },
     { id: 'screen-share', label: 'Screen Share', icon: 'tabler:screen-share', active: false, show: false },
   ],
+  error: null,
 });
 
 function activeTab(index: number) {
@@ -114,6 +127,16 @@ function setMsgType(type: MessageType) {
       state.msgType = MessageType.TEXT;
       break;
   }
+}
+
+function sendMessage(message: Partial<IMessage>) {
+  const newMessage = { ...message, reply_to_id: chatStore.replyToMessage?.id } as IMessage;
+  try {
+    chatStore.insertMessage(newMessage);
+  } catch (e: any) {
+    state.error = e.error_description || e.message;
+  }
+  chatStore.clearReplyToMessage();
 }
 
 const emit = defineEmits<{

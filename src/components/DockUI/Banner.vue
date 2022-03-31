@@ -7,7 +7,7 @@
             <Icon v-if="icon" :icon="icon" width="24" />
             <div>
               <h3 v-if="title" class="font-bold">{{ title }}</h3>
-              <div :class="title ? 'text-xs' : 'text-lg'">{{ text }}</div>
+              <div :class="title ? 'text-xs' : 'text-lg'" v-html="text" />
             </div>
           </div>
         </div>

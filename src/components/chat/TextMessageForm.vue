@@ -12,7 +12,7 @@
           <textarea
             v-else
             ref="multilineTextareaEl"
-            v-model="state.message"
+            v-model="state.text"
             placeholder="Enter message"
             :rows="3"
             class="textarea textarea-primary textarea-bordered border-b-transparent rounded-none text-lg"
@@ -33,26 +33,26 @@
         <div v-else class="form-control w-full">
           <input
             type="text"
-            @keydown.enter="submitMessage"
-            v-model="state.message"
+            @keydown.enter="sendMessage"
+            v-model="state.text"
             placeholder="Enter message"
-            class="input input-primary input-bordered rounded text-lg"
+            class="input input-lg input-primary input-bordered rounded text-lg"
           />
         </div>
 
-        <button v-if="state.message.length" class="t-ctrl right-32" :class="state.isMultiline && 'pb-8'" @click="reset">
+        <button v-if="state.text.length" class="t-ctrl right-32" :class="state.isMultiline && 'pb-8'" @click="reset">
           <Icon icon="mdi:close" width="24" />
         </button>
         <div class="t-ctrl right-2 flex items-center" :class="state.isMultiline && ' pb-8'">
           <button @click="toggleFormatToolbar" class="btn btn-ghost btn-square btn-sm" title="Format">
             <Icon icon="mdi:format-textbox" width="20" />
           </button>
-          <button @click="$emit('switchToVoiceComms')" class="btn btn-ghost btn-square btn-sm" title="Send VoiceComm">
+          <button @click="$emit('switchToVoiceComm')" class="btn btn-ghost btn-square btn-sm" title="Send Voice Comm">
             <Icon icon="clarity:microphone-solid" width="20" />
           </button>
 
           <div class="my-divider border-l ml-1">
-            <button @click="submitMessage" class="submit-msg-btn btn btn-outline btn-primary btn-square">
+            <button @click="sendMessage" class="submit-msg-btn btn btn-outline btn-primary btn-square">
               <Icon icon="fa:paper-plane" width="24" />
             </button>
           </div>
@@ -73,7 +73,7 @@ import DOMPurify from 'dompurify';
 
 import FormatToolbar from '@/components/chat/FormatTextToolbar.vue';
 import H010gramModal from '@/components/chat/H010gramModal.vue';
-import { EmojiClickEventDetail, IGif } from '@/data/interfaces';
+import { EmojiClickEventDetail, IGif, IMessage, IMessageType } from '@/data/interfaces';
 import useSupabase from '@/use/supabase';
 import { MessageType } from '@/data/mock';
 import { useAppStore } from '@/stores/app';
@@ -83,7 +83,7 @@ const route = useRoute();
 const appStore = useAppStore();
 
 const state = reactive({
-  message: '',
+  text: '',
   isMultiline: false,
   showFormatToolbar: false,
   uploading: false,
@@ -99,14 +99,23 @@ function toggleFormatToolbar() {
 function toggleMdHTML() {
   if (state.isMultiline) state.isHTML = !state.isHTML;
 }
-const markdownToHTML = computed(() => DOMPurify.sanitize(marked.parse(state.message)));
+const markdownToHTML = computed(() => DOMPurify.sanitize(marked.parse(state.text)));
 
 function reset() {
-  state.message = '';
+  state.text = '';
 }
 
-function submitMessage() {
-  console.log('submit message', state.message);
+const emit = defineEmits<{
+  (e: 'switchToVoiceComm'): void;
+  (e: 'send', message: Partial<IMessage>): void;
+}>();
+
+function sendMessage() {
+  emit('send', {
+    content: state.text,
+    type: state.isMultiline ? IMessageType.Markdown : IMessageType.TEXT,
+    space_id: route.params.spaceId.toString(),
+  });
   reset();
 }
 
@@ -150,10 +159,10 @@ async function uploadFile(event: any) {
 }
 
 function addEmoji(emoji: EmojiClickEventDetail) {
-  state.message = state.message + emoji.unicode;
+  state.text = state.text + emoji.unicode;
 }
 function addGif(gif: IGif) {
-  state.message = state.message + `[${gif.URL}](url)`;
+  state.text = state.text + `[${gif.URL}](url)`;
 }
 const multilineTextareaEl = ref<HTMLTextAreaElement>();
 function addMarkdown(cmd: { md: string; cursorIdx: number }) {
@@ -161,8 +170,8 @@ function addMarkdown(cmd: { md: string; cursorIdx: number }) {
   if (textarea) {
     if (textarea.selectionStart === textarea.selectionEnd) {
       // nothing is selected
-      state.message = state.message + cmd.md.replace('|', '');
-      textarea.value = state.message;
+      state.text = state.text + cmd.md.replace('|', '');
+      textarea.value = state.text;
       const e = textarea.selectionEnd;
       textarea.focus();
       textarea.selectionEnd = e - cmd.cursorIdx;
@@ -173,7 +182,7 @@ function addMarkdown(cmd: { md: string; cursorIdx: number }) {
       const e = textarea.selectionEnd + bIdx[0].length;
       const selectedText = textarea.value.slice(b, e);
       // TODO: fix slice: cannot select text from middle
-      state.message = state.message.slice(0, -selectedText.length) + `${bIdx[0]}${selectedText}${bIdx[1]}`;
+      state.text = state.text.slice(0, -selectedText.length) + `${bIdx[0]}${selectedText}${bIdx[1]}`;
       textarea.setSelectionRange(b, b);
       textarea.setRangeText(bIdx[0]);
       textarea.setSelectionRange(e, e);

@@ -170,6 +170,18 @@ picutre {
   clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
 }
 
+.tooltip-arrow-top:after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  top: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px;
+  background: inherit;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
 .t-border-menu {
   @apply bg-base-100 rounded border-t-2 border-primary;
 }
