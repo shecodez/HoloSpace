@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { IMessage, IMessageReaction } from '@/data/interfaces';
+import { IMessage, IMessageReaction, IUser } from '@/data/interfaces';
 import useSupabase from '@/use/supabase';
 
 const { supabase } = useSupabase();
@@ -10,6 +10,7 @@ type State = {
   messages: IMessage[];
   messageReactions: IMessageReaction[];
   replyToMessage: IMessage | null;
+  users: IUser[];
   error: null;
 };
 
@@ -28,6 +29,7 @@ type Actions = {
   clearReplyToMessage(): void;
   insertMessage(message: IMessage): void;
   insertMessageReaction(reaction: IMessageReaction): void;
+  setCurrentChatUsers(users: IUser[]): void;
 };
 
 export const useChatStore = defineStore<'chat', State, Getters, Actions>('chat', {
@@ -37,6 +39,7 @@ export const useChatStore = defineStore<'chat', State, Getters, Actions>('chat',
       messages: [],
       messageReactions: [],
       replyToMessage: null,
+      users: [],
       error: null,
     };
   },
@@ -84,8 +87,9 @@ export const useChatStore = defineStore<'chat', State, Getters, Actions>('chat',
           //console.log('Change received! messages', payload);
           switch (payload.eventType) {
             case 'INSERT':
-              // TODO: fix doesnt include joins (author_id, reply_to_id)
-              this.messages.push(payload.new);
+              const author = this.users.find((x) => x.id === payload.new.author_id);
+              const replyMessage = this.messages.find((x) => x.id === payload.new.reply_to_id);
+              this.messages.push({ ...payload.new, replyMessage, author });
               break;
             case 'UPDATE':
             case 'DELETE':
@@ -116,7 +120,8 @@ export const useChatStore = defineStore<'chat', State, Getters, Actions>('chat',
           //console.log('Change received! message_reactions', payload);
           switch (payload.eventType) {
             case 'INSERT':
-              this.messageReactions.push(payload.new);
+              const user = this.users.find((x) => x.id === payload.new.user_id);
+              this.messageReactions.push({ ...payload.new, user });
               break;
           }
         })
@@ -142,6 +147,10 @@ export const useChatStore = defineStore<'chat', State, Getters, Actions>('chat',
 
     clearReplyToMessage() {
       this.replyToMessage = null;
+    },
+
+    async setCurrentChatUsers(users) {
+      this.users = users;
     },
   },
 });

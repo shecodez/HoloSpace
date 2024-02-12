@@ -82,6 +82,7 @@ watch(
     if (deckId) {
       deckStore.setCurrentDeck(deckId as string);
       deckStore.setCrew(deckId as string);
+      chatStore.setCurrentChatUsers(deckStore.crew);
       spaceStore.setDeckSpaces(deckId as string);
     }
   },
@@ -95,6 +96,7 @@ watch(
       chatStore.setCurrentChatMessages(spaceId as string);
       chatStore.setCurrentChatMessageReactions(spaceId as string);
       spaceStore.setTeam(spaceId as string);
+      chatStore.setCurrentChatUsers(spaceStore.team);
     }
   },
   { deep: true, immediate: true },

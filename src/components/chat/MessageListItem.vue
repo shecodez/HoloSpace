@@ -128,7 +128,7 @@ function emitClose() {
   @apply p-2 rounded max-w-5xl bg-opacity-80;
 }
 .message.message-reply {
-  @apply bg-opacity-20 min-w-full p-2 rounded border-l-4 mb-1 shadow;
+  @apply bg-opacity-20 min-w-full p-2 rounded border-l-4 mb-1 shadow-lg;
 }
 
 .message .message-actions {

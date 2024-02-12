@@ -1,5 +1,5 @@
 <template>
-  <ul class="mx-2 md:mx-6">
+  <ul class="message-list">
     <li v-if="!messages.length" class="text-center py-8">
       <h2 class="text-5xl font-bold">No messages yet. Say something.</h2>
     </li>
@@ -57,7 +57,7 @@ function messageDateDivider(index: number, current: Date, previous?: Date) {
     } else return undefined;
   }
 
-  return `<div class="mx-6 md:mx-16"><div class="divider md:mx-2">${text}</div></div>`;
+  return `<div class="mx-2 md:ml-10 md:mr-8"><div class="divider md:mx-2">${text}</div></div>`;
 }
 
 function checkIsSameMinute(message: IMessage, previousMessage: IMessage) {
@@ -70,7 +70,7 @@ function checkIsSameMinute(message: IMessage, previousMessage: IMessage) {
 
 <style scoped>
 .message-li {
-  @apply flex mx-4 my-3;
+  @apply flex mx-6 md:mx-10 my-3;
 }
 .message-li.from-other {
   @apply justify-self-start;

@@ -21,7 +21,7 @@
 
       <div class="users overflow-y-auto overflow-x-hidden" :class="collapsed ? 'collapsed' : ''">
         <UserList title="On-Deck" :users="usersOnline" />
-        <UserList title="Offline" :users="usersOffline" offline />
+        <UserList title="Off-Duty" :users="usersOffline" offline />
       </div>
 
       <template #footer>

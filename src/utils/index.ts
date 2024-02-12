@@ -1,21 +1,21 @@
 //import dayjs from "dayjs";
-// @ts-ignore
-//import kebabCase from "lodash.kebabcase";
+import { format, isSameDay, isSameWeek, parseISO } from 'date-fns';
+import { kebabCase } from 'lodash';
 
-// export const formatFileName = (name: string) => {
-//   const splitted = name.split(".");
+export const formatFileName = (name: string) => {
+  const splitted = name.split('.');
 
-//   const extension = splitted.slice(-1)[0];
-//   const baseName = splitted.slice(0, -1).join(".");
+  const extension = splitted.slice(-1)[0];
+  const baseName = splitted.slice(0, -1).join('.');
 
-//   return `${Date.now()}-${kebabCase(
-//     baseName
-//       .normalize("NFD")
-//       .replace(/[\u0300-\u036f]/g, "")
-//       .replace(/đ/g, "d")
-//       .replace(/Đ/g, "D")
-//   )}.${extension}`;
-// };
+  return `${Date.now()}-${kebabCase(
+    baseName
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd')
+      .replace(/Đ/g, 'D'),
+  )}.${extension}`;
+};
 
 export const formatFileSize = (size: number) => {
   let i = Math.floor(Math.log(size) / Math.log(1024));
@@ -23,20 +23,19 @@ export const formatFileSize = (size: number) => {
   return `${(size / Math.pow(1024, i)).toFixed(1)} ${['B', 'KB', 'MB', 'GB', 'TB'][i]}`;
 };
 
-// export const formatDate = (timestamp: number) => {
-//   const date = new Date(timestamp);
-//   const formatter = dayjs(date);
-//   const now = new Date();
+export const formatDate = (timestamp: Date) => {
+  const date = parseISO(`${timestamp}`);
+  const today = new Date();
 
-//   if (dayjs().isSame(formatter, "date")) return formatter.format("h:mm A");
+  // https://date-fns.org/v2.3.0/docs/format
+  if (isSameDay(date, today)) return format(date, 'p');
 
-//   if (dayjs().isSame(formatter, "week")) return formatter.format("ddd h:mm A");
+  if (isSameWeek(date, today)) return format(date, 'iii p');
 
-//   if (now.getFullYear() === date.getFullYear())
-//     return formatter.format("MMM DD h:mm A");
+  if (date.getFullYear() === today.getFullYear()) return format(date, 'MMM dd p');
 
-//   return formatter.format("DD MMM YYYY h:mm A");
-// };
+  return format(date, 'Pp');
+};
 
 export const splitLinkFromMessage = (message: string) => {
   const URL_REGEX =
